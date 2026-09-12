@@ -1,0 +1,32 @@
+{
+  "id": "b4-pla-projecte",
+  "name": "Bloc 4 — Pla del projecte",
+  "phase": "planificacio-execucio",
+  "assessment": "teacher_review",
+  "required_files": [
+    "project.json",
+    "docs/03-planificacio/pla-projecte.md",
+    "docs/03-planificacio/pla-proves.md",
+    "docs/03-planificacio/pla-desplegament.md",
+    "docs/00-control/decisions.md",
+    "docs/00-control/fonts-ia.md"
+  ],
+  "required_globs": ["evidencies/alumnat/*.md", "traspassos/*.md"],
+  "candidate_ra_ca": [
+    "RA3.a",
+    "RA3.b",
+    "RA3.c",
+    "RA3.d",
+    "RA3.e",
+    "RA3.f",
+    "RA3.g",
+    "RA3.h",
+    "RA4.a",
+    "RA4.b",
+    "RA4.c",
+    "RA4.d",
+    "RA4.e",
+    "RA4.f",
+    "RA4.g"
+  ]
+}
