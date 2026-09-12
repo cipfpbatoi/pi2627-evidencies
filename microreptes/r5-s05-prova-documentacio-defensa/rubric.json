@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r5-s05-prova-documentacio-defensa",
+  "challenge_id": "r5-s05-prova-documentacio-defensa",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.25, "must_check": "La integració final queda tancada amb cas positiu i cas d'error."},
+    {"id": "verification", "label": "Verificació", "weight": 0.25, "must_check": "Les proves o verificacions són reproduïbles i cobreixen el flux complet."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha registre d'ajustos, incidències, commits i ús d'IA si correspon."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.2, "must_check": "La documentació explica font, configuració, mapping, execució, límits i mapa final."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "L'AI log no reconstruïx una història fictícia i mostra validació real."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "El tancament no introdueix noves peces grans sense provar ni documentar."}
+  ],
+  "hard_rules": [
+    "Sense prova positiva, la puntuacio maxima recomanada és 5.",
+    "Sense prova d'error, la puntuacio maxima recomanada és 7.",
+    "Sense mapa final o documentacio, la puntuacio maxima recomanada és 7.",
+    "Si l'alumne no pot explicar contracte extern o mapping, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

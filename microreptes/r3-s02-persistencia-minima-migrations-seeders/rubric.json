@@ -1,0 +1,21 @@
+{
+  "rubric_id": "rubric-r3-s02-persistencia-minima-migrations-seeders",
+  "challenge_id": "r3-s02-persistencia-minima-migrations-seeders",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha BBDD real amb migracions o equivalent, fixtures/seeders o script equivalent, dades carregades i lectura de conjunt de dades."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "S'ha comprovat reset o reconstruccio de BBDD, carrega de dades i lectura real."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits útils o registre equivalent del model, migracions o equivalent, càrrega inicial i prova, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta com crear BBDD, executar migracions o equivalent, carregar fixtures/seeders o script equivalent i quin conjunt de dades alimenta quin flux."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra propostes de camps, migracions o càrrega inicial i validacio pròpia."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "L'esquema és minim però coherent, no manual, i evita dades simulades en arrays quan hauria d'usar BBDD."}
+  ],
+  "hard_rules": [
+    "Sense BBDD real o mecanisme persistent, la puntuacio maxima recomanada és 5.",
+    "Sense migracions o equivalent versionat, la puntuacio maxima recomanada és 6.",
+    "Sense fixtures/seeders o carrega reproduïble equivalent, la puntuacio maxima recomanada és 7.",
+    "Sense lectura real de dades, la puntuacio maxima recomanada és 7.",
+    "Si les dades només es carreguen manualment, cal penalitzar verificacio i documentacio.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

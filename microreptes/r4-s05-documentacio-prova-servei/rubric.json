@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r4-s05-documentacio-prova-servei",
+  "challenge_id": "r4-s05-documentacio-prova-servei",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.25, "must_check": "El servei queda tancat amb endpoints, autenticacio, proves i consumidor identificables."},
+    {"id": "verification", "label": "Verificació", "weight": 0.25, "must_check": "Les proves inclouen cas correcte, error i contrast documentacio-comportament."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha incidencies, correccions, commits o registre de tancament de R4."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.2, "must_check": "La documentacio és executable per una altra persona i inclou request/response, errors i autenticacio."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA per documentar o provar, verifica i registra l'ajuda."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "Contracte, implementacio, proteccio i consumidor són coherents i preparen el pas a R5."}
+  ],
+  "hard_rules": [
+    "Sense documentacio executable, la puntuacio maxima recomanada és 6.",
+    "Sense proves reproduïbles, la puntuacio maxima recomanada és 7.",
+    "Sense cas d'error, la puntuacio maxima recomanada és 8.",
+    "Si la documentacio no coincideix amb el servei real, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

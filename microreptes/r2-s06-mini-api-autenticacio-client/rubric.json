@@ -1,0 +1,23 @@
+{
+  "rubric_id": "rubric-r2-s06-mini-api-autenticacio-client",
+  "challenge_id": "r2-s06-mini-api-autenticacio-client",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Login API i ruta protegida", "weight": 0.35, "must_check": "Hi ha POST /api/login o equivalent, token o mecanisme documentat, i una ruta protegida que comprova realment l'accés."},
+    {"id": "verification", "label": "Codis HTTP, JSON i prova externa", "weight": 0.2, "must_check": "Les respostes són JSON, el cas correcte retorna 200, el cas incorrecte o no autenticat retorna 401 i s'ha provat des de curl, Postman/Insomnia o equivalent."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha traçabilitat del pas de login web a contracte JSON consumible, amb commits o registre equivalent."},
+    {"id": "documentation", "label": "Contracte per a DWEC", "weight": 0.2, "must_check": "Hi ha contracte consumible amb URL base, mètodes, headers, body, exemples 200/401, usuari demo i limitacions conegudes."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra proposta acceptada, adaptació pròpia i verificació del contracte."},
+    {"id": "code_quality", "label": "Seguretat bàsica", "weight": 0.1, "must_check": "No exposa contrasenyes ni hashes, no usa credencials personals reals com a dades demo i no converteix el microrepte en una API completa fora d'escala."}
+  ],
+  "hard_rules": [
+    "Sense resposta JSON, la puntuació màxima recomanada és 7.",
+    "Sense ruta protegida, la puntuació màxima recomanada és 7.",
+    "Si retorna sempre 200, la puntuació màxima recomanada és 8.",
+    "Si exposa contrasenyes o hashes, cal corregir-ho abans de qualificar el microrepte.",
+    "Si el token o mecanisme equivalent es genera però no es comprova, la puntuació màxima recomanada és 7.",
+    "Sense contracte mínim documentat per a DWEC, la puntuació màxima recomanada és 8.",
+    "No exigisques API completa, CRUD, OpenAPI, OAuth, JWT professional, refresh tokens ni rols complexos.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

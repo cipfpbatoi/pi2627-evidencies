@@ -1,0 +1,23 @@
+{
+  "rubric_id": "rubric-r2-s09-persistencia-minima-bbdd-php",
+  "challenge_id": "r2-s09-persistencia-minima-bbdd-php",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha connexió, taula, alta i lectura vinculades a una dada significativa del projecte."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Es pot executar o revisar una alta i una consulta posterior, i el resultat queda documentat."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha traçabilitat del procés: idealment commits útils o registre equivalent associat a schema, connexió, alta, lectura i prova."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta com crear la taula, configurar la connexió, provar alta/lectura i què queda per a R3."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra proposta acceptada, adaptació pròpia i verificació de connexió/consulta."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "No hi ha secrets reals, les dades d'usuari van amb consulta preparada i la connexió no està duplicada sense control."}
+  ],
+  "hard_rules": [
+    "Sense connexió real a BBDD o mecanisme equivalent justificat, la puntuació màxima recomanada és 6.",
+    "Sense taula o schema reproduïble, la puntuació màxima recomanada és 7.",
+    "Sense alta i lectura, la puntuació màxima recomanada és 7.",
+    "Sense consulta preparada quan entren dades d'usuari, la puntuació màxima recomanada és 8.",
+    "Si hi ha secrets reals pujats al repositori, cal corregir-ho abans de qualificar el microrepte.",
+    "Si la BBDD trenca el flux principal, la puntuació màxima recomanada és 6.",
+    "No exigisques ORM, migrations, seeders, framework, relacions complexes ni repositori complet.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

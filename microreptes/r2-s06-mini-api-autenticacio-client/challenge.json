@@ -1,0 +1,68 @@
+{
+  "challenge_id": "r2-s06-mini-api-autenticacio-client",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S06",
+  "microrepte_code": "R2M6",
+  "microreptes_covered": [
+    "R2M6"
+  ],
+  "title": "Mini API d'autenticació per a client",
+  "summary": "Exposar l'autenticació de R2M5 com una mini API consumible des de client, amb resposta JSON, codis 200/401, token simple i ruta protegida.",
+  "pedagogical_goal": "Crear un pont intermodular amb DWEC sense esperar a R4 ni convertir R2 en un repte complet d'API.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "public/",
+    "api/",
+    "src/",
+    "app/",
+    "routes/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Endpoint POST /api/login o equivalent",
+    "Validació contra el sistema d'usuaris creat en R2M5",
+    "Resposta JSON en cas correcte i incorrecte",
+    "Codi 200 en cas correcte",
+    "Codi 401 en cas incorrecte o no autenticat",
+    "Token simple o mecanisme equivalent documentat",
+    "Endpoint protegit GET /api/me, GET /api/protected o equivalent",
+    "Comprovació real del token o mecanisme triat",
+    "Absència de contrasenyes o hashes en la resposta",
+    "Prova externa amb curl, Postman, Insomnia o fetch",
+    "Contracte documentat per a DWEC",
+    "Usuari demo, headers, exemples 200/401 i limitacions conegudes documentades",
+    "Commit o traçabilitat associada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La mini API reutilitza l'autenticació de R2M5",
+    "Les respostes són JSON i no HTML",
+    "El client pot distingir 200 i 401",
+    "La ruta protegida comprova realment el token",
+    "El contracte es pot consumir sense mirar el codi del backend",
+    "No s'exposen contrasenyes ni hashes",
+    "L'alumne pot explicar què queda per a R4"
+  ],
+  "recommended_test_strategy": "Executar POST /api/login amb credencials correctes i incorrectes, copiar el token, executar una ruta protegida amb i sense token, revisar que no es retornen secrets i comprovar que el contracte per a DWEC és suficient per consumir l'API sense mirar el codi.",
+  "source_alignment": [
+    "Repte 2 R2M6",
+    "Programacio d'aula R2S6",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 10%"
+  ],
+  "repte_weight": 0.1,
+  "primary_ra": "RA4",
+  "assessed_ca": [
+    "RA4.d",
+    "RA4.e"
+  ],
+  "context_ra": [
+    "Pont DWEC: consum d autenticacio des de client"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

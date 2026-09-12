@@ -1,0 +1,80 @@
+{
+  "challenge_id": "r1-s02-entorn-executable",
+  "repte_id": "r1-kickoff-backend",
+  "repte_weight": 0.75,
+  "session_code": "R1-S02",
+  "microrepte_code": "R1M2",
+  "microreptes_covered": [
+    "R1M2"
+  ],
+  "title": "Entorn executable, landing inicial i tancament de R1",
+  "summary": "Configurar una base executable amb Docker, PHP, servidor web, BBDD i phpMyAdmin, crear una landing inicial del producte servida pel backend i tancar R1 amb documentació verificable.",
+  "pedagogical_goal": "Comprovar que l'alumne entén el paper de cada servei, transforma la infraestructura en una primera entrada visible del producte i deixa el kickoff executable, documentat i defensable abans de passar a R2.",
+  "relevant_paths": [
+    "docker-compose.yml",
+    "compose.yaml",
+    "Dockerfile",
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "README.md",
+    "README.md",
+    "docs/",
+    "documentacio/",
+    "evidence/",
+    "decisions/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Configuració Docker o equivalent amb PHP, servidor web, BBDD i phpMyAdmin, o error real documentat amb hipòtesi i pla de correcció",
+    "README executable amb requisits, arrencada, parada, serveis, ports, URL i resultat esperat",
+    "Landing inicial del producte servida pel backend, amb contingut propi i CSS senzill",
+    "Healthcheck o endpoint d'estat només com a comprovació tècnica auxiliar, si n'hi ha",
+    "Demo, captura, log o URL de comprovació de l'entorn i de la landing",
+    "Documentació localitzable dins del repositori",
+    "Justificació tècnica curta o nota tècnica de decisió inicial",
+    "Registre d'incidències, verificacions i pendent de pas a R2",
+    "Commit o traçabilitat associada a l'entorn i a la landing",
+    "Explicació del flux petició, execució en servidor i resposta",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "docker compose up o equivalent arranca els serveis definits, o hi ha error documentat amb pla concret",
+    "El projecte està adaptat: nom, ports, estructura o resposta inicial no són una còpia plana",
+    "README.md o la documentació del microrepte permet repetir l'arrencada i comprovar servei web, BBDD i phpMyAdmin quan corresponga",
+    "Hi ha una URL de landing que respon en execució",
+    "La landing està connectada amb el producte o el seu estat inicial",
+    "Un healthcheck, si existeix, no és l'única entrega funcional",
+    "La landing no és només una maqueta estàtica oberta fora del servidor",
+    "L'alumne identifica què fa cada servei i quin fitxer o peça respon a la petició",
+    "La documentació del repte està dins del repositori i és accessible des d'un índex o ubicació clara",
+    "El tancament explica què queda pendent i quin és el primer pas cap a R2"
+  ],
+  "recommended_test_strategy": "Arrancar l'entorn seguint només README.md o la documentació del microrepte, obrir la URL de la landing documentada, comprovar que està servida pel backend, revisar documentació i decisions, contrastar-les amb commits i fer preguntes breus de defensa.",
+  "source_alignment": [
+    "Repte 1 R1M2",
+    "Programació d'aula R1 S02",
+    "Repte 1 organitzat en 2 microreptes",
+    "Pes orientatiu dins del repte: 75%"
+  ],
+  "primary_ra": "RA1",
+  "assessed_ca": [
+    "RA1.b",
+    "RA1.c",
+    "RA1.d",
+    "RA1.e",
+    "RA1.f",
+    "RA1.g"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció.",
+  "repte_extension": {
+    "scope": "repte",
+    "max_score": 1,
+    "requires_teacher_validation": true,
+    "declaration_path": "docs/r1-ampliacio.md",
+    "criteria": " 9→10\n\n**Finalitat**  \nAprofundir el kickoff del backend amb una millora funcional visible i defensable: el projecte ha de deixar de ser només una comprovació tècnica d'arrencada i ha de mostrar una primera entrada real al producte.\n\n**Condició prèvia**  \nEl nucli del repte ha d'estar complet, funcional i validat.\n\n**Millora demanada**\n\nLa landing inicial del producte forma part del nucli de `R1M2`. Per tant, **fer només una landing, encara que estiga cuidada, no és ampliació 9→10**.\n\nPer optar a la franja `9→10`, el projecte ha de superar la landing inicial i mostrar una primera estructura navegable del producte:\n\n- Una segona pàgina o ruta pròpia, com `Sobre nosaltres`, `Sobre el projecte`, `Com funciona` o una pàgina inicial de servei, també servida pel backend.\n- Navegació mínima entre la landing i eixa segona pàgina.\n- Contingut adaptat al producte concret, no text genèric ni plantilla sense personalitzar.\n- Un missatge més complet que permeta entendre quin problema resol el producte, per a qui és i quin serà el primer flux real en `R2`.\n- Millora visual coherent entre les pàgines: estructura clara, CSS compartit o estil mínimament consistent.\n- Evidència que les pàgines es poden executar seguint `README.md` o les instruccions documentades.\n\nEsta ampliació ha de mostrar que el projecte ja té més que una porta d'entrada: ha de tindre una primera estructura de presentació del producte que es puga recórrer des del backend. Un `healthcheck` pot ser útil com a comprovació tècnica del nucli, però **no compta com a ampliació 9→10** si és l'única millora presentada.\n\n**Altres millores complementàries**\n\nSi ja tens la landing i una segona pàgina o ruta pròpia, pots reforçar l'ampliació amb alguna d'estes accions:\n\n- Deixar l'entorn encara més reproductible amb automatització bàsica d'arrencada o millor contenidorització.\n- Redactar una nota tècnica breu i clara sobre l'arquitectura inicial i la decisió de stack.\n- Documentar breument com l'estructura navegable prepara el pas cap a formularis, dades o fluxos de `R2`.\n\n**Proposta pròpia**  \nTambé pots proposar una ampliació pròpia si està alineada amb el repte i la valides abans amb el professorat. En qualsevol cas, ha d'aportar valor visible al producte i no limitar-se a una comprovació tècnica d'estat.\n\n**Evidències mínimes**\n\n- commit o branca identificable\n- justificació tècnica breu\n- prova funcional de la landing i de la segona pàgina o ruta pròpia\n- URL o ruta documentada de cada pàgina\n- rastre de l'ús assistit per IA, si n'hi ha hagut\n\n**Ús assistit per IA**  \nLa IA et pot ajudar a comparar opcions o revisar configuració, però la decisió, la prova i la validació han de ser teues.\n\n**Defensa**  \nPerquè compute com a `9→10`, has de poder explicar què aporta la part que va més enllà de la landing, per què eixa segona pàgina o ruta encaixa amb el projecte, com es generen o servixen les pàgines des del backend i com esta millora prepara el treball posterior.\n\n"
+  }
+}

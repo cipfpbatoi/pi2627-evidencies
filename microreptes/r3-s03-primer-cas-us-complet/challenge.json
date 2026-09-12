@@ -1,0 +1,71 @@
+{
+  "challenge_id": "r3-s03-primer-cas-us-complet",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S03",
+  "microrepte_code": "R3M3",
+  "microreptes_covered": [
+    "R3M3"
+  ],
+  "title": "Primer cas d'us complet",
+  "summary": "Migrar o reconstruir en el framework un primer flux real heretat de R2 amb ruta, controlador, dades reals, resposta visible, validacio i error minim.",
+  "pedagogical_goal": "Comprovar que l'alumne pot convertir la base de R3 en un flux end-to-end real, separant responsabilitats i usant persistencia.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "routes/",
+    "controllers/",
+    "src/",
+    "app/",
+    "templates/",
+    "views/",
+    "database/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Identificacio del flux heretat de R2",
+    "Ruta funcional",
+    "Controlador o equivalent",
+    "Model, servei o capa de dades",
+    "Vista, plantilla o resposta HTML generada",
+    "Dades reals de BBDD",
+    "Dades passades del controlador a la vista o resposta",
+    "Formulari, parametre o interaccio processada si aplica",
+    "Validacio minima i error controlat",
+    "Prova del cas positiu i de l'error",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El flux ve de R2 i està acotat",
+    "El recorregut funciona de punta a punta",
+    "Les dades provenen de BBDD",
+    "Hi ha responsabilitats recognoscibles",
+    "La resposta no és una pantalla estatica"
+  ],
+  "recommended_test_strategy": "Executar el flux complet, identificar la ruta i el controlador, comprovar dades reals de BBDD, revisar vista/resposta, provar cas positiu i provocar un error controlat.",
+  "source_alignment": [
+    "Repte 3 R3M3",
+    "Programacio d'aula R3S3",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 18%"
+  ],
+  "repte_weight": 0.18,
+  "primary_ra": "RA8",
+  "assessed_ca": [
+    "RA8.d",
+    "RA8.e",
+    "RA8.g"
+  ],
+  "context_ra": [
+    "RA5.e",
+    "RA5.f",
+    "RA5.g",
+    "RA6.c",
+    "RA6.d",
+    "RA6.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

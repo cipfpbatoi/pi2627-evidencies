@@ -1,0 +1,79 @@
+{
+  "challenge_id": "r3-s06-qualitat-estabilitzacio",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S06",
+  "microrepte_code": "R3M6",
+  "microreptes_covered": [
+    "R3M6"
+  ],
+  "title": "Qualitat i estabilitzacio",
+  "summary": "Estabilitzar els fluxos de R3 amb proves, errors, validacio, revisio de responsabilitats, comprovacio de BBDD reproduïble i proteccio d'accessos.",
+  "pedagogical_goal": "Comprovar que la base en framework és reproduïble, verificable i mantenible, no només una demo puntual.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "tests/",
+    "evidence/",
+    "routes/",
+    "controllers/",
+    "src/",
+    "app/",
+    "database/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Checklist o proves dels fluxos principals",
+    "Cas positiu i negatiu",
+    "Tractament visible d'errors",
+    "Validacio reforçada quan calga",
+    "Revisio de responsabilitats en rutes/controladors/serveis/models",
+    "Comprovacio de migracions o equivalent i càrrega inicial",
+    "Comprovacio que la proteccio d'accessos de R3M5 no s'ha trencat",
+    "Incidencies detectades i corregides",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "Els fluxos principals continuen funcionant",
+    "Les proves no són només text inventat",
+    "Hi ha errors observables controlats",
+    "La BBDD es pot reconstruir",
+    "L'estructura és explicable"
+  ],
+  "recommended_test_strategy": "Executar els fluxos principals, provar cas positiu i negatiu, provocar un error, executar o revisar proves/checklist, comprovar migracions o equivalent, càrrega inicial i proteccio d'accessos, i revisar una millora o justificacio de responsabilitats.",
+  "source_alignment": [
+    "Repte 3 R3M6",
+    "Programacio d'aula R3S6",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 12%"
+  ],
+  "repte_weight": 0.12,
+  "primary_ra": "RA5",
+  "assessed_ca": [
+    "RA5.g",
+    "RA5.h"
+  ],
+  "assessed_ra": [
+    {
+      "ra_id": "RA5",
+      "assessed_ca": [
+        "RA5.g",
+        "RA5.h"
+      ],
+      "weight": 1
+    },
+    {
+      "ra_id": "RA6",
+      "assessed_ca": [
+        "RA6.g"
+      ],
+      "weight": 1
+    }
+  ],
+  "context_ra": [
+    "RA6.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

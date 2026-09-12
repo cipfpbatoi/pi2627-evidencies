@@ -1,0 +1,28 @@
+{
+  "student": "cipfpbatoi/dwes-ana-marti",
+  "repo": "cipfpbatoi/dwes-ana-marti",
+  "group": "2DAW-A",
+  "challenge_id": "r1-mp3-punt-entrada-backend",
+  "score": 7.9,
+  "ra_scores": [
+    {
+      "ra_id": "RA1",
+      "score": 7.9,
+      "assessed_ca": [
+        "RA1.b",
+        "RA1.c",
+        "RA1.d",
+        "RA1.e",
+        "RA1.f",
+        "RA1.g"
+      ],
+      "reason": "Nota global del RA1 per al microrepte avaluat."
+    }
+  ],
+  "confidence": 0.78,
+  "teacher_review_required": false,
+  "provisional": true,
+  "commit": "abc1234def5678",
+  "timestamp": "2026-05-29T10:15:30.000Z",
+  "source": "mock"
+}

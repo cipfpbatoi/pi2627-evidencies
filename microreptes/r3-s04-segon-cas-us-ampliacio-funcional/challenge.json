@@ -1,0 +1,69 @@
+{
+  "challenge_id": "r3-s04-segon-cas-us-ampliacio-funcional",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S04",
+  "microrepte_code": "R3M4",
+  "microreptes_covered": [
+    "R3M4"
+  ],
+  "title": "Segon cas d'us o ampliacio funcional",
+  "summary": "Afegir un segon flux end-to-end o ampliacio funcional útil que use framework, BBDD real i canvi dinàmic verificable.",
+  "pedagogical_goal": "Comprovar que la base de R3 pot créixer més enllà d'una demo única sense duplicacio buida ni canvi només visual.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "routes/",
+    "controllers/",
+    "src/",
+    "app/",
+    "templates/",
+    "views/",
+    "database/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Descripcio del segon flux i justificacio del seu valor",
+    "Ruta i controlador o equivalents",
+    "Interaccio amb BBDD real",
+    "Resposta que canvia segons dades, parametre, estat, filtre o formulari",
+    "Vista, plantilla o resposta HTML si és el flux server-rendered",
+    "Validacio o error minim",
+    "Prova o demo end-to-end",
+    "Comprovacio que el primer flux continua funcionant",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El segon flux és executable",
+    "No és només una vista nova o canvi d'estil",
+    "Aprofita estructura del framework",
+    "Usa BBDD real",
+    "No trenca el primer flux"
+  ],
+  "recommended_test_strategy": "Executar el segon flux, comprovar BBDD i canvi dinàmic, provar validacio o error, repetir el primer flux i revisar que no siga duplicacio cosmetica.",
+  "source_alignment": [
+    "Repte 3 R3M4",
+    "Programacio d'aula R3S4",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 12%"
+  ],
+  "repte_weight": 0.12,
+  "primary_ra": "RA8",
+  "assessed_ca": [
+    "RA8.f",
+    "RA8.g"
+  ],
+  "context_ra": [
+    "RA5.e",
+    "RA5.f",
+    "RA5.g",
+    "RA5.h",
+    "RA6.c",
+    "RA6.d",
+    "RA6.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

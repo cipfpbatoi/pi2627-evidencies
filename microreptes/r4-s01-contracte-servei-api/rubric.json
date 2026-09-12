@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r4-s01-contracte-servei-api",
+  "challenge_id": "r4-s01-contracte-servei-api",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha contracte d'API amb recurs real, endpoints, request/response i errors."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "El contracte es contrasta amb el producte real i amb casos d'ús possibles."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha issue, registre o commits que documenten la decisio del servei."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.2, "must_check": "La documentació permet entendre endpoints, formats, errors i valor del servei."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra propostes acceptades o descartades i valida el contracte."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "El contracte evita endpoints arbitraris i no desborda l'abast de R4."}
+  ],
+  "hard_rules": [
+    "Sense contracte documentat, la puntuacio maxima recomanada és 5.",
+    "Si el recurs no ve del projecte real, la puntuacio maxima recomanada és 6.",
+    "Sense errors o codis d'estat, la puntuacio maxima recomanada és 7.",
+    "Si el contracte és només una resposta d'IA sense adaptacio, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

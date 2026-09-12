@@ -1,0 +1,23 @@
+{
+  "rubric_id": "rubric-r2-s07-proves-depuracio-checkpoint",
+  "challenge_id": "r2-s07-proves-depuracio-checkpoint",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "El flux complet queda provat amb casos positius, negatius, estat i autenticacio, i almenys una comprovacio automàtica lleugera."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "La taula de proves conté resultats reals executats, casos mínims i una prova automàtica de caixa negra o de flux."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha traçabilitat del procés: registre d'incidencies, correccions o confirmacio explícita, i idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "README.md o guia permet reproduir la demo amb usuaris i passos, i explica com executar la prova automàtica lleugera."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, diferencia casos suggerits de casos executats."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "La depuracio està orientada a corregir bloquejos, la prova automàtica comprova comportament observable i no força unit testing prematur."}
+  ],
+  "hard_rules": [
+    "Sense taula o checklist de proves, la puntuacio maxima recomanada és 6.",
+    "Si només hi ha camí feliç, la puntuacio maxima recomanada és 6.",
+    "Sense cas d'accés denegat, la puntuacio maxima recomanada és 8.",
+    "Sense cap prova automàtica lleugera de flux, la puntuacio maxima recomanada és 8.",
+    "Si la prova automàtica no té instruccions d'execucio, la puntuacio maxima recomanada és 8.",
+    "Sense README.md o guia reproduïble, la puntuacio maxima recomanada és 8.",
+    "No exigisques proves unitàries, PHPUnit, mocks ni suite formal com a mínim.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

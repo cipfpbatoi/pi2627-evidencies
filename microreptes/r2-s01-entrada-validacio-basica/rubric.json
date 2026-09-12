@@ -1,0 +1,59 @@
+{
+  "rubric_id": "rubric-r2-s01-entrada-validacio-basica",
+  "challenge_id": "r2-s01-entrada-validacio-basica",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.35,
+      "must_check": "Hi ha un formulari o entrada equivalent connectat amb una acció de la landing i del projecte, amb text, opció tancada i checkbox, i el servidor rep les dades."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Inclou prova d'un cas incorrecte amb error visible i reenviament corregit amb resposta correcta."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.1,
+      "must_check": "Hi ha traçabilitat del procés: idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament del formulari, la recepció de dades i la validació bàsica, amb temps aproximat si s'ha demanat."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "El fitxer `README.md`, issue o registre explica com provar un cas correcte i almenys un cas incorrecte."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA, l'alumne registra què ha acceptat o modificat i verifica que la condició de servidor funciona."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica i seguretat",
+      "weight": 0.15,
+      "must_check": "La recepció controla camps absents, les opcions tancades es validen en servidor contra valors permesos, les dades de l'usuari es mostren escapades i no queden bolcats ni dades sensibles exposades, amb una solució simple i explicable."
+    }
+  ],
+  "hard_rules": [
+    "Sense formulari o entrada real enviada al servidor, la puntuació màxima recomanada és 5.",
+    "Sense recepció de dades en servidor, la puntuació màxima recomanada és 5.",
+    "Si la validació només és de client, la puntuació màxima recomanada és 6.",
+    "Si es reflectix entrada de l'usuari en HTML sense escapar o queda un bolcat de la petició accessible en el flux entregat, la puntuació màxima recomanada és 5 i cal revisió docent.",
+    "Si una opció tancada accepta qualsevol valor manipulat perquè el servidor confia en el formulari, la puntuació màxima recomanada és 6.",
+    "Si s'exposen contrasenyes, tokens o altres dades sensibles en URL, resposta, captures o repositori, cal revisió docent i corregir-ho abans de validar el microrepte.",
+    "Sense error visible generat per una condició real de servidor, la puntuació màxima recomanada és 7.",
+    "Si el formulari és genèric i no es pot relacionar amb cap acció real del projecte, cal revisió docent.",
+    "No exigisques que la regla de R2M3 estiga implementada, però sí que hi haja alguna dada tancada o classificada que la puga alimentar.",
+    "Si el codi és massa avançat i l'alumne no el pot explicar, cal revisió docent.",
+    "No penalitzes l'absència d'arrays d'errors, fitxers o checkbox múltiple en esta sessió.",
+    "No penalitzes l'absència de reintent amb dades conservades ni guardat funcional del cas correcte en esta sessió.",
+    "No penalitzes l'absència de protecció CSRF en R2M1, perquè encara no es demana una operació amb guardat funcional ni sessió autenticada.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "rubric_id": "rubric-r1-s02-entorn-executable",
+  "challenge_id": "r1-s02-entorn-executable",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.35,
+      "must_check": "L'entorn està definit i arranca amb Docker o equivalent, i hi ha una landing inicial o vista equivalent del producte servida pel backend, amb contingut propi i CSS senzill."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Inclou prova d'arrencada, URL, captura o log, i comprovació reproduïble del servei web, BBDD/phpMyAdmin quan corresponga, landing inicial i ruta tècnica si n'hi ha."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.1,
+      "must_check": "Hi ha issue mare, microtasques, commits o registre de decisions vinculats a l'entorn, a la landing inicial, la documentació i el tancament de R1."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "README.md o la documentació del microrepte indica requisits, arrencada, parada, ports, URL i comprovacions, i la documentació del repte és localitzable dins del repositori."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA per configurar, depurar o documentar, registra les consultes rellevants i verifica que el resultat correspon al sistema real."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica",
+      "weight": 0.15,
+      "must_check": "La configuració i la landing inicial són simples, adaptades al projecte i explicables; no són una còpia opaca impossible de defensar."
+    }
+  ],
+  "hard_rules": [
+    "Sense configuració d'entorn executable o error documentat, la puntuació màxima recomanada és 5.",
+    "Sense landing inicial o vista equivalent servida pel backend, la puntuació màxima recomanada és 6.",
+    "Si no hi ha evidència de prova, captura, log o URL reproduïble, la puntuació màxima recomanada és 6.",
+    "Sense README executable o comprovable, la puntuació màxima recomanada és 6.",
+    "Sense documentació localitzable dins del repositori, la puntuació màxima recomanada és 7.",
+    "Si és només un healthcheck sense landing inicial del producte, la puntuació màxima recomanada és 7.",
+    "Si és només una pàgina estàtica oberta fora del servidor o sense relació amb el backend, cal revisar manualment.",
+    "Si el projecte és una còpia plana no adaptada ni explicable, cal revisió docent."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "challenge_id": "r1-s01-model-client-servidor-stack",
+  "repte_id": "r1-kickoff-backend",
+  "repte_weight": 0.25,
+  "session_code": "R1-S01",
+  "microrepte_code": "R1M1",
+  "microreptes_covered": [
+    "R1M1"
+  ],
+  "title": "Model client/servidor i decisió tècnica inicial",
+  "summary": "Entendre el model client/servidor del producte, diferenciar l'execució en client i servidor, i justificar una primera decisió tècnica orientativa.",
+  "pedagogical_goal": "Comprovar que l'alumne sap explicar el paper del backend, caracteritza els mecanismes d'execució web i pren una decisió tècnica inicial coherent amb el marc del curs.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "documentacio/",
+    "evidence/",
+    "fitxa_exploracio_tecnica_inicial.md",
+    "fitxa-exploracio-tecnica.md",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Fitxa breu d'exploració tècnica inicial",
+    "Explicació del model d'execució client vs servidor aplicada al producte",
+    "Primera decisió tècnica orientativa per a R1M2, amb justificació",
+    "Alternativa descartada i dubte o límit tècnic real",
+    "Referència a fonts o ús d'IA si n'hi ha"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "Diferencia què s'executa al navegador i què s'executa al servidor",
+    "Relaciona el model client/servidor amb exemples del producte propi",
+    "Identifica navegador, servidor web, runtime, backend i tecnologies de client i servidor",
+    "Compara de manera acotada opcions com PHP, Laravel, Symfony o NestJS",
+    "Tanca una opció preferent per a R1M2, una alternativa descartada, què queda ajornat fins a R3 i un dubte pendent"
+  ],
+  "recommended_test_strategy": "Revisar la fitxa i la documentació entregada, i contrastar-la amb preguntes sobre client, servidor, runtime, valor del backend dinàmic i alternatives descartades.",
+  "source_alignment": [
+    "Repte 1 R1M1",
+    "Programació d'aula R1 S01",
+    "Pes orientatiu dins del repte: 25%"
+  ],
+  "primary_ra": "RA1",
+  "assessed_ca": [
+    "RA1.a",
+    "RA1.b",
+    "RA1.c",
+    "RA1.g"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

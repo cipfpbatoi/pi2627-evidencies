@@ -1,0 +1,73 @@
+{
+  "challenge_id": "r2-s03-logica-flux-regles-projecte",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S03",
+  "microrepte_code": "R2M3",
+  "microreptes_covered": [
+    "R2M3"
+  ],
+  "title": "Logica del flux i regles del projecte",
+  "summary": "Ampliar el flux de R2M2 perquè el backend aplique una regla recognoscible del projecte amb una decisio, array o estructura equivalent, funcio útil en una llibreria pròpia importada i dos casos amb resultat visible diferent.",
+  "pedagogical_goal": "Comprovar que l'alumne sap convertir dades reals del flux en comportament de servidor: decisions, estructures, funcions pròpies i separacio mínima en fitxers abans d'introduir estat, sessio, autenticacio o arquitectura completa.",
+  "relevant_paths": [
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Flux que parteix del formulari, reintent o guardat funcional treballat en R2M2",
+    "Regla del projecte escrita o explicada en llenguatge natural",
+    "Decisio de servidor connectada a dades reals del formulari, del flux o del guardat funcional preparades en R2M1 i R2M2",
+    "Array o estructura equivalent usada amb sentit funcional",
+    "Fitxer separat de llibreria pròpia, com `src/regles.php`, `includes/regles.php`, `lib/funcions.php` o equivalent",
+    "Import real de la llibreria amb `require_once`, `include_once` o mecanisme equivalent",
+    "Funcio útil dins de la llibreria pròpia, amb nom clar i responsabilitat recognoscible",
+    "Dos casos de prova amb resultats visibles diferents",
+    "Resposta, pantalla, resum o missatge on es veja la decisio presa pel backend",
+    "README.md, issue o registre que explique la regla, els dos casos i com provar-los",
+    "Commit o traçabilitat associada a la regla i a la logica implementada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La regla té sentit dins del producte i no és un exemple generic desconnectat",
+    "La regla naix de l'acció triada des de la landing i no d'un formulari nou creat només per a R2M3",
+    "La decisio canvia el resultat segons dades reals, no segons literals fixos",
+    "Hi ha almenys dos casos reproduïbles que forcen resultats diferents",
+    "L'array o estructura representa opcions, cataleg, llista, regles o elements del domini",
+    "La funcio està separada del fitxer que rep la peticio o renderitza la resposta",
+    "La llibreria pròpia s'importa i s'usa realment",
+    "La funcio encapsula una comprovacio, calcul, classificacio o preparacio útil",
+    "El resultat de la regla es mostra en una resposta generada pel servidor",
+    "La validacio i el reintent previs no queden trencats",
+    "Els errors acumulats en array poden aparéixer com a ampliació si el nucli de R2M3 ja està resolt, però no substitueixen la regla de domini obligatòria",
+    "No es demanen encara sessio, cookies, login, rols, autoritzacio, MVC ni persistencia formal com a mínim",
+    "L'alumne pot explicar què decideix el backend i modificar una condicio o valor de cataleg"
+  ],
+  "recommended_test_strategy": "Executar el flux existent, enviar un primer cas que active un resultat de la regla, enviar un segon cas que active un resultat diferent, revisar el codi de la decisio, l'array o estructura, el fitxer de llibreria pròpia, l'import i la funcio. Comprovar que les dades provenen del flux real i demanar un microcanvi sobre la condicio, valor del cataleg o retorn de la funcio.",
+  "source_alignment": [
+    "Repte 2 R2M3",
+    "Programacio d'aula R2S3",
+    "Documentacio d'alumnat del Repte 2",
+    "Decisions, arrays, funcions i llibreria pròpia mínima aplicades al flux abans d'estat, sessio i autenticacio",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA3",
+  "assessed_ca": [
+    "RA3.a",
+    "RA3.b",
+    "RA3.c",
+    "RA3.d"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

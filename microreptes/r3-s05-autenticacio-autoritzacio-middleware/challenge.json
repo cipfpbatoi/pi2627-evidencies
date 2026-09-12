@@ -1,0 +1,66 @@
+{
+  "challenge_id": "r3-s05-autenticacio-autoritzacio-middleware",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S05",
+  "microrepte_code": "R3M5",
+  "microreptes_covered": [
+    "R3M5"
+  ],
+  "title": "Autenticacio, autoritzacio i middleware",
+  "summary": "Protegir una accio significativa de R3 amb autenticacio del framework, autoritzacio minima i middleware/guard/policy equivalent.",
+  "pedagogical_goal": "Comprovar que l'alumnat sap traslladar l'autenticacio treballada en R2 a les eines pròpies del framework, separant autenticacio, autoritzacio i proteccio de ruta.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "routes/",
+    "controllers/",
+    "src/",
+    "app/",
+    "templates/",
+    "views/",
+    "config/",
+    "database/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Login o mecanisme d'autenticacio funcional amb eines del framework",
+    "Logout o invalidacio de sessio/token documentada",
+    "Usuari o rol de prova reproduïble",
+    "Ruta o accio protegida amb middleware, guard, voter, policy o equivalent",
+    "Regla d'autoritzacio minima vinculada al domini",
+    "Cas autoritzat i cas denegat verificats",
+    "Missatge o resposta d'error controlada quan no hi ha permisos",
+    "Documentacio breu de credencials demo i passos de prova",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La proteccio està en servidor i no només en la vista",
+    "El middleware/guard/policy o equivalent s'aplica a una ruta o accio real",
+    "Hi ha diferència observable entre usuari autoritzat i no autoritzat",
+    "Les credencials demo no exposen dades personals ni secrets reals",
+    "La solucio usa convencions del framework triat"
+  ],
+  "recommended_test_strategy": "Provar accés sense autenticar, login amb usuari demo, accés autoritzat, accés denegat amb usuari sense permís o rol inadequat, logout o invalidacio i reintent de l'accio protegida.",
+  "source_alignment": [
+    "Repte 3 R3M5",
+    "Programacio d'aula R3S5",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA5",
+  "assessed_ca": [
+    "RA5.f",
+    "RA5.g",
+    "RA5.h"
+  ],
+  "context_ra": [
+    "RA6.f",
+    "RA8.g"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

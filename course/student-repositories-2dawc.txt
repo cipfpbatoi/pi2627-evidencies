@@ -1,0 +1,5 @@
+# Repositoris d'alumnes de 2DAW-C per a correccio massiva.
+# Format: repositori grup
+
+batoi-dwes-2026/microreptes-fakeigomis 2DAW-C
+batoi-dwes-2026/microreptes-igomis 2DAW-C

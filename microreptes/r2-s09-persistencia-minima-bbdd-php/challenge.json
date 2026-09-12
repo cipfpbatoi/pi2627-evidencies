@@ -1,0 +1,81 @@
+{
+  "challenge_id": "r2-s09-persistencia-minima-bbdd-php",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S09",
+  "microrepte_code": "R2M9",
+  "microreptes_covered": [
+    "R2M9"
+  ],
+  "title": "Persistència mínima amb BBDD en PHP",
+  "summary": "Afegir una persistència mínima real al flux de R2 amb PHP pur: connexió, taula, alta, lectura i consultes preparades, sense entrar encara en ORM ni framework.",
+  "pedagogical_goal": "Introduir l'accés a BBDD des de PHP abans de R3, de manera acotada i vinculada a una dada significativa del projecte.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "database/",
+    "config/",
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Dada significativa del projecte triada i justificada",
+    "Taula, schema.sql o instruccions reproduïbles de creació",
+    "Configuració de connexió separada del codi principal",
+    "Absència de secrets reals al repositori",
+    "Connexió a BBDD amb PDO o mecanisme equivalent justificat",
+    "Alta funcional amb dades ja validades pel flux",
+    "Lectura, llistat o detall funcional de dades persistides",
+    "Ús de consultes preparades quan entren dades d'usuari",
+    "Tractament bàsic d'errors de connexió o consulta",
+    "README amb instruccions per crear la BBDD i provar alta/lectura",
+    "Comprovació que el flux principal continua funcionant",
+    "Nota sobre què queda per professionalitzar en R3",
+    "Commit o traçabilitat associada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La dada persistida té sentit dins del domini del projecte",
+    "La connexió està centralitzada o clarament localitzable",
+    "Les credencials reals no apareixen en fitxers versionats",
+    "Hi ha una operació d'escriptura i una de lectura",
+    "Les dades d'usuari no es concatenen directament en SQL",
+    "L'alumne pot explicar la diferència entre sessió, cookie, fitxer provisional i BBDD"
+  ],
+  "recommended_test_strategy": "Revisar configuració i schema, executar o demanar evidència d'una alta, comprovar una lectura posterior, inspeccionar consultes preparades i verificar que no s'han pujat secrets reals.",
+  "source_alignment": [
+    "Repte 2 R2M9",
+    "Programacio d'aula R2S9",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 10%"
+  ],
+  "repte_weight": 0.1,
+  "primary_ra": "RA6",
+  "assessed_ca": [
+    "RA6.a",
+    "RA6.b",
+    "RA6.c",
+    "RA6.d",
+    "RA6.f"
+  ],
+  "context_ra": [
+    "RA3",
+    "RA4"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció.",
+  "repte_extension": {
+    "scope": "repte",
+    "max_score": 1,
+    "requires_teacher_validation": true,
+    "declaration_path": "docs/r2-ampliacio.md",
+    "criteria": " 9→10\n\n**Finalitat**  \nMillorar la robustesa del flux en servidor i demostrar més control sobre validació, estat, autenticació, proves i mantenibilitat.\n\n**Autocorrecció associada**  \n`r2-s09-persistencia-minima-bbdd-php` (proposta global separada, dins de R2M9)\n\nEsta autocorrecció no posa automàticament un `10`. Servix per filtrar si la teua ampliació pot optar a la franja `9→10` i quina revisió docent necessita.\n\n## Com es calcula la nota final de R2\n\nLes autocorreccions dels microreptes `R2M1` a `R2M9` valoren el **nucli obligatori** del repte.\n\nLa nota final de `R2` es calcula així:\n\n```text\nnota_final_R2 = 0.9 * nota_nucli_R2 + ampliacio_9_10\n```\n\nOn:\n\n- `nota_nucli_R2` és la nota ponderada obtinguda amb el conjunt dels microreptes obligatoris, segons els pesos indicats en la taula anterior;\n- `0.9 * nota_nucli_R2` vol dir que el nucli obligatori pot arribar com a màxim a `9` en la nota final del repte;\n- `ampliacio_9_10` pot sumar de `0` a `1` punt només si l’ampliació està validada;\n- la nota final mai pot superar `10`.\n\nPer tant, si tens una mitjana de `10` en els microreptes però no presentes una ampliació `9→10` validada, la nota final del repte serà `9`.\n\nÉs una ponderació explícita: el **nucli obligatori** representa el 90% i la **via d’excel·lència** aporta fins a un punt.\n\n| Situació | Resultat |\n|---|---:|\n| Nucli de R2 incomplet | no pot optar a `9→10` |\n| Nucli de R2 complet, sense ampliació | màxim `9` |\n| Nucli de R2 complet, ampliació no vàlida o decorativa | màxim `9` |\n| Nucli de R2 complet, ampliació útil però limitada | base ponderada × 0,9 + fins a `0,5`, segons revisió docent |\n| Nucli de R2 complet, ampliació integrada, provada i defensada | fins a `10` |\n\n**A quin nivell s'aplica**  \nLa via `9→10` s'aplica al **Repte 2 complet**, no a cada microrepte de manera independent.\n\nAixò vol dir que no has de fer una ampliació diferent per a `R2M1`, una altra per a `R2M2`, una altra per a `R2M3`, etc. Primer has de completar bé el conjunt del repte: entrada, processament, lògica, estat, autenticació, mini API d'autenticació per a client, proves, primera peça testable i persistència mínima amb BBDD.\n\nDesprés, si el nucli ja està complet i validat, pots presentar **una ampliació integrada** que millore una part important del flux. Pot nàixer d’un microrepte concret, però ha de tindre impacte sobre el repte complet.\n\n**Condició prèvia**  \nEl nucli del repte ha d'estar complet, funcional i validat.\n\nEsta ampliació no compensa mancances del nucli. Si falten evidències obligatòries, proves mínimes, autenticació funcional o defensa del flux, primer cal reparar el repte base.\n\nTampoc és un requisit per aprovar el repte ni per tancar els microreptes. La seua absència no penalitza mentre el nucli obligatori estiga ben resolt.\n\n**Opcions d'ampliació**\n\n- Reforçar la validació, els errors visibles o la funcionalitat protegida amb un cas crític millor resolt.\n- Afegir una pujada de fitxer o imatge al flux principal si té sentit en el projecte, amb validació de tipus, grandària, error visible i associació al recurs creat.\n- Fer `R2S10`: documentar un contracte d'autenticació consumible per `DWEC`, amb endpoints, headers, respostes, dades demo i prova creuada.\n- Afegir una llibreria externa menuda amb Composer o una crida a una API externa si té sentit real en el projecte i queda documentat com a ampliació.\n\n**Exemples vàlids en R2**\n\n- Millorar la validació del flux principal amb més casos d’error reals, missatges més útils i prova documentada.\n- Afegir una imatge, captura, justificant o document associat al registre principal, amb prova de fitxer acceptat i fitxer rebutjat.\n- Afegir una comprovació de seguretat o autorització més fina sobre l’operació protegida.\n- Automatitzar millor una bateria de proves del flux amb diversos casos rellevants.\n- Usar una llibreria externa menuda amb Composer si resol una necessitat real del projecte i queda explicada.\n- Consumir una API externa només si aporta dades útils al flux i no substituïx el treball obligatori de R2.\n\n**Exemples que no compten com a 9→10**\n\n- Afegir pantalles decoratives sense millorar el flux.\n- Fer una ampliació que no es pot provar.\n- Usar una API externa només perquè parega avançat.\n- Afegir codi generat per IA que no pots explicar.\n- Presentar una ampliació mentre encara fallen el login, les proves mínimes o l’operació protegida.\n\n**Proposta pròpia**  \nTambé pots proposar una ampliació pròpia si té valor tècnic real i es valida abans amb el professorat.\n\n**Evidències mínimes**\n\n- commit o branca identificable\n- justificació tècnica breu\n- prova funcional dels casos millorats\n- rastre de l'ús assistit per IA, si l'has usat\n- referència a l'autocorrecció `r2-s09-persistencia-minima-bbdd-php` (proposta global separada, dins de R2M9) o informe equivalent de candidatura\n\n**Ús assistit per IA**  \nLa IA et pot ajudar a contrastar validacions, proves, classes o ús de Composer, però no substituïx la teua decisió ni la teua comprovació real.\n\n**Defensa**  \nL'ampliació només compta si la pots explicar amb criteri i sense delegació excessiva.\n\n**Regla curta**  \nNucli primer, ampliació després. En `R2`, la via `9→10` és una ampliació integrada del repte complet, no una col·lecció de punts extra per microrepte. Una ampliació no puja a `9→10` si el treball base encara no és funcional, verificable i defensable.\n\n"
+  }
+}

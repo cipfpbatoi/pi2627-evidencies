@@ -1,0 +1,21 @@
+{
+  "rubric_id": "rubric-r3-s01-arrencada-nou-projecte",
+  "challenge_id": "r3-s01-arrencada-nou-projecte",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha projecte en framework arrancable amb Docker o entorn equivalent, configuracio minima i ruta inicial funcional."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "S'ha comprovat l'arrencada i la ruta inicial seguint instruccions reproduïbles."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits útils o registre equivalent d'inici, arrencada i tancament, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "README.md, issue o registre inclou comparativa de stack, esquema abans/despres, .env.example o instruccions i dos casos d'us acotats."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra ajuda en arrencada o comparativa i verifica l'execucio real."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "La base no és un esquelet buit: usa convencions del framework, evita secrets versionats i delimita responsabilitats inicials."}
+  ],
+  "hard_rules": [
+    "Sense projecte arrancable, la puntuacio maxima recomanada és 5.",
+    "Sense ruta inicial o healthcheck funcional, la puntuacio maxima recomanada és 6.",
+    "Sense .env.example o instruccions de configuracio, la puntuacio maxima recomanada és 7.",
+    "Sense casos d'us declarats per a R3, la puntuacio maxima recomanada és 8.",
+    "Si es versionen secrets reals, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

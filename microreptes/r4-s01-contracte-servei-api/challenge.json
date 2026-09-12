@@ -1,0 +1,57 @@
+{
+  "challenge_id": "r4-s01-contracte-servei-api",
+  "repte_id": "r4-api-consum",
+  "session_code": "R4-S01",
+  "microrepte_code": "R4M1",
+  "microreptes_covered": [
+    "R4M1"
+  ],
+  "title": "Disseny del contracte del servei",
+  "summary": "Definir quin recurs real del projecte es publicarà com a API, amb endpoints, request/response, errors i valor funcional.",
+  "pedagogical_goal": "Evitar APIs improvisades i comprovar que l'alumne pot pensar en contracte abans d'implementar.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "api/",
+    "openapi.yaml",
+    "openapi.yml",
+    "postman/",
+    "insomnia/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Recurs o cas d'us real del projecte triat",
+    "Mapa inicial d'endpoints",
+    "Taula de request, response i errors",
+    "Codis d'estat minims previstos",
+    "Justificacio del valor de publicar el servei",
+    "Registre de decisions o issue de R4",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El contracte es pot entendre sense mirar el codi",
+    "Els endpoints tenen sentit de domini",
+    "Hi ha cas correcte i cas d'error",
+    "El contracte no promet funcionalitats que el projecte no té"
+  ],
+  "recommended_test_strategy": "Llegir el document de contracte, comprovar que el recurs ve del projecte real, revisar endpoints, request/response, codis d'estat i errors, i contrastar-ho amb el backlog de R3.",
+  "source_alignment": [
+    "Repte 4 R4M1",
+    "Programacio d'aula R4S1",
+    "Documentacio d'alumnat del Repte 4",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA7",
+  "assessed_ca": [
+    "RA7.a",
+    "RA7.b",
+    "RA7.c",
+    "RA7.d"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

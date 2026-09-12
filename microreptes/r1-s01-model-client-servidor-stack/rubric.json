@@ -1,0 +1,49 @@
+{
+  "rubric_id": "rubric-r1-s01-model-client-servidor-stack",
+  "challenge_id": "r1-s01-model-client-servidor-stack",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.35,
+      "must_check": "La fitxa resol el model client/servidor del producte i formula una decisió tècnica orientativa coherent."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Inclou evidència revisable de la fitxa, fonts o contrast utilitzat, i punts que es poden defensar oralment."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.1,
+      "must_check": "Els documents i decisions del microrepte són localitzables al repositori i no queden només en converses externes."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "README.md o la documentació enllaça la fitxa, resumeix la decisió i deixa clars els dubtes oberts."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA, el resultat mostra contrast i comprensió pròpia; les captures o respostes d'IA no substitueixen la fitxa."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica",
+      "weight": 0.15,
+      "must_check": "La comparació de tecnologies és acotada, realista, orientada a R1M2 i deixa clar que el framework complet queda per a R3 o més avant."
+    }
+  ],
+  "hard_rules": [
+    "Sense fitxa d'exploració tècnica o document equivalent, la puntuació màxima recomanada és 5.",
+    "Si no diferencia client i servidor aplicat al producte propi, la puntuació màxima recomanada és 6.",
+    "Si només aporta captures o text d'IA sense elaboració pròpia, cal revisió docent.",
+    "Si no hi ha README.md o documentació localitzable, aplica la penalització global configurada."
+  ]
+}

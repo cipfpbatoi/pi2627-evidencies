@@ -1,0 +1,69 @@
+{
+  "challenge_id": "r3-s07-tancament-tecnic",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S07",
+  "microrepte_code": "R3M7",
+  "microreptes_covered": [
+    "R3M7"
+  ],
+  "title": "Tancament tecnic",
+  "summary": "Tancar R3 amb README.md reproduïble, documentacio de BBDD, dos fluxos, decisions, demo i backlog cap a R4.",
+  "pedagogical_goal": "Comprovar que el projecte en framework és comprensible, reproduïble i defensable abans d'obrir API en R4.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "database/",
+    "routes/",
+    "src/",
+    "app/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "README tecnic actualitzat",
+    "Instruccions d'arrencada",
+    "Instruccions de BBDD, migracions/fixtures/seeders o script equivalent",
+    "Resum dels dos casos d'us implementats",
+    "Documentacio de ruta o accio protegida i regla d'autoritzacio",
+    "Decisions tecniques breus",
+    "Demo final o guio de demo",
+    "Backlog del que queda per migrar",
+    "Identificacio de possible recurs o endpoint per a R4",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "Una altra persona pot arrancar el projecte",
+    "README.md o les instruccions de reproducció coincideixen amb el codi real",
+    "Els dos fluxos són demostrables",
+    "Queda clar què s'ha migrat i què queda fora",
+    "El pas a R4 està justificat"
+  ],
+  "recommended_test_strategy": "Seguir el README per arrancar, crear BBDD, carregar dades, executar dos fluxos, revisar decisions i backlog, i comprovar quin recurs podria passar a API en R4.",
+  "source_alignment": [
+    "Repte 3 R3M7",
+    "Programacio d'aula R3S7",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 13%"
+  ],
+  "repte_weight": 0.13,
+  "primary_ra": "RA5",
+  "assessed_ca": [
+    "RA5.f",
+    "RA5.g"
+  ],
+  "context_ra": [
+    "RA6.g"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció.",
+  "repte_extension": {
+    "scope": "repte",
+    "max_score": 1,
+    "requires_teacher_validation": true,
+    "declaration_path": "docs/r3-ampliacio.md",
+    "criteria": " 9→10\n\n**Finalitat**  \nAprofundir en la qualitat de l'arquitectura en framework i demostrar millor criteri sobre `MVC`, persistència i mantenibilitat.\n\n**Condició prèvia**  \nEl nucli del repte ha d'estar complet, funcional i validat.\n\n**Opcions d'ampliació**\n- Millorar un flux amb paginació, filtrat, cerca o una autorització més fina que amplie la regla mínima sense trencar la coherència del projecte.\n- Fer una refactorització justificada del repartiment entre ruta, controlador, capa de dades i vista o plantilla.\n\n**Proposta pròpia**  \nEs pot presentar una ampliació pròpia si continua centrada en qualitat arquitectònica i es valida abans amb el professorat.\n\n**Evidències mínimes**\n- commit o branca identificable\n- nota tècnica breu de decisió\n- demo funcional del flux millorat\n- rastre de l'ús assistit per IA, si n'hi ha hagut\n\n**Ús assistit per IA**  \nLa IA et pot ajudar a comparar estructures, revisar codi o suggerir proves, però la decisió d'arquitectura i la defensa han de ser teues.\n\n**Defensa**  \nPerquè compute com a `9→10`, has de poder justificar per què la millora aporta qualitat real al projecte.\n\n"
+  }
+}

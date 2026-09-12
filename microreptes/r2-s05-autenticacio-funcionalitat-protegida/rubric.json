@@ -1,0 +1,24 @@
+{
+  "rubric_id": "rubric-r2-s05-autenticacio-funcionalitat-protegida",
+  "challenge_id": "r2-s05-autenticacio-funcionalitat-protegida",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Registre mínim o estructura d'usuaris amb contrasenya hashejada, login amb verificacio de hash, sessio autenticada i operacio real protegida amb cas permés i denegat."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Inclou prova de registre o usuari guardat amb hash, login incorrecte, login correcte, accés no autenticat, autenticat, logout i accés directe a l'operacio protegida."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha traçabilitat del procés: idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament de registre/hash, login i proteccio, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta forma de registre, usuaris de prova, on es guarda el hash, operacio protegida i casos permés/denegat."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra què ha acceptat i verifica els casos manualment."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "El control està en servidor, la contrasenya no es guarda en clar, la verificacio usa hash i la proteccio no es limita a ocultar interfície."}
+  ],
+  "hard_rules": [
+    "Sense registre mínim o estructura d'usuaris amb hash, la puntuacio maxima recomanada és 6.",
+    "Si es guarden contrasenyes en clar, la puntuacio maxima recomanada és 6 i cal revisio docent.",
+    "Si el login compara directament amb un literal de contrasenya en clar, la puntuacio maxima recomanada és 6.",
+    "Sense autenticacio funcional, la puntuacio maxima recomanada és 5.",
+    "Sense operacio real protegida, la puntuacio maxima recomanada és 6.",
+    "Si només s'oculta un botó però la ruta executa igual, la puntuacio maxima recomanada és 6.",
+    "Sense cas denegat, la puntuacio maxima recomanada és 7.",
+    "No exigisques rols avançats, registre públic complet, recuperacio de contrasenya, OAuth, JWT ni base de dades com a mínim.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

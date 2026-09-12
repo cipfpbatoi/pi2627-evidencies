@@ -1,0 +1,68 @@
+{
+  "challenge_id": "r2-s05-autenticacio-funcionalitat-protegida",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S05",
+  "microrepte_code": "R2M5",
+  "microreptes_covered": [
+    "R2M5"
+  ],
+  "title": "Autenticacio i funcionalitat protegida",
+  "summary": "Implementar registre mínim amb contrasenya hashejada, autenticacio funcional i proteccio d'una operacio real del domini amb cas autoritzat i cas denegat.",
+  "pedagogical_goal": "Comprovar que l'alumne diferencia registre, identificacio, autenticacio i autoritzacio bàsica, guarda contrasenyes amb hash i aplica la restriccio a una operacio real del producte.",
+  "relevant_paths": [
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Formulari o mecanisme de registre mínim",
+    "Usuari guardat en array, fitxer o estructura equivalent del projecte",
+    "Contrasenya guardada amb hash, per exemple `password_hash` o mecanisme equivalent",
+    "Formulari o mecanisme de login funcional",
+    "Comprovacio de credencials en servidor amb verificacio de hash, per exemple `password_verify` o equivalent",
+    "Usuari autenticat guardat en sessio o equivalent",
+    "Logout o invalidacio de sessio",
+    "Operacio real del domini protegida",
+    "Cas no autenticat denegat",
+    "Cas autenticat permés",
+    "Cas no autoritzat si el projecte ja té rol, propietat o restriccio simple",
+    "README.md, issue o registre amb forma de registre, usuaris de prova i passos",
+    "Commit o traçabilitat associada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "Hi ha registre o estructura d'usuaris amb contrasenya hashejada",
+    "La contrasenya no queda guardada en clar",
+    "El login no és només visual",
+    "La verificacio del login usa el hash guardat",
+    "La proteccio es fa en servidor abans d'executar l'operacio",
+    "L'operacio protegida té valor dins del projecte",
+    "Cridar directament la ruta protegida no salta el control",
+    "Hi ha cas permés i cas denegat reproduïbles",
+    "L'alumne pot explicar autenticacio i autoritzacio"
+  ],
+  "recommended_test_strategy": "Registrar o localitzar un usuari amb contrasenya hashejada, comprovar que no hi ha contrasenya en clar, provar login incorrecte, iniciar sessio amb credencials vàlides, intentar executar l'operacio protegida sense sessio, executar-la correctament amb sessio, fer logout i repetir l'intent. Revisar el punt de codi on es verifica el hash i on es comprova la restriccio.",
+  "source_alignment": [
+    "Repte 2 R2M5",
+    "Programacio d'aula R2S5",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 20%"
+  ],
+  "repte_weight": 0.2,
+  "primary_ra": "RA4",
+  "assessed_ca": [
+    "RA4.d",
+    "RA4.e"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

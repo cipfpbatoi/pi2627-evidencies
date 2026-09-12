@@ -1,0 +1,15 @@
+{
+  "challenge_id": "r1-s02-entorn-executable",
+  "student": "cipfpbatoi/dwes-ana-marti",
+  "commit": "abc1234def5678",
+  "final_score_over_10": "8.5",
+  "provisional": "true",
+  "dimension_scores": {
+    "functional_resolution": 8
+  },
+  "strengths": "Payload llegit",
+  "weaknesses": [],
+  "blocking_flags": [],
+  "teacher_review_required": false,
+  "confidence": 1.2
+}

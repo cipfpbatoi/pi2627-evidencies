@@ -1,0 +1,58 @@
+{
+  "rubric_id": "rubric-r2-s03-logica-flux-regles-projecte",
+  "challenge_id": "r2-s03-logica-flux-regles-projecte",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.3,
+      "must_check": "Hi ha una regla del projecte implementada en servidor amb decisio observable, dades reals del flux preparat en R2M1/R2M2, array o estructura útil, funcio clara en una llibreria pròpia importada i dos resultats visibles diferents."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Inclou prova de dos casos que activen resultats diferents i comprovacio que la regla, la funcio i l'import de la llibreria pròpia no trenquen el flux previ de validacio, reintent i guardat funcional."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.1,
+      "must_check": "Hi ha traçabilitat del procés: idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament de la regla, la funcio, la llibreria pròpia, l'import i l'array o estructura usada, amb temps aproximat si s'ha demanat."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "El fitxer `README.md`, issue o registre explica la regla en llenguatge natural, quines dades usa, quin fitxer de llibreria pròpia conté la funcio, on s'importa, quins dos casos cal provar i quin resultat s'espera en cada cas."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA, l'alumne registra què ha acceptat o modificat i verifica almenys un cas propi no limitat al suggeriment generat."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica",
+      "weight": 0.2,
+      "must_check": "El codi és explicable: noms clars, llibreria pròpia mínima importada amb `require_once`, `include_once` o equivalent, funcio amb responsabilitat real, array o estructura consultada amb sentit i logica acotada al nivell de R2M3."
+    }
+  ],
+  "hard_rules": [
+    "Sense flux executable que vinga de formulari, reintent o guardat funcional, la puntuacio maxima recomanada és 5.",
+    "Sense regla del projecte connectada al domini, la puntuacio maxima recomanada és 6.",
+    "Si la regla depén d'un formulari nou creat només per a R2M3 i no del flux anterior, cal revisio docent.",
+    "Sense dos casos amb resultats visibles diferents, la puntuacio maxima recomanada és 7.",
+    "Sense array o estructura equivalent usada amb sentit, la puntuacio maxima recomanada és 8.",
+    "Sense funcio útil amb responsabilitat recognoscible, la puntuacio maxima recomanada és 8.",
+    "Sense fitxer separat de llibreria pròpia importat pel flux, la puntuacio maxima recomanada és 8.",
+    "Si hi ha `include` o `require` però el fitxer importat no s'usa realment, la puntuacio maxima recomanada és 8.",
+    "Si el resultat depén de literals fixos i no de dades reals del flux, la puntuacio maxima recomanada és 7.",
+    "No penalitzes l'absencia d'errors acumulats en array, sessio, cookies, login, rols, autoritzacio, MVC, persistencia formal o base de dades obligatoria en esta sessio.",
+    "Els errors acumulats en array són una ampliació coherent de R2M3 si el nucli ja està resolt, però no compensen una regla de domini absent, ornamental o no verificable.",
+    "Si el codi és massa avançat i l'alumne no el pot explicar, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

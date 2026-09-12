@@ -1,0 +1,29 @@
+{
+  "groups": {
+    "2DAW-A": {
+      "active_challenge_id": "r1-s01-model-client-servidor-stack"
+    },
+    "2DAW-B": {
+      "active_challenge_id": "r1-s02-entorn-executable"
+    },
+    "2DAW-C": {
+      "active_challenge_id": "r1-s02-entorn-executable"
+    },
+    "2DAW-D": {
+      "active_challenge_id": "r1-s02-entorn-executable"
+    }
+  },
+  "students": {
+    "cipfpbatoi/dwes-ana-marti": {
+      "inherits_group_challenge": true
+    },
+    "cipfpbatoi/dwes-joan-ferrer": {
+      "inherits_group_challenge": false,
+      "active_challenge_id": "r1-s01-model-client-servidor-stack",
+      "reason": "Adaptació temporal del calendari individual"
+    },
+    "cipfpbatoi/dwes-laura-soler": {
+      "inherits_group_challenge": true
+    }
+  }
+}

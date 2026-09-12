@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r3-s05-autenticacio-autoritzacio-middleware",
+  "challenge_id": "r3-s05-autenticacio-autoritzacio-middleware",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha autenticacio funcional, accio protegida i autoritzacio minima amb eines del framework."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "S'han provat cas sense autenticar, cas autoritzat, cas denegat i logout o invalidacio."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits útils o registre equivalent de decisions de seguretat, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta usuaris demo, ruta protegida, regla d'autoritzacio i passos de prova."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra propostes de middleware/guard/policy i verificacio pròpia."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "La proteccio està en servidor, usa convencions del framework i no es limita a ocultar botons o enllaços."}
+  ],
+  "hard_rules": [
+    "Sense autenticacio funcional, la puntuacio maxima recomanada és 6.",
+    "Sense autoritzacio o regla de permís diferenciada, la puntuacio maxima recomanada és 7.",
+    "Si la proteccio només està en la vista i no en servidor, la puntuacio maxima recomanada és 6.",
+    "Sense cas denegat verificat, la puntuacio maxima recomanada és 8.",
+    "Si es versionen secrets reals o contrasenyes personals, cal penalitzar severament qualitat i documentacio."
+  ]
+}

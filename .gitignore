@@ -1,0 +1,16 @@
+node_modules/
+npm-debug.log*
+.DS_Store
+.env
+.env.*
+!.env.example
+coverage/
+dist/
+tmp/*
+!tmp/.gitkeep
+.idea/
+.vscode/
+*.log
+grades/**
+!grades/
+!grades/README.md

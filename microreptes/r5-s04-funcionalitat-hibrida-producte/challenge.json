@@ -1,0 +1,59 @@
+{
+  "challenge_id": "r5-s04-funcionalitat-hibrida-producte",
+  "repte_id": "r5-integracio-hibrida",
+  "session_code": "R5-S04",
+  "microrepte_code": "R5M4",
+  "microreptes_covered": [
+    "R5M4"
+  ],
+  "title": "Integració de la funcionalitat híbrida en el producte",
+  "summary": "Connectar connector i transformació amb una pantalla, endpoint, procés o automatització real del producte.",
+  "pedagogical_goal": "Comprovar que la integració no queda com una demo aïllada i que genera valor observable en el producte final.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "src/",
+    "app/",
+    "routes/",
+    "templates/",
+    "views/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Funcionalitat hibrida integrada en el producte",
+    "Demo completa del flux",
+    "Comparativa abans/despres",
+    "Control minim d'error de la font externa",
+    "Commit rellevant comentat",
+    "Instruccions per reproduir la demo",
+    "AI log si hi ha us rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La integracio apareix en un flux real del producte",
+    "El connector i el mapping s'utilitzen dins del flux",
+    "Hi ha efecte observable o resposta visible",
+    "L'alumne pot explicar el recorregut complet de dades"
+  ],
+  "recommended_test_strategy": "Executar el flux complet, revisar el commit rellevant, comprovar l'abans/despres i provocar o inspeccionar el comportament davant d'error extern.",
+  "source_alignment": [
+    "Repte 5 R5M4",
+    "Programacio d'aula R5S4",
+    "Documentacio d'alumnat del Repte 5",
+    "Pes orientatiu dins del repte: 25%"
+  ],
+  "repte_weight": 0.25,
+  "primary_ra": "RA9",
+  "assessed_ca": [
+    "RA9.e",
+    "RA9.f"
+  ],
+  "context_ra": [
+    "RA8.f",
+    "RA7.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

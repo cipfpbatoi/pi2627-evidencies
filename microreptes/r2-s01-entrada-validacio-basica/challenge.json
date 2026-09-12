@@ -1,0 +1,78 @@
+{
+  "challenge_id": "r2-s01-entrada-validacio-basica",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S01",
+  "microrepte_code": "R2M1",
+  "microreptes_covered": [
+    "R2M1"
+  ],
+  "title": "Entrada de dades i validació bàsica",
+  "summary": "Crear un formulari mínim nascut d'una acció de la landing, amb text, llista o opció tancada i checkbox, recuperar les dades en PHP i aplicar una validació bàsica de servidor amb error visible i reenviament corregit.",
+  "pedagogical_goal": "Comprovar que l'alumne entén el recorregut bàsic d'una petició de formulari abans d'introduir arrays, acumulació d'errors, fitxers, estat o autenticació.",
+  "relevant_paths": [
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Formulari o entrada equivalent amb text, llista/opció i checkbox",
+    "Connexió del formulari amb una acció visible o esperable de la landing page",
+    "Almenys una dada tancada o classificada que puga alimentar una decisió posterior del projecte",
+    "Recepció de dades en PHP amb `$_POST` o mecanisme equivalent",
+    "Explicació o codi que mostre què arriba com a cadena i què pot no arribar si el checkbox no està marcat",
+    "Lectura defensiva de camps absents i validació en servidor de les opcions contra una llista de valors permesos",
+    "Escapament de qualsevol dada de l'usuari mostrada en HTML i absència de bolcats de petició o dades sensibles exposades",
+    "Validació bàsica de servidor amb una condició simple i una variable o missatge d'error",
+    "Demo o captura d'un cas incorrecte amb error visible",
+    "Demo o captura del reenviament corregit",
+    "README.md, issue o registre que explique com provar el cas correcte i un error",
+    "Commit o traçabilitat associada al formulari i a la validació",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El formulari envia una petició real al servidor",
+    "El formulari no és genèric: correspon a registrar, reservar, publicar, donar d'alta, moure, sol·licitar o gestionar alguna cosa del projecte",
+    "El codi recupera almenys text, una opció tancada i un checkbox simple",
+    "Hi ha una opció, categoria, franja, prioritat, tipus, estat, quantitat o dada semblant que podria usar-se en R2M3",
+    "La validació no depén només de `required` o JavaScript de client",
+    "Els camps absents es tracten sense avisos i una opció tancada manipulada queda rebutjada pel servidor",
+    "Les dades aportades per l'usuari es mostren escapades i no s'interpreten com a HTML",
+    "No queden `var_dump`, `print_r` o bolcats equivalents accessibles ni dades sensibles en URL, resposta, captures o repositori",
+    "Hi ha una condició de servidor comprensible que bloqueja un cas incorrecte",
+    "L'error visible correspon a una condició real del codi",
+    "El cas corregit es pot reenviar i genera una resposta correcta",
+    "No es demanen arrays d'errors, checkbox múltiple, fitxers ni validació acumulada com a mínim",
+    "No s'exigeix encara reintent amb dades conservades ni guardat funcional del cas correcte; això correspon a R2M2",
+    "L'alumne pot explicar què passa quan falta la dada validada"
+  ],
+  "recommended_test_strategy": "Executar el formulari, enviar un cas incorrecte, manipular una opció tancada, provar text amb marques HTML, comprovar que el servidor rebutja l'opció i mostra el text escapat, reenviar un cas correcte, revisar la recepció defensiva i confirmar que no queden bolcats ni dades sensibles exposades.",
+  "source_alignment": [
+    "Repte 2 R2M1",
+    "Programació d'aula R2S1",
+    "Validació inicial bàsica abans d'arrays i validació acumulada",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA2",
+  "assessed_ca": [
+    "RA2.a",
+    "RA2.b",
+    "RA2.c",
+    "RA2.d"
+  ],
+  "context_ra": [
+    "RA3.e",
+    "RA3.f",
+    "RA3.g"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

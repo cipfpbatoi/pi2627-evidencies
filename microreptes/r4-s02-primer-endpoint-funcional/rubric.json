@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r4-s02-primer-endpoint-funcional",
+  "challenge_id": "r4-s02-primer-endpoint-funcional",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.35, "must_check": "Hi ha endpoint real que respon amb dades o accio del projecte."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "S'ha provat el cas correcte seguint instruccions reproduïbles."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits o registre del pas de contracte a implementacio."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "README.md o document d'API indica com executar la peticio i què retorna."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, verifica el codi i registra ajuda rellevant."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "La resposta és estructurada, coherent amb contracte i no és un JSON decoratiu."}
+  ],
+  "hard_rules": [
+    "Sense endpoint funcional, la puntuacio maxima recomanada és 5.",
+    "Si la resposta és estàtica i desconnectada del projecte, la puntuacio maxima recomanada és 6.",
+    "Sense prova reproduïble, la puntuacio maxima recomanada és 7.",
+    "Si no coincideix amb cap contracte, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

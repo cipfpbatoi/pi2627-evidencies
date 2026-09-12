@@ -1,0 +1,66 @@
+{
+  "challenge_id": "r2-s07-proves-depuracio-checkpoint",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S07",
+  "microrepte_code": "R2M7",
+  "microreptes_covered": [
+    "R2M7"
+  ],
+  "title": "Proves, depuracio i checkpoint tecnic",
+  "summary": "Executar una bateria mínima de proves del flux complet, afegir una prova automàtica lleugera de flux, registrar incidencies, corregir bloquejos i actualitzar la documentacio de reproduccio.",
+  "pedagogical_goal": "Comprovar que l'alumne pot verificar i explicar el comportament real del flux abans de crear la primera peça testable amb POO i Composer, introduint automatitzacio lleugera sense exigir encara proves unitàries.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Checklist o taula de proves amb entrada, passos, resultat esperat i resultat real",
+    "Cas vàlid executat",
+    "Cas invàlid per validacio executat",
+    "Reintent amb dades conservades comprovat",
+    "Regla del projecte amb dos resultats comprovada",
+    "Estat recuperat i invalidat comprovat",
+    "Accés no autenticat denegat",
+    "Accés autenticat permés",
+    "Logout o invalidacio i nou intent denegat",
+    "Almenys una prova automàtica lleugera de flux amb `curl`, script `.sh`, script PHP senzill, col·leccio de peticions o equivalent",
+    "Instruccions per executar la prova automàtica",
+    "Incidencies detectades o confirmacio explícita que no n'hi ha",
+    "README.md o guia de reproduccio actualitzada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "No es prova només el camí feliç",
+    "Hi ha almenys una comprovacio executable de caixa negra o de flux",
+    "No es presenten proves unitàries com a requisit obligatori de R2M7",
+    "Els resultats documentats coincideixen amb el comportament real",
+    "Hi ha rastre d'eina o entorn de prova",
+    "Les incidencies bloquejants estan corregides o documentades",
+    "Hi ha una regla o comprovacio candidata a convertir-se en classe testable en R2M8"
+  ],
+  "recommended_test_strategy": "Revisar la taula de proves, triar un cas documentat, executar-lo i contrastar resultat real, README i codi. Després executar o revisar la prova automàtica lleugera i comprovar que valida un comportament observable del flux. Revisar incidencies i correccions.",
+  "source_alignment": [
+    "Repte 2 R2M7",
+    "Programacio d'aula R2S7",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 8%"
+  ],
+  "repte_weight": 0.08,
+  "primary_ra": "RA4",
+  "assessed_ca": [
+    "RA4.f"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

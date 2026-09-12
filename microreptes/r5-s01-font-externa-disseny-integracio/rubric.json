@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r5-s01-font-externa-disseny-integracio",
+  "challenge_id": "r5-s01-font-externa-disseny-integracio",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha font externa triada, valor de producte i mapa inicial d'integració."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "La font es valida amb documentació, accessibilitat i riscos reals."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha registre de comparativa, decisio i motius de descart."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.2, "must_check": "El mapa explica entrada, font, transformacio prevista, eixida i error."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra propostes acceptades o descartades i valida la font."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "L'abast és viable i no depén d'una font opaca o ornamental."}
+  ],
+  "hard_rules": [
+    "Sense font externa documentada, la puntuacio maxima recomanada és 5.",
+    "Si la font no aporta valor al producte, la puntuacio maxima recomanada és 6.",
+    "Sense mapa d'integracio, la puntuacio maxima recomanada és 7.",
+    "Si la tria és només una resposta d'IA sense validacio, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

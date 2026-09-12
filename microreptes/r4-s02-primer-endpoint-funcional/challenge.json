@@ -1,0 +1,59 @@
+{
+  "challenge_id": "r4-s02-primer-endpoint-funcional",
+  "repte_id": "r4-api-consum",
+  "session_code": "R4-S02",
+  "microrepte_code": "R4M2",
+  "microreptes_covered": [
+    "R4M2"
+  ],
+  "title": "Implementació del primer endpoint funcional",
+  "summary": "Publicar un primer endpoint real amb resposta estructurada i dades o accio del projecte.",
+  "pedagogical_goal": "Comprovar que el contracte passa a comportament executable sense reobrir el bloc de persistencia de R3.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "routes/",
+    "controllers/",
+    "src/",
+    "app/",
+    "tests/",
+    "api/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Endpoint funcional i accessible",
+    "Resposta estructurada coherent amb el contracte",
+    "Dades reals o accio real del sistema",
+    "Demo o prova del cas correcte",
+    "Contracte actualitzat si ha canviat",
+    "Commits associats",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "L'endpoint respon seguint instruccions reproduïbles",
+    "La resposta té format estable",
+    "Les dades no són ornamentals",
+    "Es pot assenyalar el codi que construeix la resposta"
+  ],
+  "recommended_test_strategy": "Arrancar el projecte, executar la peticio documentada, comprovar resposta, dades reals i coincidencia amb el contracte.",
+  "source_alignment": [
+    "Repte 4 R4M2",
+    "Programacio d'aula R4S2",
+    "Documentacio d'alumnat del Repte 4",
+    "Pes orientatiu dins del repte: 20%"
+  ],
+  "repte_weight": 0.2,
+  "primary_ra": "RA7",
+  "assessed_ca": [
+    "RA7.d",
+    "RA7.e"
+  ],
+  "context_ra": [
+    "RA6.c",
+    "RA6.d"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

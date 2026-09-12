@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r5-s04-funcionalitat-hibrida-producte",
+  "challenge_id": "r5-s04-funcionalitat-hibrida-producte",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.4, "must_check": "La integració funciona dins d'un flux real del producte."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "La demo mostra flux complet, abans/després i error controlat."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commit rellevant comentat i registre d'incidències."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.1, "must_check": "Les instruccions permeten reproduir la demo."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra decisions i validació de la integració real."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "La integració reutilitza connector i mapping sense duplicació o acoblament excessiu."}
+  ],
+  "hard_rules": [
+    "Si la integracio no apareix en el producte, la puntuacio maxima recomanada és 6.",
+    "Si no hi ha demo reproduible, la puntuacio maxima recomanada és 7.",
+    "Sense control d'error extern, la puntuacio maxima recomanada és 8.",
+    "Si és una automatitzacio ornamental sense valor funcional, la puntuacio maxima recomanada és 6.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

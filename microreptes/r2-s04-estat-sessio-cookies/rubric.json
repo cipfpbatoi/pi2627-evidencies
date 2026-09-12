@@ -1,0 +1,24 @@
+{
+  "rubric_id": "rubric-r2-s04-estat-sessio-cookies",
+  "challenge_id": "r2-s04-estat-sessio-cookies",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha dada significativa en sessio, cookie pròpia no sensible, ús acotat de `$_SERVER`, ruta base per a includes i invalidacio dins del flux."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Inclou prova abans/després de la invalidacio, recuperacio en peticio posterior de sessio i cookie, inspeccio de cookie i revisio de l'include amb ruta base."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha traçabilitat del procés: idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament de sessio, cookie, `$_SERVER`, ruta base d'includes, recuperacio i invalidacio, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "La documentacio explica què es guarda en sessio, què queda en cookie, què ve de `$_SERVER`, on està la ruta base, amb quina finalitat i com es neteja."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra què ha acceptat i verifica el comportament real."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "El codi és explicable, separa responsabilitats entre sessio i cookie, no usa dades sensibles en client i evita includes amb rutes relatives fràgils."}
+  ],
+  "hard_rules": [
+    "Sense dada recuperable en sessio entre peticions, la puntuacio maxima recomanada és 5.",
+    "Sense cookie pròpia llegida i observable, la puntuacio maxima recomanada és 7.",
+    "Sense ús acotat de `$_SERVER`, la puntuacio maxima recomanada és 8.",
+    "Sense fitxer de ruta base o bootstrap per a includes, la puntuacio maxima recomanada és 8.",
+    "Sense invalidacio demostrable, la puntuacio maxima recomanada és 7.",
+    "Si es confon sessio amb persistencia formal, cal penalitzar la documentacio i qualitat.",
+    "No penalitzes absencia de login, rols, autoritzacio, MVC o base de dades en esta sessio.",
+    "Si guarda dades sensibles en cookies sense criteri, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

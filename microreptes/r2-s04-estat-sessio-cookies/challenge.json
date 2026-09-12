@@ -1,0 +1,69 @@
+{
+  "challenge_id": "r2-s04-estat-sessio-cookies",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S04",
+  "microrepte_code": "R2M4",
+  "microreptes_covered": [
+    "R2M4"
+  ],
+  "title": "Estat, sessio i cookies",
+  "summary": "Mantindre estat temporal significatiu amb sessio i cookie, llegir context acotat de `$_SERVER`, usar una base comuna per a includes i invalidar el flux de manera controlada.",
+  "pedagogical_goal": "Comprovar que l'alumne diferencia estat temporal de servidor, dada en client, context de peticio, ruta base d'includes i guardat funcional abans d'introduir autenticacio i autoritzacio.",
+  "relevant_paths": [
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Flux que parteix del treball de R2M1-R2M3",
+    "Dada temporal significativa del producte guardada en `$_SESSION` o equivalent",
+    "Lectura de la dada de sessio en una peticio posterior",
+    "Cookie pròpia no sensible amb sentit funcional",
+    "Lectura de la cookie en una peticio posterior i prova que és observable en client",
+    "Lectura acotada d'almenys una dada de `$_SERVER`, com `REQUEST_METHOD`, `HTTP_USER_AGENT` o `REMOTE_ADDR` tractada amb prudencia",
+    "Fitxer comú de configuracio o bootstrap amb ruta base per a includes",
+    "Ús d'eixa ruta base per importar almenys un fitxer compartit",
+    "Demo o documentacio de recuperacio del flux amb sessio i cookie",
+    "Accio de neteja, reinici o invalidacio controlada",
+    "Explicacio de què queda en client, què queda en servidor, què ve de `$_SERVER` i què no és persistencia",
+    "README.md, issue o registre amb passos abans/després",
+    "Commit o traçabilitat associada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La dada de sessio no és decorativa",
+    "La cookie no conté dades sensibles i té sentit funcional",
+    "La sessio i la cookie es recuperen en una peticio diferent",
+    "`$_SERVER` s'usa com a context tècnic, no com a autenticacio",
+    "Els includes parteixen d'una ruta base comuna i no de rutes fràgils",
+    "La invalidacio canvia el comportament posterior",
+    "No es confon sessio amb persistencia formal",
+    "No es guarden dades sensibles en cookies sense criteri",
+    "L'alumne pot explicar client, servidor i cookie de sessio"
+  ],
+  "recommended_test_strategy": "Executar el flux, guardar la dada de sessio i la cookie, obrir una peticio posterior que recupere les dues, inspeccionar la cookie en client, revisar l'ús acotat de `$_SERVER`, revisar el fitxer de ruta base i un include que la use, invalidar i repetir la peticio per comprovar que les dades temporals ja no afecten el flux.",
+  "source_alignment": [
+    "Repte 2 R2M4",
+    "Programacio d'aula R2S4",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA4",
+  "assessed_ca": [
+    "RA4.a",
+    "RA4.b",
+    "RA4.c"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

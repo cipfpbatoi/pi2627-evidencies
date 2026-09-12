@@ -1,0 +1,3 @@
+# Repositoris d'alumnes de 2DAW-B per a correccio massiva.
+# Format: repositori grup
+

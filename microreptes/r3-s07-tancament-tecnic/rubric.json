@@ -1,0 +1,22 @@
+{
+  "rubric_id": "rubric-r3-s07-tancament-tecnic",
+  "challenge_id": "r3-s07-tancament-tecnic",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "El tancament mostra projecte arrancable, BBDD reproduïble i dos fluxos demostrables."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Les instruccions permeten arrancar, migrar, seedar i executar els fluxos o revisar proves."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits finals, registre de temps, decisions i relacio amb el backlog."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "README explica arrencada, BBDD, fluxos, proteccio d'accessos, decisions, demo, backlog i pas a R4."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA per documentar, verifica que el text correspon al projecte real."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "El tancament és honest: no oculta mancances, diferencia migrat/ampliat/pendent i deixa base defensable."}
+  ],
+  "hard_rules": [
+    "Sense README.md o instruccions d'arrencada, la puntuacio maxima recomanada és 6.",
+    "Sense documentacio de BBDD/migracions/fixtures/seeders o script equivalent, la puntuacio maxima recomanada és 7.",
+    "Sense documentacio de la proteccio d'accessos, cal penalitzar documentacio i qualitat.",
+    "Sense dos fluxos descrits o demostrables, la puntuacio maxima recomanada és 7.",
+    "Sense backlog o mapa de continuïtat, la puntuacio maxima recomanada és 8.",
+    "Si el README no coincideix amb el codi, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

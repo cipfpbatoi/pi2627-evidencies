@@ -1,0 +1,64 @@
+{
+  "challenge_id": "r2-ampliacio-9-10",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-SAMP",
+  "microrepte_code": "R2-9-10",
+  "microreptes_covered": [
+    "R2M1",
+    "R2M2",
+    "R2M3",
+    "R2M4",
+    "R2M5",
+    "R2M6",
+    "R2M7"
+  ],
+  "title": "Ampliacio 9-10 del Repte 2",
+  "summary": "Filtrar si una ampliacio integrada del Repte 2 pot optar a la franja 9-10 una vegada el nucli obligatori ja està complet, funcional i validat.",
+  "pedagogical_goal": "Diferenciar nota de nucli i via d'excellencia: l'ampliacio no compensa mancances del repte base i ha d'aportar valor real, verificable i defensable.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "composer.json",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Evidencia que el nucli de R2 està complet: flux d'entrada, processament, logica, estat, autenticacio, proves i peça testable",
+    "Nota o registre de nucli R2 amb autocorreccions o revisio equivalent",
+    "Commit, branca o diff identificable de l'ampliacio",
+    "Justificacio tecnica breu que explique quin valor aporta l'ampliacio al flux complet",
+    "Ampliacio integrada en una part rellevant del flux de R2, no peça decorativa o lateral",
+    "Prova funcional, demo, checklist o prova automatitzada dels casos millorats",
+    "Documentacio de com reproduir l'ampliacio i quins casos cobreix",
+    "Rastre d'ús d'IA si ha participat de manera rellevant",
+    "Defensa o nota preparada sobre què s'ha fet, per què i com es comprova"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El treball base de R2 no queda incomplet ni ocult per l'ampliacio",
+    "L'ampliacio millora validacio, errors, autenticacio, autoritzacio, proves, Composer, llibreria externa o API amb sentit real",
+    "Si l'ampliacio és R2S10, deixa un contracte d'autenticacio consumible per DWEC amb endpoints, headers, respostes, dades demo i prova creuada",
+    "La millora afecta el flux del projecte i no només una pantalla decorativa",
+    "Hi ha prova reproduïble o evidència tècnica concreta",
+    "L'alumne pot explicar què aporta i què passaria si falla",
+    "La revisio docent pot decidir si suma 0, 0.5 o 1 punt dins de la franja 9-10"
+  ],
+  "recommended_test_strategy": "Primer comprovar que el nucli R2 està complet i validat. Després revisar commit o branca d'ampliacio, executar la prova o demo, contrastar documentacio i AI log, i fer una pregunta de defensa sobre valor, integracio i verificacio.",
+  "source_alignment": [
+    "Repte 2 ampliacio 9-10",
+    "Documentacio d'alumnat del Repte 2",
+    "Criteri docent nucli primer, ampliacio després"
+  ],
+  "assessment_role": "ampliacio_transversal",
+  "assessment_model": "No genera una nota RA independent: actua com a filtre docent per optar a la franja 9-10 del Repte 2 una vegada el nucli obligatori està validat per RA.",
+  "deprecated": true,
+  "replacement_challenge_id": "r2-s09-persistencia-minima-bbdd-php"
+}

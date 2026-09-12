@@ -1,0 +1,123 @@
+name: Audit student agent rules
+
+on:
+  workflow_dispatch:
+    inputs:
+      organization:
+        description: "Organització amb els repositoris d'alumnat"
+        required: true
+        default: "batoi-dwes-2026"
+      repository_prefix:
+        description: "Prefix dels repositoris que s'han d'auditar"
+        required: true
+        default: "microreptes-"
+      student_ref:
+        description: "Branca que s'ha d'auditar"
+        required: true
+        default: "main"
+permissions:
+  contents: read
+
+concurrency:
+  group: audit-student-agent-rules
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Audit protected AI instructions
+    runs-on: ubuntu-latest
+    env:
+      STUDENT_READ_TOKEN: ${{ secrets.CLASSROOM_AUTOGRADE_TOKEN || secrets.TEACHER_REPO_TOKEN }}
+      AUDIT_ORG: ${{ inputs.organization || 'batoi-dwes-2026' }}
+      AUDIT_PREFIX: ${{ inputs.repository_prefix || 'microreptes-' }}
+      AUDIT_REF: ${{ inputs.student_ref || 'main' }}
+
+    steps:
+      - name: Checkout teacher repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Audit repositories
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.CLASSROOM_AUTOGRADE_TOKEN || secrets.TEACHER_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${STUDENT_READ_TOKEN:-}" ]; then
+            echo "Falta CLASSROOM_AUTOGRADE_TOKEN o TEACHER_REPO_TOKEN."
+            exit 1
+          fi
+
+          work_root="$RUNNER_TEMP/agent-rules-audit"
+          policy_dir="$work_root/policy"
+          results_dir="$GITHUB_WORKSPACE/tmp/agent-rules-audit"
+          mkdir -p "$work_root" "$results_dir"
+
+          git clone --depth=1 --branch main \
+            https://github.com/igomis/dwes_microreptes_alumnes.git "$policy_dir"
+
+          repositories="$(gh api --paginate \
+            "orgs/$AUDIT_ORG/repos?per_page=100&type=all" \
+            --jq ".[] | select(.name | startswith(\"$AUDIT_PREFIX\")) | .name")"
+
+          if [ -z "$repositories" ]; then
+            echo "No s'han trobat repositoris amb el prefix $AUDIT_PREFIX."
+            exit 1
+          fi
+
+          auth_header="$(printf 'x-access-token:%s' "$STUDENT_READ_TOKEN" | base64 | tr -d '\n')"
+          failures=0
+          total=0
+
+          echo "# Auditoria de regles d'agents" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Repositori | Branca | Estat | Incidències |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|---:|" >> "$GITHUB_STEP_SUMMARY"
+
+          while IFS= read -r repo_name; do
+            [ -n "$repo_name" ] || continue
+            total=$((total + 1))
+            repo="$AUDIT_ORG/$repo_name"
+            student_dir="$work_root/$repo_name"
+            output="$results_dir/$repo_name.json"
+
+            if ! git -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic $auth_header" \
+              clone --depth=1 --branch "$AUDIT_REF" \
+              "https://github.com/$repo.git" "$student_dir"; then
+              echo "| \`$repo\` | \`$AUDIT_REF\` | Error de lectura | 1 |" >> "$GITHUB_STEP_SUMMARY"
+              failures=$((failures + 1))
+              continue
+            fi
+
+            if node scripts/audit-student-agent-rules.mjs \
+              --repo-dir "$student_dir" \
+              --policy-dir "$policy_dir" \
+              --repo "$repo" \
+              --output "$output" >/dev/null; then
+              echo "| \`$repo\` | \`$AUDIT_REF\` | Correcte | 0 |" >> "$GITHUB_STEP_SUMMARY"
+            else
+              count="$(node -e "const r=require(process.argv[1]); process.stdout.write(String(r.findings_count))" "$output")"
+              echo "| \`$repo\` | \`$AUDIT_REF\` | Revisió necessària | $count |" >> "$GITHUB_STEP_SUMMARY"
+              failures=$((failures + 1))
+            fi
+          done <<< "$repositories"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Repositoris auditats: **$total**. Repositoris amb incidències: **$failures**." >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$failures" -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: Upload audit reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-agent-rules-audit
+          if-no-files-found: warn
+          path: tmp/agent-rules-audit/

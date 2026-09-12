@@ -1,0 +1,65 @@
+{
+  "challenge_id": "r3-s02-persistencia-minima-migrations-seeders",
+  "repte_id": "r3-framework-persistencia",
+  "session_code": "R3-S02",
+  "microrepte_code": "R3M2",
+  "microreptes_covered": [
+    "R3M2"
+  ],
+  "title": "Persistencia minima amb migracions, fixtures/seeders o equivalent",
+  "summary": "Crear BBDD real reconstruïble amb migracions o mecanisme equivalent, dades inicials amb fixtures/seeders o script equivalent i una primera lectura de conjunt de dades usable.",
+  "pedagogical_goal": "Comprovar que la persistencia de R3 és real, reproduïble i connectada als fluxos triats, no una demo manual o un array temporal.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "database/",
+    "migrations/",
+    "seeders/",
+    "fixtures/",
+    "src/",
+    "app/",
+    "config/",
+    ".env.example",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Connexio a BBDD configurada",
+    "Migracions o mecanisme equivalent per crear esquema",
+    "Fixtures/seeders o script equivalent per carregar dades",
+    "Dades de prova vinculades als fluxos de R3",
+    "Lectura real d'un conjunt de dades",
+    "Ús o preparacio del conjunt de dades per a llistat, detall, filtre o resposta",
+    "Instruccions per reiniciar BBDD i carregar dades",
+    "Commits i registre de temps aproximat",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La BBDD es pot reconstruir de zero",
+    "Les dades no estan carregades només manualment",
+    "L'esquema respon als casos d'us triats",
+    "La lectura retorna dades reals i no valors incrustats",
+    "El conjunt de dades alimenta o prepara un flux funcional"
+  ],
+  "recommended_test_strategy": "Reiniciar BBDD, executar migracions o mecanisme equivalent, carregar fixtures/seeders o script equivalent, comprovar dades carregades, executar una lectura real i revisar on s'usa o es prepara eixe conjunt de dades dins del framework.",
+  "source_alignment": [
+    "Repte 3 R3M2",
+    "Programacio d'aula R3S2",
+    "Documentacio d'alumnat del Repte 3",
+    "Pes orientatiu dins del repte: 18%"
+  ],
+  "repte_weight": 0.18,
+  "primary_ra": "RA6",
+  "assessed_ca": [
+    "RA6.a",
+    "RA6.b",
+    "RA6.c",
+    "RA6.d",
+    "RA6.e"
+  ],
+  "context_ra": [
+    "RA5.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

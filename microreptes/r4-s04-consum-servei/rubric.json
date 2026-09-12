@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r4-s04-consum-servei",
+  "challenge_id": "r4-s04-consum-servei",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha consumidor minim o eina configurada que fa peticions reals al servei."},
+    {"id": "verification", "label": "Verificació", "weight": 0.25, "must_check": "S'han provat consum correcte i cas d'error o invàlid."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha registre, commits o evidencies del consumidor i de les proves."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Les instruccions permeten reproduir el consum."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, adapta i verifica el consumidor."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "El consumidor no és ornamental: llig resposta, envia credencial si cal i tracta error minim."}
+  ],
+  "hard_rules": [
+    "Sense consumidor o prova equivalent, la puntuacio maxima recomanada és 5.",
+    "Sense cas d'error, la puntuacio maxima recomanada és 7.",
+    "Sense instruccions de reproduccio, la puntuacio maxima recomanada és 8.",
+    "Si el consumidor no crida realment l'API, cal revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

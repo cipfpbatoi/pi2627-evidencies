@@ -1,0 +1,56 @@
+{
+  "challenge_id": "r4-s04-consum-servei",
+  "repte_id": "r4-api-consum",
+  "session_code": "R4-S04",
+  "microrepte_code": "R4M4",
+  "microreptes_covered": [
+    "R4M4"
+  ],
+  "title": "Consum real del servei",
+  "summary": "Preparar consumidor minim, eina o script que use el servei i tracte cas correcte i error.",
+  "pedagogical_goal": "Comprovar que l'API és realment reusable i no només una resposta del servidor.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "api/",
+    "postman/",
+    "insomnia/",
+    "scripts/",
+    "client/",
+    "frontend/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Consumidor minim, col·leccio o script",
+    "Cas correcte de consum",
+    "Cas d'error o consum invalid",
+    "Instruccions de reproduccio",
+    "Contrast amb contracte",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El servei es pot consumir fora del codi intern",
+    "La resposta es llig o s'interpreta",
+    "El consumidor envia credencial si cal",
+    "Hi ha tractament minim d'error"
+  ],
+  "recommended_test_strategy": "Executar el consumidor o col·leccio, comprovar cas correcte, cas d'error i instruccions de reproduccio.",
+  "source_alignment": [
+    "Repte 4 R4M4",
+    "Programacio d'aula R4S4",
+    "Documentacio d'alumnat del Repte 4",
+    "Pes orientatiu dins del repte: 20%"
+  ],
+  "repte_weight": 0.2,
+  "primary_ra": "RA7",
+  "assessed_ca": [
+    "RA7.f",
+    "RA7.g"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

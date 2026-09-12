@@ -1,0 +1,339 @@
+name: Batch autograde student repositories
+
+on:
+  workflow_dispatch:
+    inputs:
+      repositories:
+        description: "Repositoris d'alumnes per sobreescriure el fitxer, separats per salts de línia, comes o espais"
+        required: false
+        default: ""
+      target_group:
+        description: "Grup a corregir"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - 2DAW-A
+          - 2DAW-B
+          - 2DAW-C
+          - 2DAW-D
+      repositories_file:
+        description: "Fitxer opcional per sobreescriure target_group"
+        required: false
+        default: ""
+      group:
+        description: "Grup per defecte si el fitxer o l'input no especifiquen grup"
+        required: false
+        default: "2DAW-A"
+      challenge_id:
+        description: "Autocorrecció concreta per a tota l'execució. Si queda buit, s'usa course/active-challenges.json"
+        required: false
+        default: ""
+      mode:
+        description: "Motor d'autograding"
+        required: true
+        default: "openai"
+        type: choice
+        options:
+          - mock
+          - openai
+      student_ref:
+        description: "Branca del repositori de l'alumne"
+        required: true
+        default: "main"
+      publish_to_student_repo:
+        description: "Publicar autograde/latest.md i autograde/latest.json en cada repo"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: batch-autograde-student-repositories
+  cancel-in-progress: false
+
+jobs:
+  autograde:
+    name: Autograde student repositories
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout teacher repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate teacher configuration
+        run: npm run validate
+
+      - name: Batch autograde
+        shell: bash
+        env:
+          STUDENT_READ_TOKEN: ${{ secrets.CLASSROOM_AUTOGRADE_TOKEN || secrets.TEACHER_REPO_TOKEN }}
+          STUDENT_WRITE_TOKEN: ${{ secrets.CLASSROOM_AUTOGRADE_TOKEN || secrets.TEACHER_REPO_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          INPUT_REPOSITORIES: ${{ inputs.repositories }}
+          INPUT_TARGET_GROUP: ${{ inputs.target_group }}
+          INPUT_REPOSITORIES_FILE: ${{ inputs.repositories_file }}
+          INPUT_GROUP: ${{ inputs.group }}
+          INPUT_CHALLENGE_ID: ${{ inputs.challenge_id }}
+          INPUT_MODE: ${{ inputs.mode }}
+          INPUT_STUDENT_REF: ${{ inputs.student_ref }}
+          INPUT_PUBLISH_TO_STUDENT_REPO: ${{ inputs.publish_to_student_repo }}
+        run: |
+          set -euo pipefail
+          mkdir -p tmp/batch
+
+          if [ "$INPUT_MODE" = "openai" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "Falta el secret OPENAI_API_KEY en el repositori del professor."
+            exit 1
+          fi
+
+          if [ -z "${STUDENT_READ_TOKEN:-}" ]; then
+            echo "Falta CLASSROOM_AUTOGRADE_TOKEN o TEACHER_REPO_TOKEN amb permís de lectura sobre els repositoris privats d'alumnes."
+            exit 1
+          fi
+
+          if [ "$INPUT_PUBLISH_TO_STUDENT_REPO" = "true" ] && [ -z "${STUDENT_WRITE_TOKEN:-}" ]; then
+            echo "Falta CLASSROOM_AUTOGRADE_TOKEN o TEACHER_REPO_TOKEN amb permís d'escriptura sobre els repositoris d'alumnes."
+            exit 1
+          fi
+
+          student_auth_header="$(printf 'x-access-token:%s' "$STUDENT_READ_TOKEN" | base64 | tr -d '\n')"
+          student_write_auth_header=""
+          if [ "$INPUT_PUBLISH_TO_STUDENT_REPO" = "true" ]; then
+            student_write_auth_header="$(printf 'x-access-token:%s' "$STUDENT_WRITE_TOKEN" | base64 | tr -d '\n')"
+          fi
+
+          selected_repositories_file="$INPUT_REPOSITORIES_FILE"
+          if [ -z "$selected_repositories_file" ]; then
+            case "$INPUT_TARGET_GROUP" in
+              all)
+                selected_repositories_file="course/student-repositories.txt"
+                ;;
+              2DAW-A)
+                selected_repositories_file="course/student-repositories-2dawa.txt"
+                ;;
+              2DAW-B)
+                selected_repositories_file="course/student-repositories-2dawb.txt"
+                ;;
+              2DAW-C)
+                selected_repositories_file="course/student-repositories-2dawc.txt"
+                ;;
+              2DAW-D)
+                selected_repositories_file="course/student-repositories-2dawd.txt"
+                ;;
+              *)
+                echo "target_group no valid: $INPUT_TARGET_GROUP"
+                exit 1
+                ;;
+            esac
+          fi
+
+          tmp_repos="$(mktemp)"
+          if [ -n "$INPUT_REPOSITORIES" ]; then
+            node scripts/parse-student-repositories.mjs \
+              --input "$INPUT_REPOSITORIES" \
+              --default-group "$INPUT_GROUP" > "$tmp_repos"
+          else
+            if [ ! -f "$selected_repositories_file" ]; then
+              echo "No s'ha trobat el fitxer de repositoris: $selected_repositories_file"
+              exit 1
+            fi
+
+            node scripts/parse-student-repositories.mjs \
+              --file "$selected_repositories_file" \
+              --default-group "$INPUT_GROUP" > "$tmp_repos"
+          fi
+
+          total="$(wc -l < "$tmp_repos" | tr -d ' ')"
+          if [ "$total" -eq 0 ]; then
+            echo "No s'ha indicat cap repositori d'alumne."
+            exit 1
+          fi
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          batch_id="$(date -u +'%Y-%m-%dT%H-%M-%SZ')-${INPUT_TARGET_GROUP}-${INPUT_MODE}"
+
+          echo "# Correcció massiva d'alumnes" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Batch: \`$batch_id\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Grup seleccionat: \`$INPUT_TARGET_GROUP\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Grup per defecte: \`$INPUT_GROUP\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$INPUT_CHALLENGE_ID" ]; then
+            echo "- Microrepte seleccionat manualment: \`$INPUT_CHALLENGE_ID\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Microrepte: configuració activa de \`course/active-challenges.json\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "- Mode: \`$INPUT_MODE\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Fitxer repositoris: \`$selected_repositories_file\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Branca alumne: \`$INPUT_STUDENT_REF\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Publicació en repo alumne: \`$INPUT_PUBLISH_TO_STUDENT_REPO\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Total repositoris: **$total**" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Repositori | Grup | Branca | Microrepte | Nota | Revisió docent | Publicació |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|---|---:|---|---|" >> "$GITHUB_STEP_SUMMARY"
+
+          work_root="$RUNNER_TEMP/batch-autograde"
+          rm -rf "$work_root"
+          mkdir -p "$work_root"
+
+          failures=0
+
+          autograde_one() {
+            local repo="$1"
+            local repo_group="$2"
+
+            echo "Autograde $repo"
+            if [ -n "$INPUT_CHALLENGE_ID" ]; then
+              active_challenge="$INPUT_CHALLENGE_ID"
+            else
+              active_challenge="$(node scripts/resolve-active-challenge.mjs --student "$repo" --group "$repo_group")" || return 1
+            fi
+            microrepte_code="$(node -e "const fs=require('fs'); const c=JSON.parse(fs.readFileSync('microreptes/${active_challenge}/challenge.json','utf8')); process.stdout.write(c.microrepte_code || '')")" || return 1
+            safe_repo="${repo//\//__}"
+            student_dir="$work_root/$safe_repo/repo"
+            result_dir="$PWD/tmp/batch/$safe_repo"
+            mkdir -p "$result_dir"
+
+            node scripts/check-student-repo-access.mjs \
+              --repo "$repo" \
+              --ref "$INPUT_STUDENT_REF" || return 1
+
+            student_url="https://github.com/${repo}.git"
+            git -C "$work_root" \
+              -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic ${student_auth_header}" \
+              ls-remote --exit-code --heads "$student_url" "$INPUT_STUDENT_REF" >/dev/null || {
+              echo "No s'ha pogut accedir a ${repo} o no existeix la branca ${INPUT_STUDENT_REF}."
+              echo "Comprova que CLASSROOM_AUTOGRADE_TOKEN o TEACHER_REPO_TOKEN tinga accés de lectura a este repositori privat."
+              return 1
+            }
+            git -C "$work_root" \
+              -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic ${student_auth_header}" \
+              clone --branch "$INPUT_STUDENT_REF" --depth 1 "$student_url" "$student_dir" || return 1
+            commit_sha="$(git -C "$student_dir" rev-parse HEAD)" || return 1
+
+            node scripts/collect-repo-evidence.mjs \
+              --repo-dir "$student_dir" \
+              --repo "$repo" \
+              --commit "$commit_sha" \
+              --challenge-id "$active_challenge" \
+              --microrepte-code "$microrepte_code" \
+              --repo-signals "$result_dir/repo-signals.json" \
+              --evidence-summary "$result_dir/evidence-summary.json" || return 1
+
+            node scripts/build-evaluation-payload.mjs \
+              --student "$repo" \
+              --group "$repo_group" \
+              --challenge-id "$active_challenge" \
+              --repo "$repo" \
+              --commit "$commit_sha" \
+              --repo-signals "$result_dir/repo-signals.json" \
+              --evidence-summary "$result_dir/evidence-summary.json" > "$result_dir/evaluation-payload.stdout.json" || return 1
+            cp tmp/evaluation-payload.json "$result_dir/evaluation-payload.json" || return 1
+
+            if [ "$INPUT_MODE" = "openai" ]; then
+              node scripts/openai-autograde.mjs --input tmp/evaluation-payload.json > "$result_dir/autograde.stdout.json" || return 1
+              cp tmp/openai-raw-response.json "$result_dir/openai-raw-response.json" || return 1
+            else
+              node scripts/mock-autograde.mjs --input tmp/evaluation-payload.json > "$result_dir/autograde.stdout.json" || return 1
+              rm -f tmp/openai-raw-response.json
+            fi
+
+            node scripts/validate-autograde-result.mjs --input tmp/autograde-result.json || return 1
+            cp tmp/autograde-result.json "$result_dir/autograde-result.json" || return 1
+
+            node scripts/render-autograde-markdown.mjs \
+              --input "$result_dir/autograde-result.json" \
+              --output "$result_dir/latest.md" \
+              --repo "$repo" \
+              --group "$repo_group" \
+              --source "$INPUT_MODE" || return 1
+
+            node scripts/store-batch-autograde-result.mjs \
+              --result "$result_dir/autograde-result.json" \
+              --markdown "$result_dir/latest.md" \
+              --payload "$result_dir/evaluation-payload.json" \
+              --repo "$repo" \
+              --group "$repo_group" \
+              --source "$INPUT_MODE" \
+              --batch-id "$batch_id" || return 1
+
+            score="$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('$result_dir/autograde-result.json','utf8')); process.stdout.write(String(r.final_score_over_10 ?? 'n/d'))")" || return 1
+            review="$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('$result_dir/autograde-result.json','utf8')); process.stdout.write(r.teacher_review_required ? 'Sí' : 'No')")" || return 1
+            published="No"
+
+            if [ "$INPUT_PUBLISH_TO_STUDENT_REPO" = "true" ]; then
+              git -C "$student_dir" \
+                -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic ${student_auth_header}" \
+                fetch origin "$INPUT_STUDENT_REF" || return 1
+              git -C "$student_dir" rebase FETCH_HEAD || return 1
+
+              node scripts/publish-student-autograde.mjs \
+                --student-dir "$student_dir" \
+                --result "$result_dir/autograde-result.json" \
+                --markdown "$result_dir/latest.md" \
+                --repo "$repo" \
+                --group "$repo_group" \
+                --source "$INPUT_MODE" \
+                --batch-id "$batch_id" || return 1
+              git -C "$student_dir" add autograde || return 1
+
+              if git -C "$student_dir" diff --cached --quiet; then
+                published="Sense canvis"
+              else
+                git -C "$student_dir" commit -m "Actualitza autocorrecció ${INPUT_MODE}" || return 1
+                git -C "$student_dir" \
+                  -c "http.https://github.com/.extraheader=AUTHORIZATION: Basic ${student_write_auth_header}" \
+                  push origin "HEAD:$INPUT_STUDENT_REF" || return 1
+                published="Publicat"
+              fi
+            fi
+
+            echo "| \`$repo\` | \`$repo_group\` | \`$INPUT_STUDENT_REF\` | \`$active_challenge\` | $score | $review | $published |" >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          while read -r repo repo_group; do
+            safe_repo="${repo//\//__}"
+            result_dir="$PWD/tmp/batch/$safe_repo"
+            mkdir -p "$result_dir"
+
+            if autograde_one "$repo" "$repo_group" 2>&1 | tee "$result_dir/autograde-error.log"; then
+              rm -f "$result_dir/autograde-error.log"
+            else
+              failures=$((failures + 1))
+              echo "| \`$repo\` | \`$repo_group\` | \`$INPUT_STUDENT_REF\` | n/d | n/d | Sí | Error: veure artifact \`$safe_repo/autograde-error.log\` |" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done < "$tmp_repos"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Els resultats complets queden guardats en \`grades/history/$batch_id\` i publicats com a artifact d'aquest workflow." >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$failures" -gt 0 ]; then
+            echo "Han fallat $failures repositoris. Revisa les files d'error i l'artifact batch-autograde-results."
+            exit 1
+          fi
+
+      - name: Upload teacher-side autograde artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-autograde-results
+          if-no-files-found: ignore
+          path: |
+            tmp/batch/
+            grades/latest-grades.json
+            grades/latest-grades.csv
+            grades/history/

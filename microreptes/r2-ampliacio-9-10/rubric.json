@@ -1,0 +1,55 @@
+{
+  "rubric_id": "rubric-r2-ampliacio-9-10",
+  "challenge_id": "r2-ampliacio-9-10",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.25,
+      "must_check": "El nucli de R2 està complet i l'ampliacio aporta una millora funcional o tècnica real sobre el flux."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Hi ha prova funcional, demo, checklist o prova automatitzada que permet comprovar l'ampliacio."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.15,
+      "must_check": "L'ampliacio està separada o identificada amb commit, branca, diff, issue o registre clar."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "La documentacio explica què aporta l'ampliacio, com reproduir-la i per què està integrada en R2."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA, hi ha AI log verificable amb què s'ha acceptat, modificat, rebutjat i provat."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica",
+      "weight": 0.2,
+      "must_check": "La millora no és ornamental, no introdueix complexitat innecessària i l'alumne pot defensar-la tècnicament."
+    }
+  ],
+  "hard_rules": [
+    "Si el nucli obligatori de R2 no està complet, funcional i validat, l'ampliacio no pot computar com a 9-10.",
+    "Si falten login funcional, operacio protegida, proves mínimes o R2M7 testable, la revisio ha de prioritzar reparar el nucli.",
+    "Sense commit, branca, diff o traçabilitat clara de l'ampliacio, la candidatura ha de marcar-se com a revisio docent i no sumar automàticament.",
+    "Sense prova, demo o checklist reproduïble de l'ampliacio, la candidatura no hauria de superar la franja mínima de revisio.",
+    "Una pantalla decorativa, canvi visual o codi lateral no integrat no compta com a ampliacio 9-10.",
+    "R2S10 pot comptar com a ampliacio 9-10 si documenta un contracte d'autenticacio consumible per DWEC i inclou prova creuada o validacio equivalent.",
+    "Una API externa o llibreria només compta si aporta valor real al flux de R2 i està documentada i provada.",
+    "L'AI log no acredita autoria per si sol; cal contrast amb codi, commits, proves i defensa.",
+    "Esta autocorreccio no assigna directament la nota final: filtra candidatura i informa la revisio docent.",
+    "La nota final del repte sense ampliacio validada queda limitada a 9 encara que la mitjana dels microreptes siga 10."
+  ]
+}

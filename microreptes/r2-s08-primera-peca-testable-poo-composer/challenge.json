@@ -1,0 +1,64 @@
+{
+  "challenge_id": "r2-s08-primera-peca-testable-poo-composer",
+  "repte_id": "r2-processament-estat-autenticacio",
+  "session_code": "R2-S08",
+  "microrepte_code": "R2M8",
+  "microreptes_covered": [
+    "R2M8"
+  ],
+  "title": "Primera peça testable amb POO i Composer",
+  "summary": "Convertir una regla o comprovacio del flux de R2 en una classe simple carregada amb Composer i verificar-la amb una prova unitària mínima, mantenint el flux web funcional.",
+  "pedagogical_goal": "Introduir POO, Composer, autoload i proves automàtiques de manera acotada abans d'entrar en l'arquitectura més formal de R3.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "public/",
+    "src/",
+    "app/",
+    "routes/",
+    "views/",
+    "templates/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Flux de R2M7 provat com a punt de partida",
+    "composer.json amb autoload configurat o alternativa equivalent justificada",
+    "Ús de vendor/autoload.php o mecanisme equivalent per carregar la classe",
+    "Classe simple en src/ o carpeta equivalent vinculada al domini o servei del projecte",
+    "La classe encapsula una regla, comprovacio o càlcul real i no depén directament de $_POST, $_SESSION, $_COOKIE ni HTML",
+    "Prova unitària mínima amb PHPUnit, Pest o script automàtic equivalent",
+    "Execucio documentada de la prova i resultat obtingut",
+    "Prova de no regressio d'un cas clau del flux web",
+    "Nota de què queda per reorganitzar o ampliar en R3",
+    "Commit o traçabilitat associada",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "Composer carrega la classe sense require manual dispers",
+    "La classe es pot provar sense navegador",
+    "La prova automàtica comprova una regla concreta",
+    "El flux complet continua funcionant després del canvi",
+    "L'alumne pot explicar la diferència entre prova unitària i prova de flux"
+  ],
+  "recommended_test_strategy": "Executar la prova unitària, revisar composer.json i autoload, comprovar que la classe no depén d'entrada web directa i repetir un cas clau del flux de R2M7.",
+  "source_alignment": [
+    "Repte 2 R2M8",
+    "Programacio d'aula R2S8",
+    "Documentacio d'alumnat del Repte 2",
+    "Pes orientatiu dins del repte: 8%"
+  ],
+  "repte_weight": 0.08,
+  "primary_ra": "RA3",
+  "assessed_ca": [
+    "RA3.d",
+    "RA3.g"
+  ],
+  "context_ra": [
+    "RA4.f"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

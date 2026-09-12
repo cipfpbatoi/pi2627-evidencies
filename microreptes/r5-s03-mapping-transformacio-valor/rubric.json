@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r5-s03-mapping-transformacio-valor",
+  "challenge_id": "r5-s03-mapping-transformacio-valor",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.35, "must_check": "La transformació adapta dades externes al domini del projecte."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Hi ha comparativa entre resposta externa i resultat final."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Les decisions de mapping, descart i persistència queden registrades."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "La taula de mapping explica origen, transformació, camp intern i ús."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, valida les transformacions amb exemples reals."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "La transformació està separada, llegible i no acoblada al format cru."}
+  ],
+  "hard_rules": [
+    "Sense mapping documentat, la puntuacio maxima recomanada és 6.",
+    "Si es mostra la resposta externa sense transformacio, la puntuacio maxima recomanada és 5.",
+    "Sense comparativa abans/despres, la puntuacio maxima recomanada és 7.",
+    "Persistir dades externes sense criteri obliga a revisio docent.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

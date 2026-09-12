@@ -1,0 +1,21 @@
+{
+  "rubric_id": "rubric-r3-s03-primer-cas-us-complet",
+  "challenge_id": "r3-s03-primer-cas-us-complet",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Hi ha un flux end-to-end heretat de R2 amb ruta, controlador, dades reals, resposta visible i validacio/error minim."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Inclou prova del cas positiu i d'almenys un error o validacio controlada."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits útils o registre equivalent del flux, integracio de BBDD i prova, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta quin flux ve de R2, com s'executa, quines dades usa i quin error es pot provar."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, registra pistes, ajuda real i comprovació pròpia del flux; no delega la implementació. La declaració de no ús és vàlida."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "Les responsabilitats no estan totes en una ruta o controlador i el codi usa convencions del framework de manera explicable."}
+  ],
+  "hard_rules": [
+    "Si el flux no té relacio clara amb R2, cal revisio docent.",
+    "Sense ruta funcional, la puntuacio maxima recomanada és 5.",
+    "Sense dades reals de BBDD, la puntuacio maxima recomanada és 6.",
+    "Sense resposta visible generada pel framework, la puntuacio maxima recomanada és 7.",
+    "Sense prova de cas positiu, la puntuacio maxima recomanada és 8.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

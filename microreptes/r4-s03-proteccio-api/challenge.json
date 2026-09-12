@@ -1,0 +1,57 @@
+{
+  "challenge_id": "r4-s03-proteccio-api",
+  "repte_id": "r4-api-consum",
+  "session_code": "R4-S03",
+  "microrepte_code": "R4M3",
+  "microreptes_covered": [
+    "R4M3"
+  ],
+  "title": "Autenticació i control d'accés de l'API",
+  "summary": "Afegir control d'acces al servei amb cas autoritzat, cas denegat i resposta coherent.",
+  "pedagogical_goal": "Diferenciar una API usable d'un endpoint obert sense criteri i adaptar l'autenticacio al context de servei.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "routes/",
+    "controllers/",
+    "middleware/",
+    "src/",
+    "app/",
+    "tests/",
+    "api/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Mecanisme de control d'acces",
+    "Cas autoritzat",
+    "Cas denegat",
+    "Resposta coherent davant absencia o error de credencial",
+    "Documentacio de com enviar la credencial",
+    "Demo o registre de prova",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La proteccio és observable",
+    "El cas denegat no retorna dades sensibles",
+    "Els codis d'estat o errors són coherents",
+    "L'alumne pot assenyalar on es comprova l'acces"
+  ],
+  "recommended_test_strategy": "Executar peticio amb credencial correcta, sense credencial i amb credencial incorrecta; revisar codis, missatges i documentacio.",
+  "source_alignment": [
+    "Repte 4 R4M3",
+    "Programacio d'aula R4S3",
+    "Documentacio d'alumnat del Repte 4",
+    "Pes orientatiu dins del repte: 20%"
+  ],
+  "repte_weight": 0.2,
+  "primary_ra": "RA7",
+  "assessed_ca": [
+    "RA7.e",
+    "RA7.f"
+  ],
+  "context_ra": [],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

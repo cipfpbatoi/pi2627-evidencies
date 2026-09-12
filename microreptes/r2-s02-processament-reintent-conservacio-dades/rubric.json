@@ -1,0 +1,56 @@
+{
+  "rubric_id": "rubric-r2-s02-processament-reintent-conservacio-dades",
+  "challenge_id": "r2-s02-processament-reintent-conservacio-dades",
+  "max_score": 10,
+  "dimensions": [
+    {
+      "id": "functional_resolution",
+      "label": "Resolució funcional",
+      "weight": 0.3,
+      "must_check": "Hi ha un flux executable que manté l'acció de R2M1, amb error visible, formulari regenerat amb dades aprofitables conservades, reenviament corregit i cas correcte guardat funcionalment."
+    },
+    {
+      "id": "verification",
+      "label": "Verificació",
+      "weight": 0.2,
+      "must_check": "Inclou prova d'un cas amb error, comprovació dels valors conservats, reenviament correcte i comprovació del guardat funcional."
+    },
+    {
+      "id": "traceability",
+      "label": "Traçabilitat",
+      "weight": 0.1,
+      "must_check": "Hi ha traçabilitat del procés: idealment tres commits útils o registre equivalent associat a inici, progrés i prova/tancament del reintent, la conservació de dades i el guardat funcional, amb temps aproximat si s'ha demanat."
+    },
+    {
+      "id": "documentation",
+      "label": "Documentació",
+      "weight": 0.15,
+      "must_check": "El fitxer `README.md`, issue o registre explica com provocar l'error, quines dades es conserven, com reenviar corregit i què es guarda quan el cas és correcte."
+    },
+    {
+      "id": "ai_usage",
+      "label": "Ús d'IA",
+      "weight": 0.05,
+      "must_check": "Si usa IA, l'alumne registra què ha acceptat o modificat i verifica amb una dada pròpia que el reintent funciona."
+    },
+    {
+      "id": "code_quality",
+      "label": "Qualitat tècnica",
+      "weight": 0.2,
+      "must_check": "El codi és explicable: recupera dades, prepara valors per al formulari, guarda funcionalment el cas correcte i evita valors fixos o complexitat que desplace el focus de R2M2."
+    }
+  ],
+  "hard_rules": [
+    "Sense formulari o entrada equivalent enviada al servidor, la puntuació màxima recomanada és 5.",
+    "Si és un formulari nou desconnectat del flux de R2M1, cal revisió docent.",
+    "Si es perd o se substitueix per un valor fix la dada tancada o classificada que havia de permetre una regla posterior, cal revisió docent.",
+    "Sense error visible generat per una condició de servidor, la puntuació màxima recomanada és 6.",
+    "Si el formulari torna buit després de l'error, la puntuació màxima recomanada és 7.",
+    "Si els valors conservats són literals fixos i no dades de l'enviament, la puntuació màxima recomanada és 7.",
+    "Sense reenviament corregit verificable, la puntuació màxima recomanada és 8.",
+    "Sense guardat funcional del cas correcte, la puntuació màxima recomanada és 8.",
+    "No penalitzes l'absència de persistència formal, base de dades, sessió, cookies, login, rols, MVC, arrays d'errors, fitxers o checkbox múltiples en esta sessió; no són mínim de R2M2, encara que poden aparéixer com a ampliació o consolidar-se en microreptes posteriors del mateix repte.",
+    "Si el codi és massa avançat i l'alumne no el pot explicar, cal revisió docent.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

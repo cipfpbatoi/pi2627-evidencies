@@ -1,0 +1,93 @@
+name: Dry run autograde
+
+on:
+  workflow_dispatch:
+    inputs:
+      student:
+        description: "Repositori o identificador de l'alumne"
+        required: true
+        default: "cipfpbatoi/dwes-ana-marti"
+      group:
+        description: "Grup docent"
+        required: true
+        default: "2DAW-A"
+      repo:
+        description: "Repositori de l'alumne"
+        required: true
+        default: "cipfpbatoi/dwes-ana-marti"
+      mode:
+        description: "Motor d'autograding"
+        required: true
+        default: "mock"
+        type: choice
+        options:
+          - mock
+          - openai
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate configuration
+        run: npm run validate
+
+      - name: Resolve active challenge
+        id: resolve
+        run: |
+          CHALLENGE_ID="$(node scripts/resolve-active-challenge.mjs --student "${{ inputs.student }}" --group "${{ inputs.group }}")"
+          echo "challenge_id=${CHALLENGE_ID}" >> "$GITHUB_OUTPUT"
+
+      - name: List challenges
+        run: npm run list:challenges
+
+      - name: Build evaluation payload
+        id: payload
+        run: |
+          node scripts/build-evaluation-payload.mjs \
+            --student "${{ inputs.student }}" \
+            --group "${{ inputs.group }}" \
+            --repo "${{ inputs.repo }}" \
+            --commit dry-run
+          echo "payload_path=tmp/evaluation-payload.json" >> "$GITHUB_OUTPUT"
+
+      - name: Mock autograde
+        if: ${{ inputs.mode == 'mock' }}
+        run: node scripts/mock-autograde.mjs --input tmp/evaluation-payload.json
+
+      - name: OpenAI autograde
+        if: ${{ inputs.mode == 'openai' }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+        run: node scripts/openai-autograde.mjs --input tmp/evaluation-payload.json
+
+      - name: Validate autograde result
+        run: node scripts/validate-autograde-result.mjs --input tmp/autograde-result.json
+
+      - name: Dry run summary
+        run: |
+          echo "student=${{ inputs.student }}"
+          echo "group=${{ inputs.group }}"
+          echo "repo=${{ inputs.repo }}"
+          echo "mode=${{ inputs.mode }}"
+          echo "challenge=${{ steps.resolve.outputs.challenge_id }}"
+          echo "payload=${{ steps.payload.outputs.payload_path }}"
+          echo "result=tmp/autograde-result.json"
+          echo "result_validated=true"
+          echo "Dry run completat amb resultat validat. Encara no es fan crides a OpenAI."

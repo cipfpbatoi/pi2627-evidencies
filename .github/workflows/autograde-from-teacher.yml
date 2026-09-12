@@ -1,0 +1,227 @@
+name: Autograde from teacher repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      student:
+        description: "Repositori o identificador de l'alumne"
+        required: false
+        default: ""
+      group:
+        description: "Grup docent"
+        required: false
+        default: ""
+      mode:
+        description: "Motor d'autograding"
+        required: true
+        default: "mock"
+        type: choice
+        options:
+          - mock
+          - openai
+      teacher_repository:
+        description: "Repositori del professor amb la configuracio d'autograding"
+        required: true
+        default: "igomis/dwes-microreptes-autocorreccio"
+      teacher_ref:
+        description: "Branca, tag o SHA del repositori del professor"
+        required: true
+        default: "main"
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  DEFAULT_TEACHER_REPOSITORY: igomis/dwes-microreptes-autocorreccio
+  DEFAULT_TEACHER_REF: main
+
+jobs:
+  autograde:
+    name: Autograde student repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout student repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Resolve autograde configuration
+        id: config
+        shell: bash
+        env:
+          INPUT_STUDENT: ${{ github.event.inputs.student || '' }}
+          INPUT_GROUP: ${{ github.event.inputs.group || '' }}
+          INPUT_MODE: ${{ github.event.inputs.mode || '' }}
+          INPUT_TEACHER_REPOSITORY: ${{ github.event.inputs.teacher_repository || '' }}
+          INPUT_TEACHER_REF: ${{ github.event.inputs.teacher_ref || '' }}
+          VAR_AUTOGRADE_GROUP: ${{ vars.AUTOGRADE_GROUP }}
+          VAR_TEACHER_REPOSITORY: ${{ vars.TEACHER_REPOSITORY }}
+          VAR_TEACHER_REF: ${{ vars.TEACHER_REPO_REF }}
+        run: |
+          set -euo pipefail
+
+          student="${INPUT_STUDENT:-${{ github.repository }}}"
+          group="${INPUT_GROUP:-$VAR_AUTOGRADE_GROUP}"
+          mode="${INPUT_MODE:-mock}"
+          teacher_repository="${INPUT_TEACHER_REPOSITORY:-$VAR_TEACHER_REPOSITORY}"
+          teacher_ref="${INPUT_TEACHER_REF:-$VAR_TEACHER_REF}"
+
+          if [ -z "$teacher_repository" ]; then
+            teacher_repository="$DEFAULT_TEACHER_REPOSITORY"
+          fi
+
+          if [ -z "$teacher_ref" ]; then
+            teacher_ref="$DEFAULT_TEACHER_REF"
+          fi
+
+          if [ "$mode" != "mock" ] && [ "$mode" != "openai" ]; then
+            echo "Mode d'autograding no valid: $mode"
+            exit 1
+          fi
+
+          if [ -z "$group" ] && [ -f student-meta.json ]; then
+            group="$(node -e "const fs=require('fs'); const data=JSON.parse(fs.readFileSync('student-meta.json', 'utf8')); process.stdout.write(data.group || '')")"
+          fi
+
+          if [ -z "$group" ]; then
+            echo "No s'ha pogut resoldre el grup. Defineix l'input group, la variable AUTOGRADE_GROUP o student-meta.json."
+            exit 1
+          fi
+
+          {
+            echo "student=$student"
+            echo "group=$group"
+            echo "mode=$mode"
+            echo "teacher_repository=$teacher_repository"
+            echo "teacher_ref=$teacher_ref"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Checkout teacher repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.config.outputs.teacher_repository }}
+          ref: ${{ steps.config.outputs.teacher_ref }}
+          token: ${{ secrets.TEACHER_REPO_TOKEN || github.token }}
+          path: _teacher_repo
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: _teacher_repo/package-lock.json
+
+      - name: Install teacher dependencies
+        working-directory: _teacher_repo
+        run: npm ci
+
+      - name: Validate teacher repository structure
+        working-directory: _teacher_repo
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f package-lock.json
+          test -f scripts/resolve-active-challenge.mjs
+          test -f scripts/build-evaluation-payload.mjs
+          test -f scripts/mock-autograde.mjs
+          test -f scripts/openai-autograde.mjs
+          test -f scripts/validate-autograde-result.mjs
+
+      # L'script usa process.cwd(), per aixo cal executar-lo des de _teacher_repo.
+      - name: Resolve active challenge
+        id: resolve
+        working-directory: _teacher_repo
+        shell: bash
+        env:
+          RESOLVED_STUDENT: ${{ steps.config.outputs.student }}
+          RESOLVED_GROUP: ${{ steps.config.outputs.group }}
+        run: |
+          set -euo pipefail
+          challenge_id="$(
+            node scripts/resolve-active-challenge.mjs --student "${RESOLVED_STUDENT}" --group "${RESOLVED_GROUP}"
+          )"
+          echo "challenge_id=$challenge_id" >> "$GITHUB_OUTPUT"
+          mkdir -p ../_artifacts
+          CHALLENGE_ID="$challenge_id" node -e "const fs = require('fs'); fs.writeFileSync('../_artifacts/active-challenge.json', JSON.stringify({ challenge_id: process.env.CHALLENGE_ID }, null, 2) + '\n');"
+
+      - name: Build evaluation payload
+        id: payload
+        working-directory: _teacher_repo
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build-evaluation-payload.mjs \
+            --student "${{ steps.config.outputs.student }}" \
+            --group "${{ steps.config.outputs.group }}" \
+            --repo "${{ github.repository }}" \
+            --commit "${{ github.sha }}"
+          echo "payload_path=_teacher_repo/tmp/evaluation-payload.json" >> "$GITHUB_OUTPUT"
+
+      - name: Mock autograde
+        if: ${{ steps.config.outputs.mode == 'mock' }}
+        working-directory: _teacher_repo
+        run: node scripts/mock-autograde.mjs --input tmp/evaluation-payload.json
+
+      - name: OpenAI autograde
+        if: ${{ steps.config.outputs.mode == 'openai' }}
+        working-directory: _teacher_repo
+        shell: bash
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "Falta el secret OPENAI_API_KEY"
+            exit 1
+          fi
+
+          node scripts/openai-autograde.mjs --input tmp/evaluation-payload.json
+
+      - name: Validate autograde result
+        working-directory: _teacher_repo
+        run: node scripts/validate-autograde-result.mjs --input tmp/autograde-result.json
+
+      - name: Copy artifacts to student repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _artifacts
+          cp _teacher_repo/tmp/evaluation-payload.json _artifacts/evaluation-payload.json
+          cp _teacher_repo/tmp/autograde-result.json _artifacts/autograde-result.json
+
+          if [ -f _teacher_repo/tmp/openai-raw-response.json ]; then
+            cp _teacher_repo/tmp/openai-raw-response.json _artifacts/openai-raw-response.json
+          fi
+
+      - name: Publish autograde summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'JS' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          const result = JSON.parse(fs.readFileSync('_artifacts/autograde-result.json', 'utf8'));
+
+          console.log("# Resum d'autograding");
+          console.log("");
+          console.log("- Repo alumne: `${{ github.repository }}`");
+          console.log("- Alumne: `${{ steps.config.outputs.student }}`");
+          console.log("- Grup: `${{ steps.config.outputs.group }}`");
+          console.log("- Challenge: `" + (result.challenge_id || "${{ steps.resolve.outputs.challenge_id }}") + "`");
+          console.log("- Nota provisional: **" + (result.final_score_over_10 ?? "n/d") + "**");
+          console.log("- Confiança: **" + (result.confidence ?? "n/d") + "**");
+          console.log("- Revisió docent: **" + (result.teacher_review_required ?? "n/d") + "**");
+          JS
+
+      - name: Upload autograde artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: autograde-result
+          path: _artifacts/

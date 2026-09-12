@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r4-s03-proteccio-api",
+  "challenge_id": "r4-s03-proteccio-api",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.35, "must_check": "El servei té control d'acces real i observable."},
+    {"id": "verification", "label": "Verificació", "weight": 0.25, "must_check": "S'han provat cas autoritzat, sense credencial i credencial incorrecta."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha commits o registre del mecanisme triat i de les proves."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.1, "must_check": "La documentacio explica com enviar credencial i què passa si falla."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, justifica el mecanisme i verifica l'execucio."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "El control està en el flux correcte i no és una condicio decorativa."}
+  ],
+  "hard_rules": [
+    "Sense control d'acces real, la puntuacio maxima recomanada és 5.",
+    "Sense cas denegat provat, la puntuacio maxima recomanada és 7.",
+    "Si el cas denegat retorna dades sensibles, cal revisio docent.",
+    "Si només repeteix login web sense adaptar-lo a API, la puntuacio maxima recomanada és 8.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

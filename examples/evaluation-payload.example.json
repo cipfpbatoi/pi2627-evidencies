@@ -1,0 +1,26 @@
+{
+  "student": "cipfpbatoi/dwes-ana-marti",
+  "group": "2DAW-C",
+  "repo": "cipfpbatoi/dwes-ana-marti",
+  "challenge_id": "r1-s02-entorn-executable",
+  "commit": "abc1234def5678",
+  "changed_files": [
+    "public/index.php",
+    "README.md",
+    "evidence/punt-entrada.md"
+  ],
+  "repo_signals": {
+    "readme_present": true,
+    "template_guide_present": true,
+    "ai_log_present": false,
+    "declared_runtime": "php",
+    "framework_detected": null
+  },
+  "test_results": {
+    "status": "not_configured",
+    "summary": "Encara no hi ha tests automàtics per a este microrepte.",
+    "passed": 0,
+    "failed": 0
+  },
+  "rubric_id": "rubric-r1-s02-entorn-executable"
+}

@@ -1,0 +1,66 @@
+{
+  "challenge_id": "r4-s05-documentacio-prova-servei",
+  "repte_id": "r4-api-consum",
+  "session_code": "R4-S05",
+  "microrepte_code": "R4M5",
+  "microreptes_covered": [
+    "R4M5"
+  ],
+  "title": "Documentació i prova del servei",
+  "summary": "Tancar R4 amb documentacio d'endpoints, proves reproduïbles, incidencies i mini defensa de contracte i consum.",
+  "pedagogical_goal": "Comprovar que una altra persona pot entendre, provar i consumir el servei abans d'obrir R5.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "tests/",
+    "api/",
+    "openapi.yaml",
+    "postman/",
+    "insomnia/",
+    "scripts/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Documentacio d'endpoints",
+    "Exemples de request i response",
+    "Requisits d'autenticacio",
+    "Casos de prova minims",
+    "Errors principals",
+    "Incidencies i correccions",
+    "Possible pas a R5",
+    "AI log si hi ha ús rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La documentacio coincideix amb el servei real",
+    "Les proves són reproduïbles",
+    "Hi ha cas correcte i cas d'error",
+    "El pas a R5 està justificat"
+  ],
+  "recommended_test_strategy": "Seguir la documentacio com a tercer, executar cas correcte i cas d'error, revisar incidencies i comprovar que el servei podria alimentar una integracio de R5.",
+  "source_alignment": [
+    "Repte 4 R4M5",
+    "Programacio d'aula R4S5",
+    "Documentacio d'alumnat del Repte 4",
+    "Pes orientatiu dins del repte: 25%"
+  ],
+  "repte_weight": 0.25,
+  "primary_ra": "RA7",
+  "assessed_ca": [
+    "RA7.f",
+    "RA7.h"
+  ],
+  "context_ra": [
+    "RA6.g"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció.",
+  "repte_extension": {
+    "scope": "repte",
+    "max_score": 1,
+    "requires_teacher_validation": true,
+    "declaration_path": "docs/r4-ampliacio.md",
+    "criteria": " 9→10\n\n**Finalitat**  \nFer l'API més robusta, més clara i més verificable des del punt de vista del productor i del consumidor.\n\n**Condició prèvia**  \nEl nucli del repte ha d'estar complet, funcional i validat.\n\n**Opcions d'ampliació**\n- Millorar la documentació de l'API, la coherència dels codis de resposta i la gestió d'errors dels endpoints principals.\n- Afegir comprovacions o proves addicionals sobre contracte, autenticació o casos crítics de consum.\n\n**Proposta pròpia**  \nPots proposar una ampliació pròpia si continua centrada en qualitat d'API i es valida abans amb el professorat.\n\n**Evidències mínimes**\n- commit o branca identificable\n- `README.md` curt o nota tècnica de canvis\n- prova funcional amb client, script, Postman o equivalent\n- rastre de l'ús assistit per IA, si n'hi ha hagut\n\n**Ús assistit per IA**  \nLa IA pot ajudar a revisar endpoints, generar proves o comparar respostes, però has de validar tu el comportament real de l'API.\n\n**Defensa**  \nPerquè compte com a `9→10`, l'ampliació ha d'estar integrada, aportar robustesa real i poder-se defensar.\n\n"
+  }
+}

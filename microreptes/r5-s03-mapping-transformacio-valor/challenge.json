@@ -1,0 +1,56 @@
+{
+  "challenge_id": "r5-s03-mapping-transformacio-valor",
+  "repte_id": "r5-integracio-hibrida",
+  "session_code": "R5-S03",
+  "microrepte_code": "R5M3",
+  "microreptes_covered": [
+    "R5M3"
+  ],
+  "title": "Transformació, mapping i valor afegit",
+  "summary": "Transformar la resposta externa perquè encaixe amb el domini del producte i demostrar el valor aportat.",
+  "pedagogical_goal": "Evitar mostrar dades externes en cru i comprovar que l'alumne adapta, filtra i justifica la informació integrada.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "src/",
+    "app/",
+    "tests/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Taula o esquema de mapping",
+    "Codi de transformacio localitzable",
+    "Filtrat, normalitzacio o enriquiment de dades",
+    "Comparativa font externa / resultat final",
+    "Justificacio del valor afegit",
+    "Decisio sobre persistencia si s'utilitza",
+    "AI log si hi ha us rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "El projecte no depén del format cru de la font externa",
+    "El mapping usa llenguatge del domini intern",
+    "Hi ha dades descartades amb criteri",
+    "El resultat integrat millora una funcionalitat real"
+  ],
+  "recommended_test_strategy": "Revisar la taula de mapping, comparar una resposta externa amb el resultat transformat i executar o inspeccionar la peça de transformació.",
+  "source_alignment": [
+    "Repte 5 R5M3",
+    "Programacio d'aula R5S3",
+    "Documentacio d'alumnat del Repte 5",
+    "Pes orientatiu dins del repte: 20%"
+  ],
+  "repte_weight": 0.2,
+  "primary_ra": "RA9",
+  "assessed_ca": [
+    "RA9.d",
+    "RA9.e"
+  ],
+  "context_ra": [
+    "RA6.c",
+    "RA6.d"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

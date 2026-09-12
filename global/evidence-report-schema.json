@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Informe d'evidències del Projecte Intermodular",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "project", "checkpoint", "version", "status", "checks", "candidate_evidence", "warnings", "blocking_flags", "teacher_review_required", "qualification"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string" },
+    "project": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "repository"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "repository": { "type": "string", "minLength": 1 }
+      }
+    },
+    "checkpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "phase", "assessment"],
+      "properties": {
+        "id": { "type": "string" }, "name": { "type": "string" }, "phase": { "type": "string" },
+        "assessment": { "enum": ["formative", "teacher_review"] }
+      }
+    },
+    "version": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requested_ref", "commit"],
+      "properties": { "requested_ref": { "type": "string" }, "commit": { "type": "string", "minLength": 7 } }
+    },
+    "status": { "enum": ["complete", "complete_with_warnings", "incomplete"] },
+    "checks": { "type": "array", "items": { "type": "object" } },
+    "candidate_evidence": { "type": "array", "items": { "type": "object" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "blocking_flags": { "type": "array", "items": { "type": "string" } },
+    "teacher_review_required": { "const": true },
+    "qualification": { "type": "null" }
+  }
+}

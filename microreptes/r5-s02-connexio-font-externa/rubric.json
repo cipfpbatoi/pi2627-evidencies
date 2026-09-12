@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r5-s02-connexio-font-externa",
+  "challenge_id": "r5-s02-connexio-font-externa",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.35, "must_check": "La connexió recupera una resposta real de la font externa."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Hi ha cas positiu i cas d'error reproduïbles."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha registre de proves, resposta rebuda i ajustos fets."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "El projecte explica configuració i execució sense exposar secrets."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA, valida codi, paràmetres i tractament d'errors."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.15, "must_check": "El connector està separat i té control mínim de configuració i errors."}
+  ],
+  "hard_rules": [
+    "Sense connexio real, la puntuacio maxima recomanada és 5.",
+    "Si hi ha secrets reals al repositori, cal correccio obligatoria i revisio docent.",
+    "Sense cas d'error, la puntuacio maxima recomanada és 7.",
+    "Si la resposta és fixa i no prové de la font, la puntuacio maxima recomanada és 6.",
+    "Esta rúbrica avalua només el nucli obligatori; les ampliacions no compensen mancances del mínim."
+  ]
+}

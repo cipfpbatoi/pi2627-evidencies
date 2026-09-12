@@ -1,0 +1,20 @@
+{
+  "rubric_id": "rubric-r3-s06-qualitat-estabilitzacio",
+  "challenge_id": "r3-s06-qualitat-estabilitzacio",
+  "max_score": 10,
+  "dimensions": [
+    {"id": "functional_resolution", "label": "Resolució funcional", "weight": 0.3, "must_check": "Els fluxos principals funcionen amb validacio/error, BBDD reproduïble i proteccio d'accessos intacta."},
+    {"id": "verification", "label": "Verificació", "weight": 0.2, "must_check": "Hi ha proves o checklist executada amb cas positiu, negatiu, error, comprovacio de BBDD i cas d'acces protegit."},
+    {"id": "traceability", "label": "Traçabilitat", "weight": 0.1, "must_check": "Hi ha incidencies, correccions, commits útils o registre equivalent, amb temps aproximat si s'ha demanat."},
+    {"id": "documentation", "label": "Documentació", "weight": 0.15, "must_check": "Documenta proves, errors, incidencies corregides i estat dels dos fluxos."},
+    {"id": "ai_usage", "label": "Ús d'IA", "weight": 0.05, "must_check": "Si usa IA per depurar o proposar proves, registra verificacio posterior."},
+    {"id": "code_quality", "label": "Qualitat tècnica", "weight": 0.2, "must_check": "Hi ha revisio de responsabilitats i no s'afegeix funcionalitat nova per esquivar estabilitzacio."}
+  ],
+  "hard_rules": [
+    "Sense fluxos principals funcionals, la puntuacio maxima recomanada és 6.",
+    "Sense prova o checklist verificable, la puntuacio maxima recomanada és 7.",
+    "Sense cas negatiu o error controlat, la puntuacio maxima recomanada és 8.",
+    "Si migracions o carrega inicial queden trencades, cal penalitzar verificacio i qualitat.",
+    "Esta rúbrica avalua només el nucli obligatori del microrepte; les ampliacions no s'han d'exigir ni usar per compensar mancances del mínim."
+  ]
+}

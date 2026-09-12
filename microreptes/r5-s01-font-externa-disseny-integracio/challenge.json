@@ -1,0 +1,55 @@
+{
+  "challenge_id": "r5-s01-font-externa-disseny-integracio",
+  "repte_id": "r5-integracio-hibrida",
+  "session_code": "R5-S01",
+  "microrepte_code": "R5M1",
+  "microreptes_covered": [
+    "R5M1"
+  ],
+  "title": "Selecció de font externa i disseny de la integració",
+  "summary": "Triar una font externa útil, comparar alternatives i dissenyar el mapa inicial del flux híbrid abans d'implementar.",
+  "pedagogical_goal": "Evitar integracions ornamentals i comprovar que l'alumne entén contracte, valor, riscos i límits de la font triada.",
+  "relevant_paths": [
+    "README.md",
+    "README.md",
+    "docs/",
+    "evidence/",
+    "integration/",
+    "integrations/",
+    "api/",
+    "ai-log.md"
+  ],
+  "required_evidence": [
+    "Comparativa curta de fonts o serveis externs",
+    "Font triada i justificacio de valor per al producte",
+    "Contracte, format o mecanisme d'acces identificat",
+    "Mapa inicial del flux hibrid",
+    "Dades necessaries i dades descartades",
+    "Riscos, limits, permisos o dependencia externa",
+    "AI log si hi ha us rellevant d'IA"
+  ],
+  "ai_log_required": false,
+  "expected_signals": [
+    "La font externa aporta valor real al producte",
+    "Hi ha almenys una alternativa considerada o descartada",
+    "El mapa diferencia entrada, connexio, transformacio, eixida i error",
+    "Els riscos no queden ocults"
+  ],
+  "recommended_test_strategy": "Llegir la comparativa, comprovar que la font triada és accessible i útil, revisar el mapa inicial i contrastar riscos amb la documentació real de la font.",
+  "source_alignment": [
+    "Repte 5 R5M1",
+    "Programacio d'aula R5S1",
+    "Documentacio d'alumnat del Repte 5",
+    "Pes orientatiu dins del repte: 15%"
+  ],
+  "repte_weight": 0.15,
+  "primary_ra": "RA9",
+  "assessed_ca": [
+    "RA9.a",
+    "RA9.b"
+  ],
+  "context_ra": [
+    "RA7.a"
+  ],
+  "assessment_model": "Este microrepte genera nota només per al RA avaluat. Els RA de context poden aparéixer en el producte, però no es ponderen en esta autocorrecció."
+}

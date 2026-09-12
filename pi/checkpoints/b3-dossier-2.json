@@ -1,0 +1,9 @@
+{
+  "id": "b3-dossier-2",
+  "name": "Bloc 3 — Avantprojecte",
+  "phase": "disseny-viabilitat",
+  "assessment": "teacher_review",
+  "required_files": ["project.json", "docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "docs/00-control/fonts-ia.md"],
+  "required_globs": ["evidencies/alumnat/*.md", "traspassos/*.md"],
+  "candidate_ra_ca": ["RA1.f", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.f", "RA2.g", "RA2.h", "RA2.i"]
+}
