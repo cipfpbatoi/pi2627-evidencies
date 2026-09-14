@@ -85,6 +85,20 @@ Obri:
 http://localhost:4173
 ```
 
+## Dashboard del Projecte Intermodular
+
+L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interfície es pot:
+
+- registrar o actualitzar un projecte amb el mateix identificador de `project.json`;
+- seleccionar un punt de control i una referència immutable;
+- analitzar un clon local del repositori sense modificar-lo;
+- consultar les comprovacions, els avisos, els bloquejos i els RA/CA candidats;
+- obrir en GitHub el commit analitzat i descarregar l'informe JSON.
+
+El directori del repositori introduït en el formulari ha de ser una ruta absoluta, existir i ser llegible per l'usuari que executa el servei. Eixe usuari també necessita escriptura en `course/projects.json` i `tmp/pi/`. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
+
+El dashboard PI només accepta `DASHBOARD_HOST=127.0.0.1`, `localhost` o `::1`. No incorpora autenticació pròpia i no s'ha d'exposar directament a Internet.
+
 ## Què permet fer
 
 El dashboard està separat en aquestes vistes:

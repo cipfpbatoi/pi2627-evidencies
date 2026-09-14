@@ -1,11 +1,14 @@
 import { createServer } from 'node:http';
+import { execFile } from 'node:child_process';
 import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { loadConfiguration } from '../scripts/pi/lib/config.mjs';
+import { loadConfiguration, validId, validateProject } from '../scripts/pi/lib/config.mjs';
 
+const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const host = process.env.DASHBOARD_HOST || '127.0.0.1';
 const port = Number(process.env.DASHBOARD_PORT || 4173);
@@ -18,39 +21,137 @@ function escape(value) {
   return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
+function layout(title, content) {
+  return `<!doctype html><html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(title)}</title><style>
+  :root{color-scheme:light;--ink:#17202a;--muted:#566573;--line:#ccd1d1;--soft:#f4f6f7;--accent:#1769aa;--ok:#18794e;--bad:#b42318;--warn:#9a6700}*{box-sizing:border-box}body{font:16px/1.45 system-ui;max-width:1180px;margin:0 auto;padding:1.5rem;color:var(--ink)}nav{display:flex;gap:1rem;align-items:center;margin-bottom:2rem}nav a{font-weight:700}a{color:var(--accent)}h1{margin:.2rem 0}.lead{color:var(--muted);margin-top:.25rem}table{border-collapse:collapse;width:100%;margin:1rem 0 2rem}th,td{border:1px solid var(--line);padding:.6rem;text-align:left;vertical-align:top}th{background:#eaf2f8}code{background:var(--soft);padding:.15rem .3rem;overflow-wrap:anywhere}form{background:var(--soft);padding:1rem;border:1px solid var(--line);border-radius:.4rem;margin:1rem 0 2rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}label{display:block;font-weight:650}input,select{display:block;width:100%;padding:.55rem;margin-top:.2rem;border:1px solid #899;border-radius:.25rem;background:white}button{padding:.6rem .9rem;background:var(--accent);color:white;border:0;border-radius:.25rem;font-weight:700;cursor:pointer}.status-complete,.passed{color:var(--ok)}.status-incomplete,.failed{color:var(--bad)}.status-complete_with_warnings,.warning{color:var(--warn)}.notice{padding:.8rem;border-left:4px solid var(--accent);background:#eef6fc}.error{border-color:var(--bad);background:#fff1f0}.evidence{font-size:.92rem;color:var(--muted)}
+  </style></head><body><nav><a href="/">Evidències PI</a><a href="/#projectes">Projectes</a><a href="/#recopilar">Recopilar</a></nav>${content}</body></html>`;
+}
+
 async function reports() {
   const dir = path.join(root, 'tmp/pi');
   if (!existsSync(dir)) return [];
   const result = [];
   for (const entry of await readdir(dir)) {
     if (!entry.endsWith('.json')) continue;
-    try { result.push(JSON.parse(await readFile(path.join(dir, entry), 'utf8'))); } catch { /* informe incomplet ignorat */ }
+    try {
+      const report = JSON.parse(await readFile(path.join(dir, entry), 'utf8'));
+      result.push({ ...report, filename: entry });
+    } catch { /* informe incomplet ignorat */ }
   }
   return result.sort((a, b) => String(b.generated_at).localeCompare(String(a.generated_at)));
 }
 
-export function renderDashboard(projects, checkpoints, evidenceReports) {
-  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td>${escape(project.repository)}</td></tr>`).join('');
-  const reportRows = evidenceReports.map((report) => `<tr><td>${escape(report.project.name)}</td><td>${escape(report.checkpoint.name)}</td><td>${escape(report.version.requested_ref)}</td><td>${escape(report.status)}</td><td>${escape(report.generated_at)}</td></tr>`).join('');
-  return `<!doctype html><html lang="ca"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Evidències PI</title><style>body{font:16px system-ui;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#17202a}table{border-collapse:collapse;width:100%;margin-bottom:2rem}th,td{border:1px solid #ccd1d1;padding:.55rem;text-align:left}th{background:#eaf2f8}code{background:#f4f6f7;padding:.15rem .3rem}</style><body><h1>Evidències del Projecte Intermodular</h1><p>L'aplicatiu analitza projectes i versions. No gestiona parelles ni assigna qualificacions.</p><h2>Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th></tr></thead><tbody>${projectRows || '<tr><td colspan="3">No hi ha projectes registrats.</td></tr>'}</tbody></table><h2>Punts de control (${checkpoints.size})</h2><ul>${[...checkpoints.values()].map((item) => `<li><code>${escape(item.id)}</code> — ${escape(item.name)}</li>`).join('')}</ul><h2>Últims informes</h2><table><thead><tr><th>Projecte</th><th>Punt de control</th><th>Versió</th><th>Estat</th><th>Data</th></tr></thead><tbody>${reportRows || '<tr><td colspan="5">Encara no hi ha informes.</td></tr>'}</tbody></table></body></html>`;
+function notice(searchParams) {
+  if (searchParams.get('error')) return `<p class="notice error"><strong>Error:</strong> ${escape(searchParams.get('error'))}</p>`;
+  if (searchParams.get('ok')) return `<p class="notice">${escape(searchParams.get('ok'))}</p>`;
+  return '';
+}
+
+export function renderDashboard(projects, checkpoints, evidenceReports, message = '') {
+  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td></tr>`).join('');
+  const reportRows = evidenceReports.map((report) => `<tr><td><a href="/reports/${encodeURIComponent(report.filename)}">${escape(report.project.name)}</a></td><td>${escape(report.checkpoint.name)}</td><td><code>${escape(report.version.requested_ref)}</code></td><td class="status-${escape(report.status)}">${escape(report.status)}</td><td>${escape(report.generated_at)}</td></tr>`).join('');
+  const projectOptions = [...projects.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)} (${escape(item.id)})</option>`).join('');
+  const checkpointOptions = [...checkpoints.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)}</option>`).join('');
+  return layout('Evidències PI', `${message}<h1>Evidències del Projecte Intermodular</h1><p class="lead">Analitza una versió immutable d’un projecte i prepara evidències candidates per a la revisió docent. No gestiona parelles ni assigna qualificacions.</p>
+  <h2 id="projectes">Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th></tr></thead><tbody>${projectRows || '<tr><td colspan="3">No hi ha projectes registrats.</td></tr>'}</tbody></table>
+  <details><summary><strong>Registrar o actualitzar un projecte</strong></summary><form method="post" action="/projects"><div class="grid"><label>Identificador<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Repositori GitHub<input name="repository" required placeholder="organitzacio/repositori"></label></div><p><button type="submit">Guardar projecte</button></p></form></details>
+  <h2>Punts de control (${checkpoints.size})</h2><ul>${[...checkpoints.values()].map((item) => `<li><code>${escape(item.id)}</code> — ${escape(item.name)}</li>`).join('')}</ul>
+  <h2 id="recopilar">Recopilar evidències</h2>${projects.size ? `<form method="post" action="/reports"><div class="grid"><label>Projecte<select name="project-id" required>${projectOptions}</select></label><label>Punt de control<select name="checkpoint" required>${checkpointOptions}</select></label><label>Directori del repositori al servidor<input name="repo-dir" required placeholder="/var/www/projectes/hort-urba"></label><label>Etiqueta, branca o commit<input name="ref" required placeholder="dossier-0-v1.0"></label></div><p class="evidence">La referència es resol a un commit concret; l’informe no altera el repositori analitzat.</p><button type="submit">Recopilar i mostrar l’informe</button></form>` : '<p class="notice">Registra almenys un projecte abans de recopilar evidències.</p>'}
+  <h2>Últims informes</h2><table><thead><tr><th>Projecte</th><th>Punt de control</th><th>Versió</th><th>Estat</th><th>Data</th></tr></thead><tbody>${reportRows || '<tr><td colspan="5">Encara no hi ha informes.</td></tr>'}</tbody></table>`);
+}
+
+export function renderReport(report) {
+  const checks = report.checks.map((check) => `<tr><td class="${escape(check.status)}">${escape(check.status)}</td><td><code>${escape(check.id)}</code></td><td>${escape(check.message)}</td><td class="evidence">${(check.evidence || []).map(escape).join('<br>') || '—'}</td></tr>`).join('');
+  const list = (items, empty) => items?.length ? `<ul>${items.map((item) => `<li>${escape(item)}</li>`).join('')}</ul>` : `<p>${empty}</p>`;
+  return layout(`Informe — ${report.project.name}`, `<h1>${escape(report.project.name)}</h1><p class="lead">${escape(report.checkpoint.name)} · <code>${escape(report.version.requested_ref)}</code></p><p><strong>Estat:</strong> <span class="status-${escape(report.status)}">${escape(report.status)}</span> · <strong>Commit:</strong> <code>${escape(report.version.commit)}</code></p><p><a href="${escape(`https://github.com/${report.project.repository}/tree/${report.version.commit}`)}" rel="noreferrer">Obrir esta versió a GitHub</a> · <a href="/api/reports/${encodeURIComponent(report.filename)}">Descarregar JSON</a></p><h2>Comprovacions</h2><table><thead><tr><th>Estat</th><th>Comprovació</th><th>Resultat</th><th>Evidència</th></tr></thead><tbody>${checks}</tbody></table><h2>Avisos</h2>${list(report.warnings, 'Cap avís automàtic.')}<h2>Bloquejos</h2>${list(report.blocking_flags, 'Cap bloqueig automàtic.')}<h2>RA/CA candidats</h2>${list(report.candidate_evidence?.map((item) => item.ra_ca), 'No se n’han identificat.')}<p class="notice">Cal revisar qualitat, autoria, abast i defensa. Este informe no acredita assoliments ni assigna qualificacions.</p>`);
+}
+
+async function readBody(request) {
+  let body = '';
+  for await (const chunk of request) {
+    body += chunk;
+    if (body.length > 32_768) throw new Error('El formulari supera la mida permesa.');
+  }
+  return Object.fromEntries(new URLSearchParams(body));
+}
+
+function redirect(response, location) {
+  response.writeHead(303, { location });
+  response.end();
+}
+
+async function registerProject(input) {
+  const project = { id: input.id?.trim(), name: input.name?.trim(), repository: input.repository?.trim() };
+  const errors = validateProject(project);
+  if (errors.length) throw new Error(errors.join(', '));
+  await execFileAsync(process.execPath, ['scripts/pi/register-project.mjs', '--id', project.id, '--name', project.name, '--repository', project.repository], { cwd: root });
+  return project;
+}
+
+async function collectReport(input) {
+  if (!validId(input['project-id']) || !validId(input.checkpoint)) throw new Error('Projecte o punt de control invàlid.');
+  if (!String(input.ref || '').trim() || /[\0\r\n]/.test(input.ref)) throw new Error('Referència invàlida.');
+  const repoDir = path.resolve(String(input['repo-dir'] || ''));
+  if (!path.isAbsolute(String(input['repo-dir'] || '')) || !existsSync(repoDir)) throw new Error('El directori del repositori no existix o no és absolut.');
+  const filename = `${input['project-id']}-${input.checkpoint}.json`;
+  await execFileAsync(process.execPath, ['scripts/pi/collect-evidence.mjs', '--repo-dir', repoDir, '--project-id', input['project-id'], '--checkpoint', input.checkpoint, '--ref', input.ref, '--output', `tmp/pi/${filename}`], { cwd: root, maxBuffer: 12 * 1024 * 1024 });
+  return filename;
+}
+
+async function handle(request, response) {
+  const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+  try {
+    if (request.method === 'GET' && url.pathname === '/') {
+      const { projects, checkpoints } = await loadConfiguration(root);
+      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+      response.end(renderDashboard(projects, checkpoints, await reports(), notice(url.searchParams)));
+      return;
+    }
+    if (request.method === 'POST' && url.pathname === '/projects') {
+      const project = await registerProject(await readBody(request));
+      redirect(response, `/?ok=${encodeURIComponent(`Projecte “${project.name}” guardat.`)}#projectes`);
+      return;
+    }
+    if (request.method === 'POST' && url.pathname === '/reports') {
+      const filename = await collectReport(await readBody(request));
+      redirect(response, `/reports/${encodeURIComponent(filename)}`);
+      return;
+    }
+    const reportMatch = url.pathname.match(/^\/(api\/)?reports\/([^/]+\.json)$/);
+    if (request.method === 'GET' && reportMatch) {
+      const filename = path.basename(decodeURIComponent(reportMatch[2]));
+      const report = { ...JSON.parse(await readFile(path.join(root, 'tmp/pi', filename), 'utf8')), filename };
+      if (reportMatch[1]) {
+        response.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'content-disposition': `attachment; filename="${filename}"` });
+        response.end(`${JSON.stringify(report, null, 2)}\n`);
+      } else {
+        response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+        response.end(renderReport(report));
+      }
+      return;
+    }
+    if (request.method === 'GET' && url.pathname === '/api/state') {
+      const { projects, checkpoints } = await loadConfiguration(root);
+      response.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
+      response.end(`${JSON.stringify({ projects: [...projects.values()], checkpoints: [...checkpoints.values()], reports: await reports() }, null, 2)}\n`);
+      return;
+    }
+    response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
+    response.end('No trobat.\n');
+  } catch (error) {
+    if (request.method === 'POST') {
+      redirect(response, `/?error=${encodeURIComponent(error.message)}`);
+      return;
+    }
+    response.writeHead(error.code === 'ENOENT' ? 404 : 500, { 'content-type': 'text/plain; charset=utf-8' });
+    response.end(`Error: ${error.message}\n`);
+  }
+}
+
+export function createDashboardServer() {
+  return createServer(handle);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const server = createServer(async (request, response) => {
-    try {
-      if (request.url === '/api/state') {
-        const { projects, checkpoints } = await loadConfiguration(root);
-        response.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-        response.end(`${JSON.stringify({ projects: [...projects.values()], checkpoints: [...checkpoints.values()], reports: await reports() }, null, 2)}\n`);
-        return;
-      }
-      const { projects, checkpoints } = await loadConfiguration(root);
-      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
-      response.end(renderDashboard(projects, checkpoints, await reports()));
-    } catch (error) {
-      response.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
-      response.end(`Error: ${error.message}\n`);
-    }
-  });
-  server.listen(port, host, () => console.log(`Dashboard PI: http://${host}:${port}`));
+  createDashboardServer().listen(port, host, () => console.log(`Dashboard PI: http://${host}:${port}`));
 }

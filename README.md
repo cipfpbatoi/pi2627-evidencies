@@ -40,7 +40,9 @@ L'informe sempre conté `qualification: null` i `teacher_review_required: true`.
 npm run dashboard
 ```
 
-Mostra els projectes pel nom, els punts de control i els informes locals. El dashboard anterior continua disponible amb `npm run dashboard:legacy`.
+Permet registrar projectes, recopilar una versió des d'un clon local, consultar les comprovacions, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`, i llegir els repositoris que s'indiquen en el formulari. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
+
+Els informes continuen sense assignar qualificacions: presenten evidències candidates que requerixen revisió docent. El dashboard anterior continua disponible amb `npm run dashboard:legacy`.
 
 ## Sistema anterior de DWES
 
