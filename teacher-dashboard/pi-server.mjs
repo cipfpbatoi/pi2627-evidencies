@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
-import { readFile, readdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { access, readFile, readdir } from 'node:fs/promises';
+import { constants, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { promisify } from 'node:util';
@@ -10,6 +10,23 @@ import { loadConfiguration, validId, validateProject } from '../scripts/pi/lib/c
 
 const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+function loadDotEnv() {
+  const file = path.join(root, '.env');
+  if (!existsSync(file)) return;
+  for (const rawLine of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    const separator = line.indexOf('=');
+    if (separator < 1) continue;
+    const key = line.slice(0, separator).trim();
+    let value = line.slice(separator + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) value = value.slice(1, -1);
+    if (!(key in process.env)) process.env[key] = value;
+  }
+}
+
+loadDotEnv();
 const host = process.env.DASHBOARD_HOST || '127.0.0.1';
 const port = Number(process.env.DASHBOARD_PORT || 4173);
 
@@ -47,14 +64,15 @@ function notice(searchParams) {
   return '';
 }
 
-export function renderDashboard(projects, checkpoints, evidenceReports, message = '') {
+export function renderDashboard(projects, checkpoints, evidenceReports, message = '', githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
   const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td></tr>`).join('');
   const reportRows = evidenceReports.map((report) => `<tr><td><a href="/reports/${encodeURIComponent(report.filename)}">${escape(report.project.name)}</a></td><td>${escape(report.checkpoint.name)}</td><td><code>${escape(report.version.requested_ref)}</code></td><td class="status-${escape(report.status)}">${escape(report.status)}</td><td>${escape(report.generated_at)}</td></tr>`).join('');
   const projectOptions = [...projects.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)} (${escape(item.id)})</option>`).join('');
   const checkpointOptions = [...checkpoints.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)}</option>`).join('');
   return layout('Evidències PI', `${message}<h1>Evidències del Projecte Intermodular</h1><p class="lead">Analitza una versió immutable d’un projecte i prepara evidències candidates per a la revisió docent. No gestiona parelles ni assigna qualificacions.</p>
   <h2 id="projectes">Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th></tr></thead><tbody>${projectRows || '<tr><td colspan="3">No hi ha projectes registrats.</td></tr>'}</tbody></table>
-  <details><summary><strong>Registrar o actualitzar un projecte</strong></summary><form method="post" action="/projects"><div class="grid"><label>Identificador<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Repositori GitHub<input name="repository" required placeholder="organitzacio/repositori"></label></div><p><button type="submit">Guardar projecte</button></p></form></details>
+  <details><summary><strong>Crear un repositori des de la plantilla</strong></summary><form method="post" action="/projects/from-template"><div class="grid"><label>Identificador del projecte<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom del projecte<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Organització GitHub<input name="owner" required value="${escape(process.env.PI_GITHUB_ORG || 'cipfpbatoi')}"></label><label>Nom del repositori<input name="repo-name" required pattern="[A-Za-z0-9._-]+" placeholder="pi-hort-urba"></label></div><p><label><input name="private" type="checkbox" checked style="display:inline;width:auto"> Repositori privat</label></p><p class="evidence">Plantilla: <code>${escape(process.env.PI_PROJECT_TEMPLATE || 'cipfpbatoi/pi2627-plantilla-projecte')}</code>. En crear-lo, també queda registrat en Evidències.</p>${githubConfigured ? '<button type="submit">Crear repositori i registrar-lo</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form></details>
+  <details><summary><strong>Registrar un repositori que ja existix</strong></summary><form method="post" action="/projects"><div class="grid"><label>Identificador<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Repositori GitHub<input name="repository" required placeholder="organitzacio/repositori"></label></div><p><button type="submit">Guardar projecte</button></p></form></details>
   <h2>Punts de control (${checkpoints.size})</h2><ul>${[...checkpoints.values()].map((item) => `<li><code>${escape(item.id)}</code> — ${escape(item.name)}</li>`).join('')}</ul>
   <h2 id="recopilar">Recopilar evidències</h2>${projects.size ? `<form method="post" action="/reports"><div class="grid"><label>Projecte<select name="project-id" required>${projectOptions}</select></label><label>Punt de control<select name="checkpoint" required>${checkpointOptions}</select></label><label>Directori del repositori al servidor<input name="repo-dir" required placeholder="/var/www/projectes/hort-urba"></label><label>Etiqueta, branca o commit<input name="ref" required placeholder="dossier-0-v1.0"></label></div><p class="evidence">La referència es resol a un commit concret; l’informe no altera el repositori analitzat.</p><button type="submit">Recopilar i mostrar l’informe</button></form>` : '<p class="notice">Registra almenys un projecte abans de recopilar evidències.</p>'}
   <h2>Últims informes</h2><table><thead><tr><th>Projecte</th><th>Punt de control</th><th>Versió</th><th>Estat</th><th>Data</th></tr></thead><tbody>${reportRows || '<tr><td colspan="5">Encara no hi ha informes.</td></tr>'}</tbody></table>`);
@@ -88,6 +106,42 @@ async function registerProject(input) {
   return project;
 }
 
+function validGithubName(value) {
+  return /^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/.test(String(value || '')) && !String(value).endsWith('.git');
+}
+
+export function templateProjectInput(input) {
+  const project = { id: input.id?.trim(), name: input.name?.trim(), repository: `${input.owner?.trim()}/${input['repo-name']?.trim()}` };
+  const errors = validateProject(project);
+  if (!validGithubName(input.owner)) errors.push('organització GitHub invàlida');
+  if (!validGithubName(input['repo-name'])) errors.push('nom de repositori invàlid');
+  if (errors.length) throw new Error([...new Set(errors)].join(', '));
+  return { project, owner: input.owner.trim(), repoName: input['repo-name'].trim(), private: input.private === 'on' || input.private === 'true' };
+}
+
+async function createProjectFromTemplate(input) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) throw new Error('Falta GITHUB_TOKEN per crear repositoris.');
+  const template = process.env.PI_PROJECT_TEMPLATE || 'cipfpbatoi/pi2627-plantilla-projecte';
+  const [templateOwner, templateRepo, extra] = template.split('/');
+  if (!validGithubName(templateOwner) || !validGithubName(templateRepo) || extra) throw new Error('PI_PROJECT_TEMPLATE ha de tindre el format organitzacio/repositori.');
+  const data = templateProjectInput(input);
+
+  await access(path.join(root, 'course/projects.json'), constants.W_OK);
+  const response = await fetch(`https://api.github.com/repos/${templateOwner}/${templateRepo}/generate`, {
+    method: 'POST',
+    headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${token}`, 'content-type': 'application/json', 'user-agent': 'pi2627-evidencies', 'x-github-api-version': '2022-11-28' },
+    body: JSON.stringify({ owner: data.owner, name: data.repoName, description: `Projecte Intermodular: ${data.project.name}`, private: data.private, include_all_branches: false })
+  });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    const detail = payload.errors?.map((item) => item.message || item.code).filter(Boolean).join(', ') || payload.message || `HTTP ${response.status}`;
+    throw new Error(`GitHub no ha creat el repositori: ${detail}.`);
+  }
+  await registerProject(data.project);
+  return data;
+}
+
 async function collectReport(input) {
   if (!validId(input['project-id']) || !validId(input.checkpoint)) throw new Error('Projecte o punt de control invàlid.');
   if (!String(input.ref || '').trim() || /[\0\r\n]/.test(input.ref)) throw new Error('Referència invàlida.');
@@ -110,6 +164,11 @@ async function handle(request, response) {
     if (request.method === 'POST' && url.pathname === '/projects') {
       const project = await registerProject(await readBody(request));
       redirect(response, `/?ok=${encodeURIComponent(`Projecte “${project.name}” guardat.`)}#projectes`);
+      return;
+    }
+    if (request.method === 'POST' && url.pathname === '/projects/from-template') {
+      const data = await createProjectFromTemplate(await readBody(request));
+      redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.`)}#projectes`);
       return;
     }
     if (request.method === 'POST' && url.pathname === '/reports') {

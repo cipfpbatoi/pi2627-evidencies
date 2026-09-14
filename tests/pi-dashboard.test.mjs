@@ -1,16 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderDashboard, renderReport } from '../teacher-dashboard/pi-server.mjs';
+import { renderDashboard, renderReport, templateProjectInput } from '../teacher-dashboard/pi-server.mjs';
 
 test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   const projects = new Map([['hort', { id: 'hort', name: 'Hort urbà', repository: 'org/hort' }]]);
   const checkpoints = new Map([['b1', { id: 'b1', name: 'Dossier 0' }]]);
-  const html = renderDashboard(projects, checkpoints, []);
+  const html = renderDashboard(projects, checkpoints, [], '', false);
   assert.match(html, /Hort urbà/);
   assert.match(html, /No gestiona parelles ni assigna qualificacions/);
-  assert.match(html, /Registrar o actualitzar un projecte/);
+  assert.match(html, /Registrar un repositori que ja existix/);
+  assert.match(html, /Crear un repositori des de la plantilla/);
+  assert.match(html, /Falta configurar GITHUB_TOKEN/);
   assert.match(html, /Recopilar evidències/);
   assert.match(html, /https:\/\/github.com\/org\/hort/);
+});
+
+test('valida les dades abans de crear un repositori des de la plantilla', () => {
+  assert.deepEqual(templateProjectInput({ id: 'hort-urba', name: 'Hort urbà', owner: 'cipfpbatoi', 'repo-name': 'pi-hort-urba', private: 'on' }), {
+    project: { id: 'hort-urba', name: 'Hort urbà', repository: 'cipfpbatoi/pi-hort-urba' },
+    owner: 'cipfpbatoi', repoName: 'pi-hort-urba', private: true
+  });
+  assert.throws(() => templateProjectInput({ id: '../hort', name: '', owner: 'cipf/batoi', 'repo-name': 'hort.git' }), /invàlid|falta/);
 });
 
 test('els informes del dashboard són navegables i mantenen la revisió docent', () => {
