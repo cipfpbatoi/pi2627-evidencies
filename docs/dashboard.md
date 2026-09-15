@@ -99,7 +99,16 @@ L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interf
 
 El directori del repositori introduït en el formulari ha de ser una ruta absoluta, existir i ser llegible per l'usuari que executa el servei. Eixe usuari també necessita escriptura en `course/projects.json` i `tmp/pi/`. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
 
-El dashboard PI només accepta `DASHBOARD_HOST=127.0.0.1`, `localhost` o `::1`. No incorpora autenticació pròpia i no s'ha d'exposar directament a Internet.
+El dashboard PI només accepta `DASHBOARD_HOST=127.0.0.1`, `localhost` o `::1` i no s'ha d'exposar directament a Internet.
+
+El dashboard PI exigix sempre estes credencials per arrancar:
+
+```text
+DASHBOARD_USER=professor
+DASHBOARD_PASSWORD=una-contrasenya-llarga-i-unica
+```
+
+El navegador mostrarà el diàleg d'autenticació HTTP Basic. Esta autenticació no xifra la contrasenya durant el transport: cal accedir al port local mitjançant un túnel SSH o publicar-lo darrere d'un proxy HTTPS. Si falta qualsevol credencial, el servei finalitza amb un error explícit en lloc d'arrancar desprotegit.
 
 ### Creació des de la plantilla
 

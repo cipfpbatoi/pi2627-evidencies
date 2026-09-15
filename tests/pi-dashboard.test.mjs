@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { initializeProjectJson, renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
+import { authorizationAccepted, initializeProjectJson, renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
+
+test('el dashboard exigix usuari i contrasenya correctes', () => {
+  const valid = `Basic ${Buffer.from('professor:contrasenya-segura').toString('base64')}`;
+  const invalid = `Basic ${Buffer.from('professor:incorrecta').toString('base64')}`;
+  assert.equal(authorizationAccepted(valid, 'professor', 'contrasenya-segura'), true);
+  assert.equal(authorizationAccepted(invalid, 'professor', 'contrasenya-segura'), false);
+  assert.equal(authorizationAccepted('', 'professor', 'contrasenya-segura'), false);
+  assert.equal(authorizationAccepted(valid, '', ''), false);
+});
 
 test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   const projects = new Map([['hort', { id: 'hort', name: 'Hort urbà', repository: 'org/hort' }]]);

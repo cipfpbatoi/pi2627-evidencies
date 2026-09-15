@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -31,7 +32,47 @@ const host = process.env.DASHBOARD_HOST || '127.0.0.1';
 const port = Number(process.env.DASHBOARD_PORT || 4173);
 
 if (!['127.0.0.1', 'localhost', '::1'].includes(host)) {
-  throw new Error('El dashboard PI només es pot escoltar en local; no inclou autenticació ni s’ha d’exposar a la xarxa.');
+  throw new Error('El dashboard PI només es pot escoltar en local; publiqueu-lo únicament mitjançant HTTPS i un proxy controlat.');
+}
+
+function hashValue(value) {
+  return createHash('sha256').update(String(value)).digest();
+}
+
+function constantTimeTextEqual(left, right) {
+  return timingSafeEqual(hashValue(left), hashValue(right));
+}
+
+function parseBasicAuth(header) {
+  const match = String(header || '').match(/^Basic\s+(.+)$/i);
+  if (!match) return null;
+  try {
+    const decoded = Buffer.from(match[1], 'base64').toString('utf8');
+    const separator = decoded.indexOf(':');
+    if (separator < 0) return null;
+    return { user: decoded.slice(0, separator), password: decoded.slice(separator + 1) };
+  } catch {
+    return null;
+  }
+}
+
+function credentialsConfigured() {
+  return Boolean(process.env.DASHBOARD_USER && process.env.DASHBOARD_PASSWORD);
+}
+
+export function authorizationAccepted(header, user = process.env.DASHBOARD_USER, password = process.env.DASHBOARD_PASSWORD) {
+  if (!user || !password) return false;
+  const credentials = parseBasicAuth(header);
+  return Boolean(credentials) && constantTimeTextEqual(credentials.user, user) && constantTimeTextEqual(credentials.password, password);
+}
+
+function sendUnauthorized(response) {
+  response.writeHead(401, {
+    'content-type': 'text/plain; charset=utf-8',
+    'cache-control': 'no-store',
+    'www-authenticate': 'Basic realm="Evidencies PI", charset="UTF-8"'
+  });
+  response.end('Autenticació requerida.\n');
 }
 
 function escape(value) {
@@ -232,6 +273,10 @@ async function collectReport(input) {
 }
 
 async function handle(request, response) {
+  if (!authorizationAccepted(request.headers.authorization)) {
+    sendUnauthorized(response);
+    return;
+  }
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   try {
     if (request.method === 'GET' && url.pathname === '/') {
@@ -306,5 +351,9 @@ export function createDashboardServer() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (!credentialsConfigured()) {
+    console.error('DASHBOARD_USER i DASHBOARD_PASSWORD són obligatoris per arrancar el dashboard PI.');
+    process.exit(1);
+  }
   createDashboardServer().listen(port, host, () => console.log(`Dashboard PI: http://${host}:${port}`));
 }
