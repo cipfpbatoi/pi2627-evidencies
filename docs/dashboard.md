@@ -122,6 +122,8 @@ PI_PROJECT_TEMPLATE=cipfpbatoi/pi2627-plantilla-projecte
 
 La plantilla font es manté en `cipfpbatoi`, però els repositoris de treball es creen per defecte en l'organització docent `batoi-pi-2026`, administrada pel compte docent corresponent. El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json` i actualitza el `project.json` de la còpia amb les mateixes dades. Si esta inicialització posterior falla, el dashboard conserva el repositori i el registre i mostra que `project.json` requerix revisió manual. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
 
+Després d'enviar una alta, el navegador conserva localment l'identificador, el nom, l'organització, el nom del repositori i la visibilitat. En tornar al formulari, recupera eixos valors i l'obri perquè es puguen canviar només els números de l'equip següent. Les dades són pròpies de cada navegador i no inclouen `GITHUB_TOKEN`, l'usuari ni la contrasenya del dashboard.
+
 ### Retirada i eliminació
 
 L'acció «Esborrar…» sempre exigix escriure exactament `organitzacio/repositori`. Sense marcar cap opció addicional, només retira el projecte de `course/projects.json`. Si es marca «Eliminar també el repositori de GitHub», primer demana a GitHub l'eliminació i només actualitza el registre local quan GitHub confirma l'operació. El token necessita permís d'administració per eliminar repositoris.

@@ -50,6 +50,8 @@ El menú incorpora accessos directes a les webs de l'alumnat i del professorat. 
 
 També pot crear en `batoi-pi-2026` un repositori privat des de `cipfpbatoi/pi2627-plantilla-projecte`, inicialitzar-ne `project.json` i registrar-lo en la mateixa operació. Cal configurar `GITHUB_TOKEN`; `PI_GITHUB_ORG` i `PI_PROJECT_TEMPLATE` permeten canviar l'organització i la plantilla predeterminades.
 
+El formulari de creació conserva en l'emmagatzematge local del navegador les dades de l'última alta, de manera que per crear una sèrie d'equips només cal canviar els números. No hi guarda credencials ni tokens.
+
 Cada projecte registrat es pot retirar després d'escriure exactament el nom complet del repositori. De manera opcional es pot eliminar també el repositori de GitHub; esta segona acció és irreversible, requerix permisos d'administració en el token i no elimina els informes locals conservats com a traça docent.
 
 Els informes continuen sense assignar qualificacions: presenten evidències candidates que requerixen revisió docent. El dashboard anterior continua disponible amb `npm run dashboard:legacy`.
