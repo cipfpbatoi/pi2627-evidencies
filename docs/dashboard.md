@@ -91,6 +91,7 @@ L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interf
 
 - registrar o actualitzar un projecte amb el mateix identificador de `project.json`;
 - crear un repositori privat a GitHub des de la plantilla del curs i registrar-lo en la mateixa operació;
+- retirar un projecte del registre i, amb una confirmació explícita separada, eliminar també el repositori de GitHub;
 - seleccionar un punt de control i una referència immutable;
 - analitzar un clon local del repositori sense modificar-lo;
 - consultar les comprovacions, els avisos, els bloquejos i els RA/CA candidats;
@@ -111,6 +112,12 @@ PI_PROJECT_TEMPLATE=cipfpbatoi/pi2627-plantilla-projecte
 ```
 
 El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json`. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
+
+### Retirada i eliminació
+
+L'acció «Esborrar…» sempre exigix escriure exactament `organitzacio/repositori`. Sense marcar cap opció addicional, només retira el projecte de `course/projects.json`. Si es marca «Eliminar també el repositori de GitHub», primer demana a GitHub l'eliminació i només actualitza el registre local quan GitHub confirma l'operació. El token necessita permís d'administració per eliminar repositoris.
+
+Els informes de `tmp/pi/` no s'eliminen automàticament: es conserven com a traça docent i poden continuar consultant-se. La retirada tampoc elimina clons locals ni entregues d'Aules.
 
 ## Què permet fer
 

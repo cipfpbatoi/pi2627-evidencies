@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
-import { access, readFile, readdir } from 'node:fs/promises';
+import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -65,17 +65,21 @@ function notice(searchParams) {
 }
 
 export function renderDashboard(projects, checkpoints, evidenceReports, message = '', githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
-  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td></tr>`).join('');
+  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td><td><a href="/projects/${encodeURIComponent(project.id)}/delete">Esborrar…</a></td></tr>`).join('');
   const reportRows = evidenceReports.map((report) => `<tr><td><a href="/reports/${encodeURIComponent(report.filename)}">${escape(report.project.name)}</a></td><td>${escape(report.checkpoint.name)}</td><td><code>${escape(report.version.requested_ref)}</code></td><td class="status-${escape(report.status)}">${escape(report.status)}</td><td>${escape(report.generated_at)}</td></tr>`).join('');
   const projectOptions = [...projects.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)} (${escape(item.id)})</option>`).join('');
   const checkpointOptions = [...checkpoints.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)}</option>`).join('');
   return layout('Evidències PI', `${message}<h1>Evidències del Projecte Intermodular</h1><p class="lead">Analitza una versió immutable d’un projecte i prepara evidències candidates per a la revisió docent. No gestiona parelles ni assigna qualificacions.</p>
-  <h2 id="projectes">Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th></tr></thead><tbody>${projectRows || '<tr><td colspan="3">No hi ha projectes registrats.</td></tr>'}</tbody></table>
+  <h2 id="projectes">Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th><th>Accions</th></tr></thead><tbody>${projectRows || '<tr><td colspan="4">No hi ha projectes registrats.</td></tr>'}</tbody></table>
   <details><summary><strong>Crear un repositori des de la plantilla</strong></summary><form method="post" action="/projects/from-template"><div class="grid"><label>Identificador del projecte<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom del projecte<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Organització GitHub<input name="owner" required value="${escape(process.env.PI_GITHUB_ORG || 'cipfpbatoi')}"></label><label>Nom del repositori<input name="repo-name" required pattern="[A-Za-z0-9._-]+" placeholder="pi-hort-urba"></label></div><p><label><input name="private" type="checkbox" checked style="display:inline;width:auto"> Repositori privat</label></p><p class="evidence">Plantilla: <code>${escape(process.env.PI_PROJECT_TEMPLATE || 'cipfpbatoi/pi2627-plantilla-projecte')}</code>. En crear-lo, també queda registrat en Evidències.</p>${githubConfigured ? '<button type="submit">Crear repositori i registrar-lo</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form></details>
   <details><summary><strong>Registrar un repositori que ja existix</strong></summary><form method="post" action="/projects"><div class="grid"><label>Identificador<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Repositori GitHub<input name="repository" required placeholder="organitzacio/repositori"></label></div><p><button type="submit">Guardar projecte</button></p></form></details>
   <h2>Punts de control (${checkpoints.size})</h2><ul>${[...checkpoints.values()].map((item) => `<li><code>${escape(item.id)}</code> — ${escape(item.name)}</li>`).join('')}</ul>
   <h2 id="recopilar">Recopilar evidències</h2>${projects.size ? `<form method="post" action="/reports"><div class="grid"><label>Projecte<select name="project-id" required>${projectOptions}</select></label><label>Punt de control<select name="checkpoint" required>${checkpointOptions}</select></label><label>Directori del repositori al servidor<input name="repo-dir" required placeholder="/var/www/projectes/hort-urba"></label><label>Etiqueta, branca o commit<input name="ref" required placeholder="dossier-0-v1.0"></label></div><p class="evidence">La referència es resol a un commit concret; l’informe no altera el repositori analitzat.</p><button type="submit">Recopilar i mostrar l’informe</button></form>` : '<p class="notice">Registra almenys un projecte abans de recopilar evidències.</p>'}
   <h2>Últims informes</h2><table><thead><tr><th>Projecte</th><th>Punt de control</th><th>Versió</th><th>Estat</th><th>Data</th></tr></thead><tbody>${reportRows || '<tr><td colspan="5">Encara no hi ha informes.</td></tr>'}</tbody></table>`);
+}
+
+export function renderDeleteProject(project, githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
+  return layout(`Esborrar — ${project.name}`, `<h1>Esborrar el projecte</h1><p>Retiraràs <strong>${escape(project.name)}</strong> (<code>${escape(project.id)}</code>) del registre d’Evidències.</p><p class="notice">Els informes locals es conservaran com a traça docent. El repositori de GitHub només s’eliminarà si marques l’opció corresponent.</p><form method="post" action="/projects/${encodeURIComponent(project.id)}/delete"><label>Escriu exactament <code>${escape(project.repository)}</code> per confirmar<input name="confirm-repository" required autocomplete="off"></label><p><label><input name="delete-repository" type="checkbox" ${githubConfigured ? '' : 'disabled'} style="display:inline;width:auto"> Eliminar també el repositori de GitHub (acció irreversible)</label></p>${githubConfigured ? '' : '<p class="notice error">Sense GITHUB_TOKEN només es pot retirar el projecte del registre local.</p>'}<p class="actions"><button type="submit" style="background:var(--bad)">Confirmar l’esborrat</button> <a href="/#projectes">Cancel·lar</a></p></form>`);
 }
 
 export function renderReport(report) {
@@ -142,6 +146,38 @@ async function createProjectFromTemplate(input) {
   return data;
 }
 
+export function validateProjectDeletion(project, input) {
+  if (!project) throw new Error('El projecte no existix.');
+  if (String(input['confirm-repository'] || '').trim() !== project.repository) throw new Error(`La confirmació no coincidix amb ${project.repository}.`);
+  return { deleteRepository: input['delete-repository'] === 'on' || input['delete-repository'] === 'true' };
+}
+
+async function deleteProject(projectId, input) {
+  const file = path.join(root, 'course/projects.json');
+  const { registry, projects } = await loadConfiguration(root);
+  const project = projects.get(projectId);
+  const options = validateProjectDeletion(project, input);
+  await access(file, constants.W_OK);
+
+  if (options.deleteRepository) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) throw new Error('Falta GITHUB_TOKEN per eliminar el repositori de GitHub.');
+    const [owner, repository] = project.repository.split('/');
+    const response = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repository)}`, {
+      method: 'DELETE',
+      headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${token}`, 'user-agent': 'pi2627-evidencies', 'x-github-api-version': '2022-11-28' }
+    });
+    if (!response.ok) {
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(`GitHub no ha eliminat el repositori: ${payload.message || `HTTP ${response.status}`}.`);
+    }
+  }
+
+  registry.projects = registry.projects.filter((item) => item.id !== projectId);
+  await writeFile(file, `${JSON.stringify(registry, null, 2)}\n`, 'utf8');
+  return { project, repositoryDeleted: options.deleteRepository };
+}
+
 async function collectReport(input) {
   if (!validId(input['project-id']) || !validId(input.checkpoint)) throw new Error('Projecte o punt de control invàlid.');
   if (!String(input.ref || '').trim() || /[\0\r\n]/.test(input.ref)) throw new Error('Referència invàlida.');
@@ -169,6 +205,21 @@ async function handle(request, response) {
     if (request.method === 'POST' && url.pathname === '/projects/from-template') {
       const data = await createProjectFromTemplate(await readBody(request));
       redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.`)}#projectes`);
+      return;
+    }
+    const deleteProjectMatch = url.pathname.match(/^\/projects\/([a-z0-9][a-z0-9-]*)\/delete$/);
+    if (request.method === 'GET' && deleteProjectMatch) {
+      const { projects } = await loadConfiguration(root);
+      const project = projects.get(deleteProjectMatch[1]);
+      if (!project) throw Object.assign(new Error('El projecte no existix.'), { code: 'ENOENT' });
+      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+      response.end(renderDeleteProject(project));
+      return;
+    }
+    if (request.method === 'POST' && deleteProjectMatch) {
+      const result = await deleteProject(deleteProjectMatch[1], await readBody(request));
+      const detail = result.repositoryDeleted ? ' i el repositori de GitHub s’ha eliminat' : '';
+      redirect(response, `/?ok=${encodeURIComponent(`El projecte “${result.project.name}” s’ha retirat del registre${detail}.`)}#projectes`);
       return;
     }
     if (request.method === 'POST' && url.pathname === '/reports') {

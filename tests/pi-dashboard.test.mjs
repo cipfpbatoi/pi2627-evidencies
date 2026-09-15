@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderDashboard, renderReport, templateProjectInput } from '../teacher-dashboard/pi-server.mjs';
+import { renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
 
 test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   const projects = new Map([['hort', { id: 'hort', name: 'Hort urbà', repository: 'org/hort' }]]);
@@ -13,6 +13,17 @@ test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   assert.match(html, /Falta configurar GITHUB_TOKEN/);
   assert.match(html, /Recopilar evidències/);
   assert.match(html, /https:\/\/github.com\/org\/hort/);
+  assert.match(html, /\/projects\/hort\/delete/);
+});
+
+test('l’esborrat exigix el repositori exacte i separa GitHub del registre', () => {
+  const project = { id: 'hort', name: 'Hort urbà', repository: 'org/hort' };
+  const html = renderDeleteProject(project, true);
+  assert.match(html, /acció irreversible/);
+  assert.match(html, /org\/hort/);
+  assert.deepEqual(validateProjectDeletion(project, { 'confirm-repository': 'org/hort' }), { deleteRepository: false });
+  assert.deepEqual(validateProjectDeletion(project, { 'confirm-repository': 'org/hort', 'delete-repository': 'on' }), { deleteRepository: true });
+  assert.throws(() => validateProjectDeletion(project, { 'confirm-repository': 'org/altre' }), /no coincidix/);
 });
 
 test('valida les dades abans de crear un repositori des de la plantilla', () => {
