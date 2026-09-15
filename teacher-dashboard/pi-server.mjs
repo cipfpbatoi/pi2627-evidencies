@@ -153,8 +153,40 @@ async function createProjectFromTemplate(input) {
     const detail = payload.errors?.map((item) => item.message || item.code).filter(Boolean).join(', ') || payload.message || `HTTP ${response.status}`;
     throw new Error(`GitHub no ha creat el repositori: ${detail}.`);
   }
+  const createdRepository = await response.json();
   await registerProject(data.project);
-  return data;
+  let initializationWarning = '';
+  try {
+    await initializeProjectJson(data.project, createdRepository.default_branch || 'main', token);
+  } catch (error) {
+    initializationWarning = ` El repositori està creat i registrat, però project.json requerix revisió manual: ${error.message}`;
+  }
+  return { ...data, initializationWarning };
+}
+
+export async function initializeProjectJson(project, branch, token) {
+  const [owner, repository] = project.repository.split('/');
+  const endpoint = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repository)}/contents/project.json`;
+  const headers = { accept: 'application/vnd.github+json', authorization: `Bearer ${token}`, 'user-agent': 'pi2627-evidencies', 'x-github-api-version': '2022-11-28' };
+  let current;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const response = await fetch(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers });
+    if (response.ok) {
+      current = await response.json();
+      break;
+    }
+    if (response.status !== 404 || attempt === 4) throw new Error(`no s'ha pogut llegir el fitxer de la plantilla (HTTP ${response.status})`);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  const content = `${JSON.stringify(project, null, 2)}\n`;
+  const response = await fetch(endpoint, {
+    method: 'PUT', headers: { ...headers, 'content-type': 'application/json' },
+    body: JSON.stringify({ message: 'Inicialitza la identificació del projecte', content: Buffer.from(content).toString('base64'), sha: current.sha, branch })
+  });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.message || `no s'ha pogut actualitzar project.json (HTTP ${response.status})`);
+  }
 }
 
 export function validateProjectDeletion(project, input) {
@@ -215,7 +247,7 @@ async function handle(request, response) {
     }
     if (request.method === 'POST' && url.pathname === '/projects/from-template') {
       const data = await createProjectFromTemplate(await readBody(request));
-      redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.`)}#projectes`);
+      redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.${data.initializationWarning}`)}#projectes`);
       return;
     }
     const deleteProjectMatch = url.pathname.match(/^\/projects\/([a-z0-9][a-z0-9-]*)\/delete$/);

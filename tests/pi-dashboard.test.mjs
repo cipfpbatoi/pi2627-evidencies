@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
+import { initializeProjectJson, renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
 
 test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   const projects = new Map([['hort', { id: 'hort', name: 'Hort urbà', repository: 'org/hort' }]]);
@@ -36,6 +36,27 @@ test('valida les dades abans de crear un repositori des de la plantilla', () => 
     owner: 'cipfpbatoi', repoName: 'pi-hort-urba', private: true
   });
   assert.throws(() => templateProjectInput({ id: '../hort', name: '', owner: 'cipf/batoi', 'repo-name': 'hort.git' }), /invàlid|falta/);
+});
+
+test('inicialitza project.json amb les mateixes dades registrades', async () => {
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (url, options = {}) => {
+    calls.push({ url, options });
+    if (!options.method) return new Response(JSON.stringify({ sha: 'sha-plantilla' }), { status: 200 });
+    return new Response('', { status: 200 });
+  };
+  try {
+    const project = { id: 'hort-urba', name: 'Hort urbà', repository: 'org/pi-hort' };
+    await initializeProjectJson(project, 'main', 'token-prova');
+    assert.equal(calls.length, 2);
+    const update = JSON.parse(calls[1].options.body);
+    assert.equal(update.sha, 'sha-plantilla');
+    assert.equal(update.branch, 'main');
+    assert.deepEqual(JSON.parse(Buffer.from(update.content, 'base64').toString('utf8')), project);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test('els informes del dashboard són navegables i mantenen la revisió docent', () => {

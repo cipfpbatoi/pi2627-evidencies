@@ -21,6 +21,8 @@ Cada repositori també conté `project.json` amb el mateix identificador i nom. 
 
 ### Recopilar una entrega
 
+Per al primer punt de control, el repositori ha de contindre `project.json`, `docs/01-proposta/dossier-0.md`, `docs/00-control/fonts-ia.md` i un fitxer real per membre en `evidencies/alumnat/nom-cognoms.md`. El `README.md` és una portada amb enllaços i no substituïx cap d'estos documents. La referència ordinària al final del bloc és `dossier-0-v1.0`.
+
 ```bash
 npm run validate:pi
 npm run evidence:collect -- \
@@ -44,7 +46,7 @@ Permet registrar projectes, recopilar una versió des d'un clon local, consultar
 
 El menú incorpora accessos directes a les webs de l'alumnat i del professorat. Es poden personalitzar amb `DASHBOARD_DOCS_ALUMNAT_URL` i `DASHBOARD_DOCS_PROFESSORAT_URL`.
 
-També pot crear un repositori privat des de `cipfpbatoi/pi2627-plantilla-projecte` i registrar-lo en la mateixa operació. Cal configurar `GITHUB_TOKEN`; `PI_GITHUB_ORG` i `PI_PROJECT_TEMPLATE` permeten canviar l'organització i la plantilla predeterminades.
+També pot crear un repositori privat des de `cipfpbatoi/pi2627-plantilla-projecte`, inicialitzar-ne `project.json` i registrar-lo en la mateixa operació. Cal configurar `GITHUB_TOKEN`; `PI_GITHUB_ORG` i `PI_PROJECT_TEMPLATE` permeten canviar l'organització i la plantilla predeterminades.
 
 Cada projecte registrat es pot retirar després d'escriure exactament el nom complet del repositori. De manera opcional es pot eliminar també el repositori de GitHub; esta segona acció és irreversible, requerix permisos d'administració en el token i no elimina els informes locals conservats com a traça docent.
 

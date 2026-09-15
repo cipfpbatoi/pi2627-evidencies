@@ -111,7 +111,7 @@ PI_GITHUB_ORG=cipfpbatoi
 PI_PROJECT_TEMPLATE=cipfpbatoi/pi2627-plantilla-projecte
 ```
 
-El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json`. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
+El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json` i actualitza el `project.json` de la còpia amb les mateixes dades. Si esta inicialització posterior falla, el dashboard conserva el repositori i el registre i mostra que `project.json` requerix revisió manual. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
 
 ### Retirada i eliminació
 
