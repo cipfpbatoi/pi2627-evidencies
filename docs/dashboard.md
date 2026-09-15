@@ -20,8 +20,8 @@ DASHBOARD_PORT=4173
 DASHBOARD_AUTH_REQUIRED=false
 DASHBOARD_USER=
 DASHBOARD_PASSWORD=
-DASHBOARD_DOCS_PROFESSORAT_URL=https://igomis.github.io/reestructuracioModul/professorat/
-DASHBOARD_DOCS_ALUMNAT_URL=https://cipfpbatoi.github.io/dwes2627/
+DASHBOARD_DOCS_PROFESSORAT_URL=https://cipfpbatoi.github.io/pi2627-professorat/
+DASHBOARD_DOCS_ALUMNAT_URL=https://cipfpbatoi.github.io/pi2627/
 ```
 
 El `GITHUB_TOKEN` ha de poder executar workflows en `igomis/dwes-microreptes-autocorreccio`. El workflow de GitHub també necessita el secret `CLASSROOM_AUTOGRADE_TOKEN` configurat en el repositori del professor per llegir els repositoris privats d'alumnes i, si cal, publicar-hi resultats.
@@ -55,8 +55,8 @@ Quan `DASHBOARD_HOST` no és local, el dashboard exigeix usuari i contrasenya ex
 
 El dashboard pot mostrar enllaços externs configurats des de `.env`:
 
-- `DASHBOARD_DOCS_PROFESSORAT_URL`: apareix dins del panell `Programació d'aula` com a accés a la documentació del professorat.
-- `DASHBOARD_DOCS_ALUMNAT_URL`: apareix en el menú principal com a accés ràpid a la documentació de l'alumnat.
+- `DASHBOARD_DOCS_PROFESSORAT_URL`: apareix en el menú principal com a accés a la documentació del professorat.
+- `DASHBOARD_DOCS_ALUMNAT_URL`: apareix en el menú principal com a accés a la documentació de l'alumnat.
 
 Si alguna variable queda buida, el seu enllaç no es mostra.
 

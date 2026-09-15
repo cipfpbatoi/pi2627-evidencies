@@ -14,6 +14,10 @@ test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   assert.match(html, /Recopilar evidències/);
   assert.match(html, /https:\/\/github.com\/org\/hort/);
   assert.match(html, /\/projects\/hort\/delete/);
+  assert.match(html, /Documentació alumnat/);
+  assert.match(html, /https:\/\/cipfpbatoi.github.io\/pi2627\//);
+  assert.match(html, /Documentació professorat/);
+  assert.match(html, /https:\/\/cipfpbatoi.github.io\/pi2627-professorat\//);
 });
 
 test('l’esborrat exigix el repositori exacte i separa GitHub del registre', () => {

@@ -38,10 +38,21 @@ function escape(value) {
   return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
+function externalUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+}
+
 function layout(title, content) {
+  const alumnatUrl = externalUrl(process.env.DASHBOARD_DOCS_ALUMNAT_URL || 'https://cipfpbatoi.github.io/pi2627/');
+  const professoratUrl = externalUrl(process.env.DASHBOARD_DOCS_PROFESSORAT_URL || 'https://cipfpbatoi.github.io/pi2627-professorat/');
   return `<!doctype html><html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(title)}</title><style>
   :root{color-scheme:light;--ink:#17202a;--muted:#566573;--line:#ccd1d1;--soft:#f4f6f7;--accent:#1769aa;--ok:#18794e;--bad:#b42318;--warn:#9a6700}*{box-sizing:border-box}body{font:16px/1.45 system-ui;max-width:1180px;margin:0 auto;padding:1.5rem;color:var(--ink)}nav{display:flex;gap:1rem;align-items:center;margin-bottom:2rem}nav a{font-weight:700}a{color:var(--accent)}h1{margin:.2rem 0}.lead{color:var(--muted);margin-top:.25rem}table{border-collapse:collapse;width:100%;margin:1rem 0 2rem}th,td{border:1px solid var(--line);padding:.6rem;text-align:left;vertical-align:top}th{background:#eaf2f8}code{background:var(--soft);padding:.15rem .3rem;overflow-wrap:anywhere}form{background:var(--soft);padding:1rem;border:1px solid var(--line);border-radius:.4rem;margin:1rem 0 2rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}label{display:block;font-weight:650}input,select{display:block;width:100%;padding:.55rem;margin-top:.2rem;border:1px solid #899;border-radius:.25rem;background:white}button{padding:.6rem .9rem;background:var(--accent);color:white;border:0;border-radius:.25rem;font-weight:700;cursor:pointer}.status-complete,.passed{color:var(--ok)}.status-incomplete,.failed{color:var(--bad)}.status-complete_with_warnings,.warning{color:var(--warn)}.notice{padding:.8rem;border-left:4px solid var(--accent);background:#eef6fc}.error{border-color:var(--bad);background:#fff1f0}.evidence{font-size:.92rem;color:var(--muted)}
-  </style></head><body><nav><a href="/">Evidències PI</a><a href="/#projectes">Projectes</a><a href="/#recopilar">Recopilar</a></nav>${content}</body></html>`;
+  </style></head><body><nav><a href="/">Evidències PI</a><a href="/#projectes">Projectes</a><a href="/#recopilar">Recopilar</a>${alumnatUrl ? `<a href="${escape(alumnatUrl)}" rel="noreferrer">Documentació alumnat ↗</a>` : ''}${professoratUrl ? `<a href="${escape(professoratUrl)}" rel="noreferrer">Documentació professorat ↗</a>` : ''}</nav>${content}</body></html>`;
 }
 
 async function reports() {

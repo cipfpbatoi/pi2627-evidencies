@@ -42,6 +42,8 @@ npm run dashboard
 
 Permet registrar projectes, recopilar una versió des d'un clon local, consultar les comprovacions, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`, i llegir els repositoris que s'indiquen en el formulari. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
 
+El menú incorpora accessos directes a les webs de l'alumnat i del professorat. Es poden personalitzar amb `DASHBOARD_DOCS_ALUMNAT_URL` i `DASHBOARD_DOCS_PROFESSORAT_URL`.
+
 També pot crear un repositori privat des de `cipfpbatoi/pi2627-plantilla-projecte` i registrar-lo en la mateixa operació. Cal configurar `GITHUB_TOKEN`; `PI_GITHUB_ORG` i `PI_PROJECT_TEMPLATE` permeten canviar l'organització i la plantilla predeterminades.
 
 Cada projecte registrat es pot retirar després d'escriure exactament el nom complet del repositori. De manera opcional es pot eliminar també el repositori de GitHub; esta segona acció és irreversible, requerix permisos d'administració en el token i no elimina els informes locals conservats com a traça docent.
