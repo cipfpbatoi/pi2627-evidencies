@@ -116,11 +116,11 @@ Configura en `.env` un token docent que puga llegir la plantilla i crear reposit
 
 ```text
 GITHUB_TOKEN=
-PI_GITHUB_ORG=cipfpbatoi
+PI_GITHUB_ORG=batoi-pi-2026
 PI_PROJECT_TEMPLATE=cipfpbatoi/pi2627-plantilla-projecte
 ```
 
-El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json` i actualitza el `project.json` de la còpia amb les mateixes dades. Si esta inicialització posterior falla, el dashboard conserva el repositori i el registre i mostra que `project.json` requerix revisió manual. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
+La plantilla font es manté en `cipfpbatoi`, però els repositoris de treball es creen per defecte en l'organització docent `batoi-pi-2026`, administrada pel compte docent corresponent. El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json` i actualitza el `project.json` de la còpia amb les mateixes dades. Si esta inicialització posterior falla, el dashboard conserva el repositori i el registre i mostra que `project.json` requerix revisió manual. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
 
 ### Retirada i eliminació
 

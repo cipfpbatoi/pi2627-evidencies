@@ -19,6 +19,7 @@ test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   assert.match(html, /No gestiona parelles ni assigna qualificacions/);
   assert.match(html, /Registrar un repositori que ja existix/);
   assert.match(html, /Crear un repositori des de la plantilla/);
+  assert.match(html, /value="batoi-pi-2026"/);
   assert.match(html, /Falta configurar GITHUB_TOKEN/);
   assert.match(html, /Recopilar evidències/);
   assert.match(html, /https:\/\/github.com\/org\/hort/);
