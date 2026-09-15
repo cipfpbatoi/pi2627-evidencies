@@ -92,7 +92,7 @@ function layout(title, content) {
   const alumnatUrl = externalUrl(process.env.DASHBOARD_DOCS_ALUMNAT_URL || 'https://cipfpbatoi.github.io/pi2627/');
   const professoratUrl = externalUrl(process.env.DASHBOARD_DOCS_PROFESSORAT_URL || 'https://cipfpbatoi.github.io/pi2627-professorat/');
   return `<!doctype html><html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(title)}</title><style>
-  :root{color-scheme:light;--ink:#17202a;--muted:#566573;--line:#ccd1d1;--soft:#f4f6f7;--accent:#1769aa;--ok:#18794e;--bad:#b42318;--warn:#9a6700}*{box-sizing:border-box}body{font:16px/1.45 system-ui;max-width:1180px;margin:0 auto;padding:1.5rem;color:var(--ink)}nav{display:flex;gap:1rem;align-items:center;margin-bottom:2rem}nav a{font-weight:700}a{color:var(--accent)}h1{margin:.2rem 0}.lead{color:var(--muted);margin-top:.25rem}table{border-collapse:collapse;width:100%;margin:1rem 0 2rem}th,td{border:1px solid var(--line);padding:.6rem;text-align:left;vertical-align:top}th{background:#eaf2f8}code{background:var(--soft);padding:.15rem .3rem;overflow-wrap:anywhere}form{background:var(--soft);padding:1rem;border:1px solid var(--line);border-radius:.4rem;margin:1rem 0 2rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}label{display:block;font-weight:650}input,select{display:block;width:100%;padding:.55rem;margin-top:.2rem;border:1px solid #899;border-radius:.25rem;background:white}button{padding:.6rem .9rem;background:var(--accent);color:white;border:0;border-radius:.25rem;font-weight:700;cursor:pointer}.status-complete,.passed{color:var(--ok)}.status-incomplete,.failed{color:var(--bad)}.status-complete_with_warnings,.warning{color:var(--warn)}.notice{padding:.8rem;border-left:4px solid var(--accent);background:#eef6fc}.error{border-color:var(--bad);background:#fff1f0}.evidence{font-size:.92rem;color:var(--muted)}
+  :root{color-scheme:light;--ink:#17202a;--muted:#566573;--line:#ccd1d1;--soft:#f4f6f7;--accent:#1769aa;--ok:#18794e;--bad:#b42318;--warn:#9a6700}*{box-sizing:border-box}body{font:16px/1.45 system-ui;max-width:1180px;margin:0 auto;padding:1.5rem;color:var(--ink)}nav{display:flex;gap:1rem;align-items:center;margin-bottom:2rem}nav a{font-weight:700}a{color:var(--accent)}h1{margin:.2rem 0}.lead{color:var(--muted);margin-top:.25rem}table{border-collapse:collapse;width:100%;margin:1rem 0 2rem}th,td{border:1px solid var(--line);padding:.6rem;text-align:left;vertical-align:top}th{background:#eaf2f8}code{background:var(--soft);padding:.15rem .3rem;overflow-wrap:anywhere}form{background:var(--soft);padding:1rem;border:1px solid var(--line);border-radius:.4rem;margin:1rem 0 2rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}label{display:block;font-weight:650}input,select,textarea{display:block;width:100%;padding:.55rem;margin-top:.2rem;border:1px solid #899;border-radius:.25rem;background:white}textarea{min-height:5.5rem}button{padding:.6rem .9rem;background:var(--accent);color:white;border:0;border-radius:.25rem;font-weight:700;cursor:pointer}.status-complete,.passed{color:var(--ok)}.status-incomplete,.failed{color:var(--bad)}.status-complete_with_warnings,.warning{color:var(--warn)}.notice{padding:.8rem;border-left:4px solid var(--accent);background:#eef6fc}.error{border-color:var(--bad);background:#fff1f0}.evidence{font-size:.92rem;color:var(--muted)}
   </style></head><body><nav><a href="/">Evidències PI</a><a href="/#projectes">Projectes</a><a href="/#recopilar">Recopilar</a>${alumnatUrl ? `<a href="${escape(alumnatUrl)}" rel="noreferrer">Documentació alumnat ↗</a>` : ''}${professoratUrl ? `<a href="${escape(professoratUrl)}" rel="noreferrer">Documentació professorat ↗</a>` : ''}</nav>${content}</body></html>`;
 }
 
@@ -117,13 +117,13 @@ function notice(searchParams) {
 }
 
 export function renderDashboard(projects, checkpoints, evidenceReports, message = '', githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
-  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td><td><a href="/projects/${encodeURIComponent(project.id)}/delete">Esborrar…</a></td></tr>`).join('');
+  const projectRows = [...projects.values()].map((project) => `<tr><td>${escape(project.name)}</td><td><code>${escape(project.id)}</code></td><td><a href="${escape(`https://github.com/${project.repository}`)}" rel="noreferrer">${escape(project.repository)}</a></td><td><a href="/projects/${encodeURIComponent(project.id)}/access">Gestionar accés</a><br><a href="/projects/${encodeURIComponent(project.id)}/delete">Esborrar…</a></td></tr>`).join('');
   const reportRows = evidenceReports.map((report) => `<tr><td><a href="/reports/${encodeURIComponent(report.filename)}">${escape(report.project.name)}</a></td><td>${escape(report.checkpoint.name)}</td><td><code>${escape(report.version.requested_ref)}</code></td><td class="status-${escape(report.status)}">${escape(report.status)}</td><td>${escape(report.generated_at)}</td></tr>`).join('');
   const projectOptions = [...projects.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)} (${escape(item.id)})</option>`).join('');
   const checkpointOptions = [...checkpoints.values()].map((item) => `<option value="${escape(item.id)}">${escape(item.name)}</option>`).join('');
   return layout('Evidències PI', `${message}<h1>Evidències del Projecte Intermodular</h1><p class="lead">Analitza una versió immutable d’un projecte i prepara evidències candidates per a la revisió docent. No gestiona parelles ni assigna qualificacions.</p>
   <h2 id="projectes">Projectes (${projects.size})</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Repositori</th><th>Accions</th></tr></thead><tbody>${projectRows || '<tr><td colspan="4">No hi ha projectes registrats.</td></tr>'}</tbody></table>
-  <details><summary><strong>Crear un repositori des de la plantilla</strong></summary><form id="project-create-form" method="post" action="/projects/from-template"><div class="grid"><label>Identificador del projecte<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom del projecte<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Organització GitHub<input name="owner" required value="${escape(process.env.PI_GITHUB_ORG || 'batoi-pi-2026')}"></label><label>Nom del repositori<input name="repo-name" required pattern="[A-Za-z0-9._-]+" placeholder="pi-hort-urba"></label></div><p><label><input name="private" type="checkbox" checked style="display:inline;width:auto"> Repositori privat</label></p><p class="evidence">Plantilla: <code>${escape(process.env.PI_PROJECT_TEMPLATE || 'cipfpbatoi/pi2627-plantilla-projecte')}</code>. L'última alta es conserva en este navegador perquè només calga canviar els números. En crear-lo, també queda registrat en Evidències.</p>${githubConfigured ? '<button type="submit">Crear repositori i registrar-lo</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form></details>
+  <details><summary><strong>Crear un repositori des de la plantilla</strong></summary><form id="project-create-form" method="post" action="/projects/from-template"><div class="grid"><label>Identificador del projecte<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom del projecte<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Organització GitHub<input name="owner" required value="${escape(process.env.PI_GITHUB_ORG || 'batoi-pi-2026')}"></label><label>Nom del repositori<input name="repo-name" required pattern="[A-Za-z0-9._-]+" placeholder="pi-hort-urba"></label></div><p><label>Usuaris de GitHub de l'equip<textarea name="collaborators" placeholder="usuari1&#10;usuari2&#10;usuari3"></textarea></label></p><p><label><input name="private" type="checkbox" checked style="display:inline;width:auto"> Repositori privat</label></p><p class="evidence">Cada usuari rebrà accés <code>write</code> i haurà d'acceptar la invitació. Plantilla: <code>${escape(process.env.PI_PROJECT_TEMPLATE || 'cipfpbatoi/pi2627-plantilla-projecte')}</code>. L'última alta es conserva en este navegador perquè només calga canviar els números.</p>${githubConfigured ? '<button type="submit">Crear repositori, registrar-lo i convidar l\'equip</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form></details>
   <details><summary><strong>Registrar un repositori que ja existix</strong></summary><form method="post" action="/projects"><div class="grid"><label>Identificador<input name="id" required pattern="[a-z0-9][a-z0-9-]*" placeholder="hort-urba"></label><label>Nom<input name="name" required placeholder="Hort urbà col·laboratiu"></label><label>Repositori GitHub<input name="repository" required placeholder="organitzacio/repositori"></label></div><p><button type="submit">Guardar projecte</button></p></form></details>
   <h2>Punts de control (${checkpoints.size})</h2><ul>${[...checkpoints.values()].map((item) => `<li><code>${escape(item.id)}</code> — ${escape(item.name)}</li>`).join('')}</ul>
   <h2 id="recopilar">Recopilar evidències</h2>${projects.size ? `<form method="post" action="/reports"><div class="grid"><label>Projecte<select name="project-id" required>${projectOptions}</select></label><label>Punt de control<select name="checkpoint" required>${checkpointOptions}</select></label><label>Directori del repositori al servidor<input name="repo-dir" required placeholder="/var/www/projectes/hort-urba"></label><label>Etiqueta, branca o commit<input name="ref" required placeholder="dossier-0-v1.0"></label></div><p class="evidence">La referència es resol a un commit concret; l’informe no altera el repositori analitzat.</p><button type="submit">Recopilar i mostrar l’informe</button></form>` : '<p class="notice">Registra almenys un projecte abans de recopilar evidències.</p>'}
@@ -136,7 +136,7 @@ export function renderDashboard(projects, checkpoints, evidenceReports, message 
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
       if (saved) {
-        for (const name of ['id', 'name', 'owner', 'repo-name']) {
+        for (const name of ['id', 'name', 'owner', 'repo-name', 'collaborators']) {
           if (typeof saved[name] === 'string') form.elements[name].value = saved[name];
         }
         if (typeof saved.private === 'boolean') form.elements.private.checked = saved.private;
@@ -150,6 +150,7 @@ export function renderDashboard(projects, checkpoints, evidenceReports, message 
           name: form.elements.name.value,
           owner: form.elements.owner.value,
           'repo-name': form.elements['repo-name'].value,
+          collaborators: form.elements.collaborators.value,
           private: form.elements.private.checked
         }));
       } catch { /* El formulari continua funcionant sense emmagatzematge local. */ }
@@ -160,6 +161,10 @@ export function renderDashboard(projects, checkpoints, evidenceReports, message 
 
 export function renderDeleteProject(project, githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
   return layout(`Esborrar — ${project.name}`, `<h1>Esborrar el projecte</h1><p>Retiraràs <strong>${escape(project.name)}</strong> (<code>${escape(project.id)}</code>) del registre d’Evidències.</p><p class="notice">Els informes locals es conservaran com a traça docent. El repositori de GitHub només s’eliminarà si marques l’opció corresponent.</p><form method="post" action="/projects/${encodeURIComponent(project.id)}/delete"><label>Escriu exactament <code>${escape(project.repository)}</code> per confirmar<input name="confirm-repository" required autocomplete="off"></label><p><label><input name="delete-repository" type="checkbox" ${githubConfigured ? '' : 'disabled'} style="display:inline;width:auto"> Eliminar també el repositori de GitHub (acció irreversible)</label></p>${githubConfigured ? '' : '<p class="notice error">Sense GITHUB_TOKEN només es pot retirar el projecte del registre local.</p>'}<p class="actions"><button type="submit" style="background:var(--bad)">Confirmar l’esborrat</button> <a href="/#projectes">Cancel·lar</a></p></form>`);
+}
+
+export function renderProjectAccess(project, githubConfigured = Boolean(process.env.GITHUB_TOKEN)) {
+  return layout(`Accés — ${project.name}`, `<h1>Gestionar accés</h1><p><strong>${escape(project.name)}</strong> · <a href="${escape(`https://github.com/${project.repository}/settings/access`)}" rel="noreferrer"><code>${escape(project.repository)}</code> ↗</a></p><form method="post" action="/projects/${encodeURIComponent(project.id)}/access"><label>Usuaris de GitHub<textarea name="collaborators" required placeholder="usuari1&#10;usuari2&#10;usuari3"></textarea></label><p class="evidence">Escriu un usuari per línia o separa'ls amb comes. Rebran el rol <code>write</code>; una invitació pendent encara no dona accés efectiu.</p>${githubConfigured ? '<button type="submit">Convidar usuaris</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form><p><a href="/#projectes">Tornar als projectes</a></p>`);
 }
 
 export function renderReport(report) {
@@ -200,7 +205,33 @@ export function templateProjectInput(input) {
   if (!validGithubName(input.owner)) errors.push('organització GitHub invàlida');
   if (!validGithubName(input['repo-name'])) errors.push('nom de repositori invàlid');
   if (errors.length) throw new Error([...new Set(errors)].join(', '));
-  return { project, owner: input.owner.trim(), repoName: input['repo-name'].trim(), private: input.private === 'on' || input.private === 'true' };
+  return { project, owner: input.owner.trim(), repoName: input['repo-name'].trim(), private: input.private === 'on' || input.private === 'true', collaborators: collaboratorNames(input.collaborators) };
+}
+
+export function collaboratorNames(value) {
+  const names = [...new Set(String(value || '').split(/[\s,;]+/).map((item) => item.trim()).filter(Boolean))];
+  if (names.length > 10) throw new Error('No es poden convidar més de 10 usuaris en una operació.');
+  const invalid = names.find((name) => !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/.test(name));
+  if (invalid) throw new Error(`Usuari de GitHub invàlid: ${invalid}.`);
+  return names;
+}
+
+export async function inviteCollaborators(repository, collaborators, token) {
+  const [owner, repo] = repository.split('/');
+  const results = [];
+  for (const username of collaborators) {
+    const response = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/collaborators/${encodeURIComponent(username)}`, {
+      method: 'PUT',
+      headers: { accept: 'application/vnd.github+json', authorization: `Bearer ${token}`, 'content-type': 'application/json', 'user-agent': 'pi2627-evidencies', 'x-github-api-version': '2022-11-28' },
+      body: JSON.stringify({ permission: 'push' })
+    });
+    if (response.ok) results.push({ username, ok: true });
+    else {
+      const payload = await response.json().catch(() => ({}));
+      results.push({ username, ok: false, error: payload.message || `HTTP ${response.status}` });
+    }
+  }
+  return results;
 }
 
 async function createProjectFromTemplate(input) {
@@ -230,7 +261,8 @@ async function createProjectFromTemplate(input) {
   } catch (error) {
     initializationWarning = ` El repositori està creat i registrat, però project.json requerix revisió manual: ${error.message}`;
   }
-  return { ...data, initializationWarning };
+  const invitations = await inviteCollaborators(data.project.repository, data.collaborators, token);
+  return { ...data, initializationWarning, invitations };
 }
 
 export async function initializeProjectJson(project, branch, token) {
@@ -320,7 +352,35 @@ async function handle(request, response) {
     }
     if (request.method === 'POST' && url.pathname === '/projects/from-template') {
       const data = await createProjectFromTemplate(await readBody(request));
-      redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.${data.initializationWarning}`)}#projectes`);
+      const invited = data.invitations.filter((item) => item.ok).map((item) => item.username);
+      const failed = data.invitations.filter((item) => !item.ok).map((item) => `${item.username} (${item.error})`);
+      const invitationDetail = invited.length ? ` Invitacions enviades: ${invited.join(', ')}.` : '';
+      const failureDetail = failed.length ? ` No s'han pogut convidar: ${failed.join(', ')}.` : '';
+      redirect(response, `/?ok=${encodeURIComponent(`Repositori ${data.project.repository} creat i projecte “${data.project.name}” registrat.${data.initializationWarning}${invitationDetail}${failureDetail}`)}#projectes`);
+      return;
+    }
+    const accessProjectMatch = url.pathname.match(/^\/projects\/([a-z0-9][a-z0-9-]*)\/access$/);
+    if (request.method === 'GET' && accessProjectMatch) {
+      const { projects } = await loadConfiguration(root);
+      const project = projects.get(accessProjectMatch[1]);
+      if (!project) throw Object.assign(new Error('El projecte no existix.'), { code: 'ENOENT' });
+      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+      response.end(renderProjectAccess(project));
+      return;
+    }
+    if (request.method === 'POST' && accessProjectMatch) {
+      const token = process.env.GITHUB_TOKEN;
+      if (!token) throw new Error('Falta GITHUB_TOKEN per gestionar l’accés al repositori.');
+      const { projects } = await loadConfiguration(root);
+      const project = projects.get(accessProjectMatch[1]);
+      if (!project) throw Object.assign(new Error('El projecte no existix.'), { code: 'ENOENT' });
+      const collaborators = collaboratorNames((await readBody(request)).collaborators);
+      if (!collaborators.length) throw new Error('Indica almenys un usuari de GitHub.');
+      const invitations = await inviteCollaborators(project.repository, collaborators, token);
+      const invited = invitations.filter((item) => item.ok).map((item) => item.username);
+      const failed = invitations.filter((item) => !item.ok).map((item) => `${item.username} (${item.error})`);
+      const message = `${invited.length ? `Invitacions enviades: ${invited.join(', ')}.` : ''}${failed.length ? ` No s'han pogut convidar: ${failed.join(', ')}.` : ''}`.trim();
+      redirect(response, `/?ok=${encodeURIComponent(message)}#projectes`);
       return;
     }
     const deleteProjectMatch = url.pathname.match(/^\/projects\/([a-z0-9][a-z0-9-]*)\/delete$/);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { authorizationAccepted, initializeProjectJson, renderDashboard, renderDeleteProject, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
+import { authorizationAccepted, collaboratorNames, initializeProjectJson, inviteCollaborators, renderDashboard, renderDeleteProject, renderProjectAccess, renderReport, templateProjectInput, validateProjectDeletion } from '../teacher-dashboard/pi-server.mjs';
 
 test('el dashboard exigix usuari i contrasenya correctes', () => {
   const valid = `Basic ${Buffer.from('professor:contrasenya-segura').toString('base64')}`;
@@ -26,6 +26,8 @@ test('el dashboard mostra el nom del projecte i no una qualificació', () => {
   assert.match(html, /Recopilar evidències/);
   assert.match(html, /https:\/\/github.com\/org\/hort/);
   assert.match(html, /\/projects\/hort\/delete/);
+  assert.match(html, /\/projects\/hort\/access/);
+  assert.match(html, /Usuaris de GitHub de l'equip/);
   assert.match(html, /Documentació alumnat/);
   assert.match(html, /https:\/\/cipfpbatoi.github.io\/pi2627\//);
   assert.match(html, /Documentació professorat/);
@@ -45,9 +47,35 @@ test('l’esborrat exigix el repositori exacte i separa GitHub del registre', ()
 test('valida les dades abans de crear un repositori des de la plantilla', () => {
   assert.deepEqual(templateProjectInput({ id: 'hort-urba', name: 'Hort urbà', owner: 'cipfpbatoi', 'repo-name': 'pi-hort-urba', private: 'on' }), {
     project: { id: 'hort-urba', name: 'Hort urbà', repository: 'cipfpbatoi/pi-hort-urba' },
-    owner: 'cipfpbatoi', repoName: 'pi-hort-urba', private: true
+    owner: 'cipfpbatoi', repoName: 'pi-hort-urba', private: true, collaborators: []
   });
   assert.throws(() => templateProjectInput({ id: '../hort', name: '', owner: 'cipf/batoi', 'repo-name': 'hort.git' }), /invàlid|falta/);
+});
+
+test('normalitza i valida els usuaris de GitHub de l’equip', () => {
+  assert.deepEqual(collaboratorNames('anna\npau,anna;joan-2'), ['anna', 'pau', 'joan-2']);
+  assert.throws(() => collaboratorNames('usuari_incorrecte'), /invàlid/);
+  assert.throws(() => collaboratorNames('u1 u2 u3 u4 u5 u6 u7 u8 u9 u10 u11'), /més de 10/);
+});
+
+test('la gestió d’accés convida amb permís write i informa dels errors', async () => {
+  const project = { id: 'hort', name: 'Hort urbà', repository: 'org/hort' };
+  assert.match(renderProjectAccess(project, true), /Rebran el rol <code>write<\/code>/);
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (url, options) => {
+    calls.push({ url, options });
+    return url.endsWith('/pau')
+      ? new Response(JSON.stringify({ message: 'Not Found' }), { status: 404 })
+      : new Response('', { status: 201 });
+  };
+  try {
+    const result = await inviteCollaborators('org/hort', ['anna', 'pau'], 'token-prova');
+    assert.deepEqual(result, [{ username: 'anna', ok: true }, { username: 'pau', ok: false, error: 'Not Found' }]);
+    assert.deepEqual(calls.map((call) => JSON.parse(call.options.body)), [{ permission: 'push' }, { permission: 'push' }]);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test('inicialitza project.json amb les mateixes dades registrades', async () => {

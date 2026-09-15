@@ -90,7 +90,8 @@ http://localhost:4173
 L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interfície es pot:
 
 - registrar o actualitzar un projecte amb el mateix identificador de `project.json`;
-- crear un repositori privat a GitHub des de la plantilla del curs i registrar-lo en la mateixa operació;
+- crear un repositori privat a GitHub des de la plantilla del curs, registrar-lo i convidar l'equip en la mateixa operació;
+- afegir posteriorment usuaris de GitHub amb accés d'escriptura des de «Gestionar accés»;
 - retirar un projecte del registre i, amb una confirmació explícita separada, eliminar també el repositori de GitHub;
 - seleccionar un punt de control i una referència immutable;
 - analitzar un clon local del repositori sense modificar-lo;
@@ -120,9 +121,11 @@ PI_GITHUB_ORG=batoi-pi-2026
 PI_PROJECT_TEMPLATE=cipfpbatoi/pi2627-plantilla-projecte
 ```
 
-La plantilla font es manté en `cipfpbatoi`, però els repositoris de treball es creen per defecte en l'organització docent `batoi-pi-2026`, administrada pel compte docent corresponent. El formulari valida l'identificador, el nom, l'organització i el nom del repositori abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json` i actualitza el `project.json` de la còpia amb les mateixes dades. Si esta inicialització posterior falla, el dashboard conserva el repositori i el registre i mostra que `project.json` requerix revisió manual. La creació no convida automàticament membres de l'equip ni clona el repositori al servidor; estes accions requerixen decisions docents separades.
+La plantilla font es manté en `cipfpbatoi`, però els repositoris de treball es creen per defecte en l'organització docent `batoi-pi-2026`, administrada pel compte docent corresponent. El formulari valida l'identificador, el nom, l'organització, el nom del repositori i fins a deu usuaris de GitHub abans de cridar GitHub. Per defecte crea un repositori privat i, quan GitHub confirma la creació, incorpora `organitzacio/repositori` a `course/projects.json`, actualitza el `project.json` de la còpia amb les mateixes dades i envia a cada membre una invitació amb accés `write`. Si la inicialització o alguna invitació falla, el dashboard conserva el repositori i el registre i indica exactament què requerix revisió. El repositori no es clona automàticament al servidor.
 
-Després d'enviar una alta, el navegador conserva localment l'identificador, el nom, l'organització, el nom del repositori i la visibilitat. En tornar al formulari, recupera eixos valors i l'obri perquè es puguen canviar només els números de l'equip següent. Les dades són pròpies de cada navegador i no inclouen `GITHUB_TOKEN`, l'usuari ni la contrasenya del dashboard.
+Cada invitació ha de ser acceptada per la persona destinatària abans que l'accés siga efectiu. L'acció «Gestionar accés» permet repetir una invitació o afegir membres després de l'alta. El dashboard mostra els errors que torna GitHub, però GitHub continua sent la font real dels permisos; useu l'enllaç als ajustos d'accés per comprovar invitacions pendents i membres incorporats.
+
+Després d'enviar una alta, el navegador conserva localment l'identificador, el nom, l'organització, el nom del repositori, els usuaris de GitHub i la visibilitat. En tornar al formulari, recupera eixos valors i l'obri perquè es puguen canviar només els números i els membres de l'equip següent. Les dades són pròpies de cada navegador i no inclouen `GITHUB_TOKEN`, l'usuari ni la contrasenya del dashboard.
 
 ### Retirada i eliminació
 
