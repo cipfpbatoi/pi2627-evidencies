@@ -1,9 +1,0 @@
-{
-  "id": "b1-dossier-0",
-  "name": "Bloc 1 — Dossier 0 diagnòstic",
-  "phase": "reactivacio",
-  "assessment": "formative",
-  "required_files": ["project.json", "docs/01-proposta/dossier-0.md", "docs/00-control/fonts-ia.md"],
-  "required_globs": ["evidencies/alumnat/*.md"],
-  "candidate_ra_ca": ["RA1.c", "RA1.e", "RA1.f", "RA1.i", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.f", "RA2.h", "RA2.i", "RA3.a", "RA3.b", "RA3.e", "RA3.f", "RA3.g", "RA3.h", "RA4.a", "RA4.b", "RA4.c", "RA4.d", "RA4.e"]
-}

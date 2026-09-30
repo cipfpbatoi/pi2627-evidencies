@@ -6,6 +6,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { githubSnapshot } from '../scripts/pi/lib/github-source.mjs';
 
 const exec = promisify(execFile);
 const script = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../scripts/pi/collect-evidence.mjs');
@@ -34,4 +35,23 @@ test('recopila una versió immutable d’un projecte amb nom i no genera nota', 
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test('recopila l’arbre i project.json des de GitHub sense clonar el repositori', async () => {
+  const commit = 'a'.repeat(40);
+  const tree = 'b'.repeat(40);
+  const blob = 'c'.repeat(40);
+  const requested = [];
+  const fetchImpl = async (url) => {
+    requested.push(url);
+    if (url.endsWith('/commits/dossier-1-v1.0')) return new Response(JSON.stringify({ sha: commit, commit: { tree: { sha: tree } } }), { status: 200 });
+    if (url.includes(`/git/trees/${tree}?recursive=1`)) return new Response(JSON.stringify({ truncated: false, tree: [{ path: 'project.json', type: 'blob', sha: blob }, { path: 'docs/dossier.md', type: 'blob', sha: 'd'.repeat(40) }] }), { status: 200 });
+    if (url.endsWith(`/git/blobs/${blob}`)) return new Response(JSON.stringify({ encoding: 'base64', content: Buffer.from(JSON.stringify({ id: 'hort', name: 'Hort urbà' })).toString('base64') }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404 });
+  };
+  const snapshot = await githubSnapshot({ repository: 'org/hort', ref: 'dossier-1-v1.0', token: 'secret', fetchImpl });
+  assert.equal(snapshot.commit, commit);
+  assert.deepEqual(snapshot.files, ['project.json', 'docs/dossier.md']);
+  assert.equal(JSON.parse(snapshot.projectFile).name, 'Hort urbà');
+  assert.equal(requested.length, 3);
 });

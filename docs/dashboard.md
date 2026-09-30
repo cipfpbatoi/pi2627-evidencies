@@ -94,11 +94,11 @@ L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interf
 - afegir posteriorment usuaris de GitHub amb accés d'escriptura des de «Gestionar accés»;
 - retirar un projecte del registre i, amb una confirmació explícita separada, eliminar també el repositori de GitHub;
 - seleccionar un punt de control i una referència immutable;
-- analitzar un clon local del repositori sense modificar-lo;
+- analitzar directament a GitHub el repositori registrat, sense clonar-lo ni modificar-lo;
 - consultar les comprovacions, els avisos, els bloquejos i els RA/CA candidats;
 - obrir en GitHub el commit analitzat i descarregar l'informe JSON.
 
-El directori del repositori introduït en el formulari ha de ser una ruta absoluta, existir i ser llegible per l'usuari que executa el servei. Eixe usuari també necessita escriptura en `course/projects.json` i `tmp/pi/`. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
+El dashboard llig el repositori registrat directament des de GitHub. `GITHUB_TOKEN` ha de tindre accés de lectura de continguts als repositoris privats; la referència indicada es resol a un commit i l'informe conserva eixe hash. L'usuari del servei només necessita escriptura en `course/projects.json` i `tmp/pi/`; no cal preparar clons locals dels projectes. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
 
 El dashboard PI només accepta `DASHBOARD_HOST=127.0.0.1`, `localhost` o `::1` i no s'ha d'exposar directament a Internet.
 

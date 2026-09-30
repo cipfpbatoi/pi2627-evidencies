@@ -23,17 +23,17 @@ Cada repositori també conté `project.json` amb el mateix identificador i nom. 
 
 ### Recopilar una entrega
 
-Per al primer punt de control, el repositori ha de contindre `project.json`, `docs/01-proposta/dossier-0.md`, `docs/00-control/fonts-ia.md` i un fitxer real per membre en `evidencies/alumnat/nom-cognoms.md`. El `README.md` és una portada amb enllaços i no substituïx cap d'estos documents. La referència ordinària al final del bloc és `dossier-0-v1.0`.
+Per al primer punt de control definitiu, el repositori ha de contindre `project.json`, `docs/01-proposta/dossier-1.md`, `docs/00-control/fonts-ia.md` i un fitxer real per membre en `evidencies/alumnat/nom-cognoms.md`. El `README.md` és una portada amb enllaços i no substituïx cap d'estos documents. La referència ordinària al final del bloc és `dossier-1-v1.0`.
 
 ```bash
 npm run validate:pi
 npm run evidence:collect -- \
-  --repo-dir ../pi-hort-urba \
   --project-id hort-urba \
-  --checkpoint b1-dossier-0 \
-  --ref dossier-0-v1.0
+  --checkpoint b2-dossier-1 \
+  --ref dossier-1-v1.0 \
+  --github true
 npm run evidence:render -- \
-  --input tmp/pi/hort-urba-b1-dossier-0.json
+  --input tmp/pi/hort-urba-b2-dossier-1.json
 ```
 
 L'informe sempre conté `qualification: null` i `teacher_review_required: true`. Els RA/CA són candidats per a revisió docent, no assoliments automàtics.
@@ -44,7 +44,7 @@ L'informe sempre conté `qualification: null` i `teacher_review_required: true`.
 npm run dashboard
 ```
 
-Permet registrar projectes, recopilar una versió des d'un clon local, consultar les comprovacions, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`, i llegir els repositoris que s'indiquen en el formulari. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
+Permet registrar projectes, recopilar una versió directament del repositori GitHub registrat, consultar les comprovacions, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`; no cal clonar ni guardar els repositoris de l'alumnat al servidor. Per als repositoris privats, `GITHUB_TOKEN` necessita accés de lectura de continguts. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
 
 El dashboard PI exigix sempre `DASHBOARD_USER` i `DASHBOARD_PASSWORD`. L'autenticació Basic només protegix les credencials quan el trànsit circula per un túnel SSH o per HTTPS; no s'ha de publicar el port HTTP directament.
 

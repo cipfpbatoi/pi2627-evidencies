@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { loadConfiguration } from './lib/config.mjs';
+import { githubSnapshot } from './lib/github-source.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -33,8 +34,10 @@ function meaningfulFiles(files) {
 
 async function main() {
   const input = args(process.argv.slice(2));
-  const missing = ['repo-dir', 'project-id', 'checkpoint', 'ref'].filter((key) => !input[key]);
+  const missing = ['project-id', 'checkpoint', 'ref'].filter((key) => !input[key]);
   if (missing.length) throw new Error(`Falten arguments: ${missing.map((key) => `--${key}`).join(', ')}.`);
+  if (!input['repo-dir'] && !input.github) throw new Error('Indica --repo-dir o --github.');
+  if (input['repo-dir'] && input.github) throw new Error('Usa només --repo-dir o --github.');
 
   const root = process.cwd();
   const { projects, checkpoints } = await loadConfiguration(root);
@@ -43,11 +46,18 @@ async function main() {
   if (!project) throw new Error(`Projecte no registrat: ${input['project-id']}.`);
   if (!checkpoint) throw new Error(`Punt de control desconegut: ${input.checkpoint}.`);
 
-  const repoDir = path.resolve(input['repo-dir']);
-  const commit = await git(repoDir, ['rev-parse', '--verify', `${input.ref}^{commit}`]);
-  const filesText = await git(repoDir, ['ls-tree', '-r', '--name-only', commit]);
-  const files = filesText ? filesText.split('\n') : [];
-  const projectFile = await readAt(repoDir, commit, 'project.json');
+  let commit;
+  let files;
+  let projectFile;
+  if (input.github) {
+    ({ commit, files, projectFile } = await githubSnapshot({ repository: project.repository, ref: input.ref, token: process.env.GITHUB_TOKEN }));
+  } else {
+    const repoDir = path.resolve(input['repo-dir']);
+    commit = await git(repoDir, ['rev-parse', '--verify', `${input.ref}^{commit}`]);
+    const filesText = await git(repoDir, ['ls-tree', '-r', '--name-only', commit]);
+    files = filesText ? filesText.split('\n') : [];
+    projectFile = await readAt(repoDir, commit, 'project.json');
+  }
   let repositoryProject = null;
   try { repositoryProject = projectFile ? JSON.parse(projectFile) : null; } catch { /* check below */ }
 
