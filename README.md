@@ -4,6 +4,8 @@
 
 L'aplicatiu analitza una versió concreta d'un **projecte amb nom** i genera un informe de comprovacions i evidències candidates. No gestiona parelles, custòdies ni qualificacions individuals: el professorat contrasta l'informe i trasllada a Aules allò que corresponga.
 
+La temporalització del Projecte Intermodular després del Bloc 1 és: Bloc 2 (6 h), Bloc 3 (9 h), Bloc 4 (9 h), Bloc 5 (57 h) i Bloc 6 (9 h). Els punts de control continuen comprovant les mateixes fases i evidències; el desenvolupament del prototip concentra més temps perquè és on s'apliquen i es reobserven RA3 i RA4.
+
 Les ferramentes antigues de DWES es conserven temporalment com a compatibilitat durant la migració.
 
 ### Configuració
