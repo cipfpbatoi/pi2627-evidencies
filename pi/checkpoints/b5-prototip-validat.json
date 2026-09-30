@@ -1,0 +1,21 @@
+{
+  "id": "b5-prototip-validat",
+  "name": "Bloc 5 — Prototip validat",
+  "phase": "execucio-seguiment",
+  "assessment": "teacher_review",
+  "required_files": [
+    "project.json",
+    "prototip/README.md",
+    "docs/00-control/decisions.md",
+    "docs/00-control/fonts-ia.md"
+  ],
+  "required_globs": [
+    "docs/04-seguiment/iteracio-5-*.md",
+    "evidencies/alumnat/*.md",
+    "traspassos/*.md"
+  ],
+  "candidate_ra_ca": [
+    "RA3.a", "RA3.b", "RA3.c", "RA3.d", "RA3.e", "RA3.f", "RA3.g", "RA3.h",
+    "RA4.a", "RA4.b", "RA4.c", "RA4.d", "RA4.e", "RA4.f", "RA4.g"
+  ]
+}
