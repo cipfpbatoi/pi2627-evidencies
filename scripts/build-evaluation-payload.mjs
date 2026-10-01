@@ -178,7 +178,6 @@ async function main() {
     },
     delivery_contract: {
       main_readme: 'README.md de l_arrel es la fitxa de l_entrega actual. Ha d_identificar el microrepte, resumir que s_ha fet, explicar com provar-ho i enllacar evidencies concretes.',
-      declared_implementation_rule: 'El README pot declarar amb enllacos Markdown o rutes entre cometes els fitxers que implementen el microrepte, per exemple src/server.py, src/app.py, public/processar.php o templates/form.html. Si estan versionats dins del repositori, s_inclouen per a la revisio encara que el nom del fitxer no continga el codi del microrepte.',
       overwrite_rule: 'En cada microrepte l_alumnat pot sobreescriure README.md. No penalitzes que no mantinga historial complet en README.md si els fitxers del microrepte actual estan localitzables.',
       linked_evidence_rule: 'Docs, evidencies i tests del microrepte han d_estar en fitxers o carpetes amb el nom/codi del microrepte, per exemple docs/r2m3.md, evidence/r2m3/ o tests/r2m3.test.php, i idealment enllacats des de README.md.',
       folder_readmes_rule: 'docs/README.md, evidence/README.md i tests/README.md son guies de carpeta del template. No els puntues com a entrega del microrepte ni penalitzes que no estiguen modificats.',
