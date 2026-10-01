@@ -38,6 +38,18 @@ npm run evidence:render -- \
 
 L'informe sempre conté `qualification: null` i `teacher_review_required: true`. Els RA/CA són candidats per a revisió docent, no assoliments automàtics.
 
+Perquè el corrector puga inspeccionar codi amb noms genèrics com `server.py` o `app.py`, el `README.md` de l'entrega ha d'enllaçar els fitxers que implementen el microrepte:
+
+```md
+## Implementació de R2M2
+
+- Backend: [`src/server.py`](src/server.py)
+- Formulari: [`templates/form.html`](templates/form.html)
+- Proves: [`tests/test_r2m2.py`](tests/test_r2m2.py)
+```
+
+Només s'incorporen rutes locals, reals i versionades dins de `src/`, `app/`, `public/`, `routes/`, `views/`, `templates/`, `tests/`, `evidence/` o `docs/`.
+
 ### Dashboard
 
 ```bash

@@ -260,18 +260,23 @@ async function activeFileSummary(repoDir, filePath, tokens) {
   return fileSummary(repoDir, filePath);
 }
 
-async function declaredExtensionFiles(repoDir, config, trackedFiles) {
-  const declaration = await fileSummary(repoDir, config.declaration_path);
-  if (!declaration) return [];
+function declaredTargets(declarationPath, declaration) {
+  if (!declaration?.excerpt) return [];
   const candidates = new Set();
   for (const match of declaration.excerpt.matchAll(/\]\(([^)]+)\)|`([^`]+)`/g)) {
-    const target = (match[1] || match[2]).split('#')[0];
+    const target = (match[1] || match[2]).split('#')[0].split('?')[0].trim();
+    if (!target || /^(https?:|mailto:|#)/i.test(target)) continue;
     candidates.add(path.normalize(target));
-    candidates.add(path.normalize(path.join(path.dirname(config.declaration_path), target)));
+    candidates.add(path.normalize(path.join(path.dirname(declarationPath), target)));
   }
+  return [...candidates];
+}
+
+async function declaredRepositoryFiles(repoDir, declarationPath, declaration, trackedFiles) {
+  if (!declaration) return [];
   const allowed = new Set(trackedFiles.split('\n'));
   const results = [];
-  for (const candidate of candidates) {
+  for (const candidate of declaredTargets(declarationPath, declaration)) {
     if (results.length >= maxFilesPerSection) break;
     if (!allowed.has(candidate) || !/^(src|app|public|routes|views|templates|tests|evidence|docs)\//.test(candidate)) continue;
     // listFiles follows only ordinary directory entries, never repository symlinks.
@@ -284,6 +289,18 @@ async function declaredExtensionFiles(repoDir, config, trackedFiles) {
     if (summary) results.push(summary);
   }
   return results;
+}
+
+function mergeSummaries(...groups) {
+  const summaries = new Map();
+  for (const group of groups) {
+    for (const summary of group) summaries.set(summary.path, summary);
+  }
+  return [...summaries.values()];
+}
+
+function summariesInRoot(summaries, root) {
+  return summaries.filter((summary) => summary.path.startsWith(`${root}/`));
 }
 
 async function main() {
@@ -300,6 +317,8 @@ async function main() {
   }
   const trackedFiles = await git(repoDir, ['ls-files']);
   const trackedFilesCount = trackedFiles ? trackedFiles.split('\n').length : 0;
+  const readme = await fileSummary(repoDir, 'README.md');
+  const readmeDeclaredFiles = await declaredRepositoryFiles(repoDir, 'README.md', readme, trackedFiles);
 
   const signals = {
     generated_at: new Date().toISOString(),
@@ -342,16 +361,25 @@ async function main() {
     },
     repte_extension: extensionConfig ? {
       declaration: await fileSummary(repoDir, extensionConfig.declaration_path),
-      referenced_files: await declaredExtensionFiles(repoDir, extensionConfig, trackedFiles),
+      referenced_files: await declaredRepositoryFiles(repoDir, extensionConfig.declaration_path, await fileSummary(repoDir, extensionConfig.declaration_path), trackedFiles),
       files: await summarizeActiveFiles(repoDir, [...await listFiles(repoDir, resolveInRepo(repoDir, 'docs'), Infinity), ...await listFiles(repoDir, resolveInRepo(repoDir, 'evidence'), Infinity), ...await listFiles(repoDir, resolveInRepo(repoDir, 'tests'), Infinity), ...await listFiles(repoDir, resolveInRepo(repoDir, 'src'), Infinity)], [args['microrepte-code']?.split('M')[0].toLowerCase() || args['challenge-id'].split('-')[0], 'ampliacio', 'ampliació'])
     } : null,
-    readme: await fileSummary(repoDir, 'README.md'),
+    readme,
+    readme_declared_files: readmeDeclaredFiles,
     template_guide: await fileSummary(repoDir, 'ENTREGA.md'),
     ai_log: await activeFileSummary(repoDir, 'docs/ai-log.md', activeTokens),
-    docs_files: await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'docs'), Number.POSITIVE_INFINITY), activeTokens),
-    evidence_files: await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'evidence'), Number.POSITIVE_INFINITY), activeTokens),
-    test_files: await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'tests'), Number.POSITIVE_INFINITY), activeTokens),
-    source_files: await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'src'), Number.POSITIVE_INFINITY), activeTokens)
+    docs_files: mergeSummaries(await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'docs'), Number.POSITIVE_INFINITY), activeTokens), summariesInRoot(readmeDeclaredFiles, 'docs')),
+    evidence_files: mergeSummaries(await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'evidence'), Number.POSITIVE_INFINITY), activeTokens), summariesInRoot(readmeDeclaredFiles, 'evidence')),
+    test_files: mergeSummaries(await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'tests'), Number.POSITIVE_INFINITY), activeTokens), summariesInRoot(readmeDeclaredFiles, 'tests')),
+    source_files: mergeSummaries(
+      await summarizeActiveFiles(repoDir, await listFiles(repoDir, resolveInRepo(repoDir, 'src'), Number.POSITIVE_INFINITY), activeTokens),
+      summariesInRoot(readmeDeclaredFiles, 'src'),
+      summariesInRoot(readmeDeclaredFiles, 'app'),
+      summariesInRoot(readmeDeclaredFiles, 'public'),
+      summariesInRoot(readmeDeclaredFiles, 'routes'),
+      summariesInRoot(readmeDeclaredFiles, 'views'),
+      summariesInRoot(readmeDeclaredFiles, 'templates')
+    )
   };
 
   await mkdir(path.dirname(repoSignalsPath), { recursive: true });

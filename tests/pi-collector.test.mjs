@@ -10,6 +10,7 @@ import { githubSnapshot } from '../scripts/pi/lib/github-source.mjs';
 
 const exec = promisify(execFile);
 const script = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../scripts/pi/collect-evidence.mjs');
+const repositoryEvidenceScript = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../scripts/collect-repo-evidence.mjs');
 
 test('recopila una versió immutable d’un projecte amb nom i no genera nota', async () => {
   const root = await mkdtemp(path.join(tmpdir(), 'pi-evidence-'));
@@ -54,4 +55,25 @@ test('recopila l’arbre i project.json des de GitHub sense clonar el repositori
   assert.deepEqual(snapshot.files, ['project.json', 'docs/dossier.md']);
   assert.equal(JSON.parse(snapshot.projectFile).name, 'Hort urbà');
   assert.equal(requested.length, 3);
+});
+
+test('inclou el codi declarat al README encara que el fitxer no porte el nom del microrepte', async () => {
+  const root = await mkdtemp(path.join(tmpdir(), 'pi-repo-evidence-'));
+  const repo = path.join(root, 'repo');
+  try {
+    await mkdir(path.join(repo, 'src'), { recursive: true });
+    await writeFile(path.join(repo, 'README.md'), '# R2M2\n\nImplementació: [`src/server.py`](src/server.py)\n');
+    await writeFile(path.join(repo, 'src/server.py'), 'def processar_formulari():\n    return "reintent"\n');
+    await exec('git', ['init'], { cwd: repo });
+    await exec('git', ['add', '.'], { cwd: repo });
+    await exec('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'prova'], { cwd: repo });
+    const signals = path.join(root, 'signals.json');
+    const summary = path.join(root, 'summary.json');
+    await exec(process.execPath, [repositoryEvidenceScript, '--repo-dir', repo, '--repo', 'org/hort', '--commit', 'HEAD', '--challenge-id', 'r2-s02-processament-reintent-conservacio-dades', '--microrepte-code', 'R2M2', '--repo-signals', signals, '--evidence-summary', summary], { cwd: root });
+    const evidence = JSON.parse(await readFile(summary, 'utf8'));
+    assert.deepEqual(evidence.source_files.map((file) => file.path), ['src/server.py']);
+    assert.deepEqual(evidence.readme_declared_files.map((file) => file.path), ['src/server.py']);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
