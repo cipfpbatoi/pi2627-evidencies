@@ -7,13 +7,16 @@
   "required_files": [
     "project.json",
     "prototip/README.md",
+    "docs/04-seguiment/iteracio-5-1.md",
+    "docs/04-seguiment/iteracio-5-2.md",
+    "docs/04-seguiment/iteracio-5-3.md",
+    "docs/04-seguiment/iteracio-5-4.md",
+    "traspassos/02-pla-a-prototip.md",
     "docs/00-control/decisions.md",
     "docs/00-control/fonts-ia.md"
   ],
   "required_globs": [
-    "docs/04-seguiment/iteracio-5-*.md",
-    "evidencies/alumnat/*.md",
-    "traspassos/*.md"
+    "evidencies/alumnat/*.md"
   ],
   "candidate_ra_ca": [
     "RA3.a", "RA3.b", "RA3.c", "RA3.d", "RA3.e", "RA3.f", "RA3.g", "RA3.h",
@@ -22,7 +25,7 @@
   "evidence_by_ra_ca": {
     "RA3.a": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
     "RA3.b": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
-    "RA3.c": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA3.c": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "traspassos/*.md", "evidencies/alumnat/*.md"],
     "RA3.d": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
     "RA3.e": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
     "RA3.f": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
@@ -34,6 +37,6 @@
     "RA4.d": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
     "RA4.e": ["docs/04-seguiment/iteracio-5-*.md", "prototip/README.md", "evidencies/alumnat/*.md"],
     "RA4.f": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
-    "RA4.g": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"]
+    "RA4.g": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"]
   }
 }

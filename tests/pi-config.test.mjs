@@ -48,3 +48,22 @@ test('el Bloc 4 proposa només els CA sustentats pel pla demanat', async () => {
     'RA4.a', 'RA4.b', 'RA4.c', 'RA4.d', 'RA4.e', 'RA4.f', 'RA4.g'
   ]);
 });
+
+test('el Bloc 5 exigix les quatre iteracions i manté RA3 com a reobservació candidata', async () => {
+  const { checkpoints } = await loadConfiguration(process.cwd());
+  const checkpoint = checkpoints.get('b5-prototip-validat');
+  assert.deepEqual(checkpoint.candidate_ra_ca, [
+    'RA3.a', 'RA3.b', 'RA3.c', 'RA3.d', 'RA3.e', 'RA3.f', 'RA3.g', 'RA3.h',
+    'RA4.a', 'RA4.b', 'RA4.c', 'RA4.d', 'RA4.e', 'RA4.f', 'RA4.g'
+  ]);
+  assert.deepEqual(
+    checkpoint.required_files.filter((file) => file.includes('iteracio-5-')),
+    [
+      'docs/04-seguiment/iteracio-5-1.md',
+      'docs/04-seguiment/iteracio-5-2.md',
+      'docs/04-seguiment/iteracio-5-3.md',
+      'docs/04-seguiment/iteracio-5-4.md'
+    ]
+  );
+  assert.ok(checkpoint.required_files.includes('traspassos/02-pla-a-prototip.md'));
+});
