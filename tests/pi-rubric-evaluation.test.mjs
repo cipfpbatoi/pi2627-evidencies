@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { loadConfiguration } from '../scripts/pi/lib/config.mjs';
-import { buildEvidencePacket, buildRubricAssessment, criterionEvidenceFiles, validateModelProposal } from '../scripts/pi/lib/rubric-assessment.mjs';
+import { buildEvidencePacket, buildRubricAssessment, criterionEvidenceFiles, requestValidatedProposal, validateModelProposal } from '../scripts/pi/lib/rubric-assessment.mjs';
 
 const exec = promisify(execFile);
 
@@ -131,6 +131,28 @@ test('no accepta un nivell documental sense cita ni un N sense mancança explíc
   absentWithoutReason.criteria[0].document_level = 'N';
   absentWithoutReason.criteria[0].evidence = [];
   assert.throws(() => validateModelProposal(absentWithoutReason, rubric, packet), /ha d’explicitar l’evidència absent/);
+});
+
+test('torna a demanar la proposta si una cita no és literal i conserva la validació estricta', async () => {
+  const { rubrics } = await loadConfiguration(process.cwd());
+  const rubric = rubrics.get('b3-dossier-2');
+  const packet = await buildEvidencePacket(report, rubric, async (file) => `Evidència literal de ${file}\n`);
+  const invalid = proposalFor(rubric, packet);
+  invalid.criteria[0].evidence[0].excerpt = 'Evidència aproximada';
+  const valid = proposalFor(rubric, packet);
+  const requests = [];
+  const result = await requestValidatedProposal({
+    rubric,
+    packet,
+    request: async (messages) => {
+      requests.push(messages);
+      return requests.length === 1 ? invalid : valid;
+    }
+  });
+  assert.equal(result, valid);
+  assert.equal(requests.length, 2);
+  assert.match(requests[1].at(-1).content, /no és literal/);
+  assert.match(requests[1].at(-1).content, /caràcter per caràcter/);
 });
 
 test('executa el pilot local sobre el commit immutable i guarda la proposta separada', async () => {

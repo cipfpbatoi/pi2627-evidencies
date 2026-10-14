@@ -152,7 +152,9 @@ export function evaluationMessages(packet) {
         'Per als criteris deliverable, proposa un nivell documental 4, 3, 2, 1 o N.',
         'Per als criteris mixed, el nivell és només una orientació documental i has de generar focus i preguntes per confirmar autoria, comprensió o aplicació.',
         'Per als criteris defense, torna nivell i confiança null i limita’t a preparar l’observació.',
-        'Cada afirmació ha d’apuntar a un fitxer subministrat, amb apartat o ubicació i un fragment breu. No deduïsques autoria per recompte de commits, estil o volum.',
+        'Cada afirmació ha d’apuntar a un fitxer subministrat, amb apartat o ubicació i un fragment breu.',
+        'Copia cada excerpt caràcter per caràcter des del fitxer: no el parafraseges ni normalitzes cometes, accents, majúscules, puntuació o espais.',
+        'No deduïsques autoria per recompte de commits, estil o volum.',
         'Si una evidència enllaçada no està inclosa en els fitxers, declara el límit; no la dones per comprovada.',
         'La resposta és una proposta revisable, mai una qualificació oficial.'
       ].join(' ')
@@ -201,6 +203,32 @@ export function validateModelProposal(proposal, rubric, packet) {
     if (['mixed', 'defense'].includes(criterion.source) && (!item.observation_focus.length || !item.orientation_questions.length)) throw new Error(`El criteri ${criterion.id} necessita orientació per al contrast o la defensa.`);
   }
   return proposal;
+}
+
+export async function requestValidatedProposal({ rubric, packet, request, maxAttempts = 3 }) {
+  if (typeof request !== 'function') throw new Error('Falta la funció per demanar la proposta al model.');
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 5) throw new Error('El nombre d’intents de la proposta ha d’estar entre 1 i 5.');
+  const baseMessages = evaluationMessages(packet);
+  let messages = baseMessages;
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const proposal = await request(messages);
+    try {
+      return validateModelProposal(proposal, rubric, packet);
+    } catch (error) {
+      lastError = error;
+      if (attempt === maxAttempts) break;
+      messages = [
+        ...baseMessages,
+        { role: 'assistant', content: JSON.stringify(proposal) },
+        {
+          role: 'user',
+          content: `La resposta anterior no supera la validació: ${error.message} Torna a generar tot el JSON. Conserva els nivells només si continuen justificats i copia cada excerpt literalment, caràcter per caràcter, d’un dels fitxers permesos.`
+        }
+      ];
+    }
+  }
+  throw new Error(`La proposta continua sent invàlida després de ${maxAttempts} intents: ${lastError.message}`);
 }
 
 export function buildRubricAssessment(report, rubric, proposal, packet, generatedAt = new Date().toISOString()) {

@@ -6,7 +6,7 @@ import { promisify } from 'node:util';
 import OpenAI from 'openai';
 import { loadConfiguration } from './lib/config.mjs';
 import { githubFileAtCommit } from './lib/github-source.mjs';
-import { buildEvidencePacket, buildRubricAssessment, evaluationMessages, modelResponseSchema, saveRubricAssessment } from './lib/rubric-assessment.mjs';
+import { buildEvidencePacket, buildRubricAssessment, modelResponseSchema, requestValidatedProposal, saveRubricAssessment } from './lib/rubric-assessment.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -75,19 +75,25 @@ async function main() {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) throw new Error('Falta OPENAI_API_KEY per generar la proposta d’avaluació.');
     const client = new OpenAI({ apiKey });
-    const response = await client.chat.completions.create({
-      model: process.env.OPENAI_PI_MODEL || process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      messages: evaluationMessages(packet),
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
-          name: 'pi_rubric_evaluation_proposal',
-          strict: true,
-          schema: modelResponseSchema(rubric)
-        }
+    proposal = await requestValidatedProposal({
+      rubric,
+      packet,
+      request: async (messages) => {
+        const response = await client.chat.completions.create({
+          model: process.env.OPENAI_PI_MODEL || process.env.OPENAI_MODEL || 'gpt-4o-mini',
+          messages,
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: 'pi_rubric_evaluation_proposal',
+              strict: true,
+              schema: modelResponseSchema(rubric)
+            }
+          }
+        });
+        return parseModelJson(response);
       }
     });
-    proposal = parseModelJson(response);
   }
 
   const assessment = buildRubricAssessment(report, rubric, proposal, packet);
