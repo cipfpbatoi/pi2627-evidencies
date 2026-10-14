@@ -28,3 +28,13 @@ test('el Bloc 2 només proposa CA sustentats per les evidències demanades', asy
   ]);
   assert.deepEqual(candidateCa.filter((ca) => ['RA1.a', 'RA1.b', 'RA1.d', 'RA1.g', 'RA1.h', 'RA1.i'].includes(ca)), []);
 });
+
+test('el Bloc 3 no proposa finançament si el Dossier 2 no el demana', async () => {
+  const { checkpoints } = await loadConfiguration(process.cwd());
+  const candidateCa = checkpoints.get('b3-dossier-2').candidate_ra_ca;
+  assert.deepEqual(candidateCa, [
+    'RA1.f',
+    'RA2.a', 'RA2.b', 'RA2.c', 'RA2.d', 'RA2.e', 'RA2.f', 'RA2.h', 'RA2.i'
+  ]);
+  assert.equal(candidateCa.includes('RA2.g'), false);
+});
