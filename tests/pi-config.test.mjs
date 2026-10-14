@@ -67,3 +67,26 @@ test('el Bloc 5 exigix les quatre iteracions i manté RA3 com a reobservació ca
   );
   assert.ok(checkpoint.required_files.includes('traspassos/02-pla-a-prototip.md'));
 });
+
+test('el Bloc 6 recopila totes les fases sense inventar evidència de finançament', async () => {
+  const { checkpoints } = await loadConfiguration(process.cwd());
+  const checkpoint = checkpoints.get('b6-tancament-defensa');
+  assert.equal(checkpoint.candidate_ra_ca.includes('RA2.g'), false);
+  assert.deepEqual(checkpoint.candidate_ra_ca, [
+    'RA1.c', 'RA1.e', 'RA1.f', 'RA1.i',
+    'RA2.a', 'RA2.b', 'RA2.c', 'RA2.d', 'RA2.e', 'RA2.f', 'RA2.h', 'RA2.i',
+    'RA3.a', 'RA3.b', 'RA3.c', 'RA3.d', 'RA3.e', 'RA3.f', 'RA3.g', 'RA3.h',
+    'RA4.a', 'RA4.b', 'RA4.c', 'RA4.d', 'RA4.e', 'RA4.f', 'RA4.g'
+  ]);
+  for (const file of [
+    'docs/01-proposta/dossier-1.md',
+    'docs/02-avantprojecte/dossier-2.md',
+    'docs/03-planificacio/pla-projecte.md',
+    'docs/04-seguiment/iteracio-5-1.md',
+    'docs/04-seguiment/iteracio-5-2.md',
+    'docs/04-seguiment/iteracio-5-3.md',
+    'docs/04-seguiment/iteracio-5-4.md',
+    'traspassos/01-avantprojecte-a-planificacio.md',
+    'traspassos/02-pla-a-prototip.md'
+  ]) assert.ok(checkpoint.required_files.includes(file), `Falta ${file}`);
+});
