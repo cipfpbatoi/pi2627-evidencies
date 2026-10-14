@@ -2,7 +2,7 @@
 
 ## Nou nucli simplificat
 
-L'aplicatiu analitza una versió concreta d'un **projecte amb nom** i genera un informe de comprovacions i evidències candidates. No gestiona parelles, custòdies ni qualificacions individuals: el professorat contrasta l'informe i trasllada a Aules allò que corresponga.
+L'aplicatiu analitza una versió concreta d'un **projecte amb nom** i genera un informe de comprovacions i evidències candidates. També reconstruïx la traça de commits fins a l'entrega —o des del punt de control anterior— per mostrar-ne la distribució temporal i la seqüència descrita pels missatges. No gestiona parelles, custòdies ni qualificacions individuals: el professorat contrasta l'informe i trasllada a Aules allò que corresponga.
 
 La temporalització del Projecte Intermodular després del Bloc 1 és: Bloc 2 (6 h), Bloc 3 (9 h), Bloc 4 (9 h), Bloc 5 (57 h) i Bloc 6 (9 h). Els punts de control continuen comprovant les mateixes fases i evidències; el desenvolupament del prototip concentra més temps perquè és on s'apliquen i es reobserven RA3 i RA4.
 
@@ -38,13 +38,17 @@ npm run evidence:render -- \
 
 L'informe sempre conté `qualification: null` i `teacher_review_required: true`. Els RA/CA són candidats per a revisió docent, no assoliments automàtics.
 
+La secció `process` incorpora el nombre de commits i dies actius, l'interval temporal, el buit màxim, la concentració diària, els comptes Git observats, les referències a issues i una cronologia amb àrees inferides dels missatges. Des del bloc 3, cada punt de control delimita el tram amb l'etiqueta immutable anterior (`dossier-1-v1.0`, `dossier-2-v1.0`, `pla-v1.0` o `prototip-v1.0`). Si no troba eixa etiqueta, ho advertix i mostra l'historial disponible.
+
+Estos valors són **indicis de procés**, no una rúbrica de quantitat. Un commit gran, una concentració temporal, un compte compartit per una incidència o una revisió d'una fase anterior requerixen explicació i contrast, però no impliquen automàticament falta d'autoria ni una qualificació inferior. Les àrees de la cronologia es deduïxen només del missatge del commit i poden ser incompletes; cal revisar també issues, pull requests, documents, proves i defensa.
+
 ### Dashboard
 
 ```bash
 npm run dashboard
 ```
 
-Permet registrar projectes, recopilar una versió directament del repositori GitHub registrat, consultar les comprovacions, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`; no cal clonar ni guardar els repositoris de l'alumnat al servidor. Per als repositoris privats, `GITHUB_TOKEN` necessita accés de lectura de continguts. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
+Permet registrar projectes, recopilar una versió directament del repositori GitHub registrat, consultar les comprovacions i la traça temporal, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`; no cal clonar ni guardar els repositoris de l'alumnat al servidor. Per als repositoris privats, `GITHUB_TOKEN` necessita accés de lectura de continguts i historial. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
 
 El dashboard PI exigix sempre `DASHBOARD_USER` i `DASHBOARD_PASSWORD`. L'autenticació Basic només protegix les credencials quan el trànsit circula per un túnel SSH o per HTTPS; no s'ha de publicar el port HTTP directament.
 

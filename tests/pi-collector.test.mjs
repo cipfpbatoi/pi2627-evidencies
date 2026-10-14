@@ -32,6 +32,9 @@ test('recopila una versió immutable d’un projecte amb nom i no genera nota', 
     assert.equal(report.qualification, null);
     assert.equal(report.teacher_review_required, true);
     assert.equal(report.candidate_evidence[0].scope, 'candidate');
+    assert.equal(report.process.summary.total_commits, 1);
+    assert.equal(report.process.interpretation_required, true);
+    assert.match(report.warnings.join('\n'), /\[Procés\].*únic commit/);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -47,11 +50,41 @@ test('recopila l’arbre i project.json des de GitHub sense clonar el repositori
     if (url.endsWith('/commits/dossier-1-v1.0')) return new Response(JSON.stringify({ sha: commit, commit: { tree: { sha: tree } } }), { status: 200 });
     if (url.includes(`/git/trees/${tree}?recursive=1`)) return new Response(JSON.stringify({ truncated: false, tree: [{ path: 'project.json', type: 'blob', sha: blob }, { path: 'docs/dossier.md', type: 'blob', sha: 'd'.repeat(40) }] }), { status: 200 });
     if (url.endsWith(`/git/blobs/${blob}`)) return new Response(JSON.stringify({ encoding: 'base64', content: Buffer.from(JSON.stringify({ id: 'hort', name: 'Hort urbà' })).toString('base64') }), { status: 200 });
+    if (url.includes(`/commits?sha=${commit}`)) return new Response(JSON.stringify([{ sha: commit, commit: { committer: { date: '2026-10-14T08:00:00Z' }, message: 'Completa el dossier #12' }, author: { login: 'anna' } }]), { status: 200 });
     return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404 });
   };
   const snapshot = await githubSnapshot({ repository: 'org/hort', ref: 'dossier-1-v1.0', token: 'secret', fetchImpl });
   assert.equal(snapshot.commit, commit);
   assert.deepEqual(snapshot.files, ['project.json', 'docs/dossier.md']);
   assert.equal(JSON.parse(snapshot.projectFile).name, 'Hort urbà');
-  assert.equal(requested.length, 3);
+  assert.equal(snapshot.history.length, 1);
+  assert.equal(snapshot.history[0].author, 'anna');
+  assert.equal(requested.length, 4);
+});
+
+test('delimita la cronologia de GitHub amb el punt de control anterior', async () => {
+  const commit = 'a'.repeat(40);
+  const baseline = '9'.repeat(40);
+  const tree = 'b'.repeat(40);
+  const requested = [];
+  const fetchImpl = async (url) => {
+    requested.push(url);
+    if (url.endsWith('/commits/pla-v1.0')) return new Response(JSON.stringify({ sha: baseline, commit: { tree: { sha: '8'.repeat(40) } } }), { status: 200 });
+    if (url.endsWith('/commits/prototip-v1.0')) return new Response(JSON.stringify({ sha: commit, commit: { tree: { sha: tree } } }), { status: 200 });
+    if (url.includes(`/git/trees/${tree}?recursive=1`)) return new Response(JSON.stringify({ truncated: false, tree: [] }), { status: 200 });
+    if (url.includes(`/compare/${baseline}...${commit}`)) return new Response(JSON.stringify({
+      status: 'ahead', ahead_by: 2, behind_by: 0, total_commits: 2,
+      commits: [
+        { sha: 'c'.repeat(40), commit: { committer: { date: '2026-10-10T08:00:00Z' }, message: 'Inicia la iteració #31' }, author: { login: 'anna' } },
+        { sha: commit, commit: { committer: { date: '2026-10-14T08:00:00Z' }, message: 'Valida el prototip #42' }, author: { login: 'pau' } }
+      ]
+    }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404 });
+  };
+  const snapshot = await githubSnapshot({ repository: 'org/hort', ref: 'prototip-v1.0', baselineRef: 'pla-v1.0', token: 'secret', fetchImpl });
+  assert.equal(snapshot.baseline.commit, baseline);
+  assert.equal(snapshot.baseline.status, 'ahead');
+  assert.equal(snapshot.history.length, 2);
+  assert.equal(snapshot.historyTruncated, false);
+  assert.equal(requested.length, 4);
 });

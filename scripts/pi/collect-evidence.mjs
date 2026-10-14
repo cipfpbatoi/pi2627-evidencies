@@ -5,6 +5,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { loadConfiguration } from './lib/config.mjs';
 import { githubSnapshot } from './lib/github-source.mjs';
+import { analyseProcessHistory } from './lib/process-history.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -28,6 +29,50 @@ async function readAt(repoDir, commit, file) {
   try { return await git(repoDir, ['show', `${commit}:${file}`]); } catch { return null; }
 }
 
+function parseHistory(value) {
+  if (!value.trim()) return [];
+  return value.trim().split('\n').map((line) => {
+    const [commit, committedAt, author, ...message] = line.split('\u001f');
+    return { commit, committed_at: committedAt, author, message: message.join('\u001f') };
+  });
+}
+
+async function localHistory(repoDir, commit, baselineRef) {
+  const format = '%H%x1f%cI%x1f%an%x1f%s';
+  if (baselineRef) {
+    try {
+      const baselineCommit = await git(repoDir, ['rev-parse', '--verify', `${baselineRef}^{commit}`]);
+      try {
+        await git(repoDir, ['merge-base', '--is-ancestor', baselineCommit, commit]);
+        const total = Number(await git(repoDir, ['rev-list', '--count', `${baselineCommit}..${commit}`]));
+        const log = await git(repoDir, ['log', '--reverse', '--max-count=250', `--format=${format}`, `${baselineCommit}..${commit}`]);
+        return {
+          history: parseHistory(log),
+          historyTruncated: total > 250,
+          baseline: { requested_ref: baselineRef, commit: baselineCommit, status: total ? 'ahead' : 'identical', ahead_by: total, behind_by: 0 }
+        };
+      } catch {
+        const log = await git(repoDir, ['log', '--reverse', '--max-count=100', `--format=${format}`, commit]);
+        return {
+          history: parseHistory(log),
+          historyTruncated: Number(await git(repoDir, ['rev-list', '--count', commit])) > 100,
+          baseline: { requested_ref: baselineRef, commit: baselineCommit, status: 'diverged', ahead_by: null, behind_by: null }
+        };
+      }
+    } catch {
+      const log = await git(repoDir, ['log', '--reverse', '--max-count=100', `--format=${format}`, commit]);
+      return {
+        history: parseHistory(log),
+        historyTruncated: Number(await git(repoDir, ['rev-list', '--count', commit])) > 100,
+        baseline: { requested_ref: baselineRef, commit: null, status: 'missing', ahead_by: null, behind_by: null }
+      };
+    }
+  }
+  const total = Number(await git(repoDir, ['rev-list', '--count', commit]));
+  const log = await git(repoDir, ['log', '--reverse', '--max-count=100', `--format=${format}`, commit]);
+  return { history: parseHistory(log), historyTruncated: total > 100, baseline: null };
+}
+
 function meaningfulFiles(files) {
   return files.filter((file) => !path.basename(file).startsWith('plantilla') && !file.endsWith('/README.md'));
 }
@@ -49,14 +94,23 @@ async function main() {
   let commit;
   let files;
   let projectFile;
+  let history;
+  let historyTruncated;
+  let baseline;
   if (input.github) {
-    ({ commit, files, projectFile } = await githubSnapshot({ repository: project.repository, ref: input.ref, token: process.env.GITHUB_TOKEN }));
+    ({ commit, files, projectFile, history, historyTruncated, baseline } = await githubSnapshot({
+      repository: project.repository,
+      ref: input.ref,
+      baselineRef: checkpoint.baseline_ref,
+      token: process.env.GITHUB_TOKEN
+    }));
   } else {
     const repoDir = path.resolve(input['repo-dir']);
     commit = await git(repoDir, ['rev-parse', '--verify', `${input.ref}^{commit}`]);
     const filesText = await git(repoDir, ['ls-tree', '-r', '--name-only', commit]);
     files = filesText ? filesText.split('\n') : [];
     projectFile = await readAt(repoDir, commit, 'project.json');
+    ({ history, historyTruncated, baseline } = await localHistory(repoDir, commit, checkpoint.baseline_ref));
   }
   let repositoryProject = null;
   try { repositoryProject = projectFile ? JSON.parse(projectFile) : null; } catch { /* check below */ }
@@ -82,12 +136,13 @@ async function main() {
     checks.push({ id: 'project-metadata', status: 'passed', message: `Projecte identificat com “${repositoryProject.name}”.`, evidence: ['project.json'] });
   }
 
-  const warnings = [];
+  const processEvidence = analyseProcessHistory(history, { baseline, historyTruncated });
+  const warnings = processEvidence.observations.map((item) => `[Procés] ${item}`);
   const contributors = files.filter((file) => /^evidencies\/alumnat\/[^/]+\.md$/.test(file) && !file.endsWith('/plantilla.md'));
   if (contributors.length < 2) warnings.push('Hi ha menys de dos registres individuals identificables; cal revisar si és una excepció autoritzada.');
   const candidateEvidence = checkpoint.candidate_ra_ca.map((raCa) => ({ ra_ca: raCa, scope: 'candidate', evidence: checks.filter((check) => check.status === 'passed').flatMap((check) => check.evidence) }));
   const report = {
-    schema_version: 1,
+    schema_version: 2,
     generated_at: new Date().toISOString(),
     project: { id: project.id, name: project.name, repository: project.repository },
     checkpoint: { id: checkpoint.id, name: checkpoint.name, phase: checkpoint.phase, assessment: checkpoint.assessment },
@@ -95,6 +150,7 @@ async function main() {
     status: blockingFlags.length ? 'incomplete' : warnings.length ? 'complete_with_warnings' : 'complete',
     checks,
     candidate_evidence: candidateEvidence,
+    process: processEvidence,
     warnings,
     blocking_flags: [...new Set(blockingFlags)],
     teacher_review_required: true,

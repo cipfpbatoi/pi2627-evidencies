@@ -11,6 +11,24 @@ if (inputIndex < 0 || !process.argv[inputIndex + 1]) {
 
 const report = JSON.parse(await readFile(path.resolve(process.argv[inputIndex + 1]), 'utf8'));
 const icon = (status) => status === 'passed' ? '✅' : status === 'warning' ? '⚠️' : '❌';
+const processSummary = report.process?.summary;
+const processLines = processSummary ? [
+  '## Traça temporal i seqüència',
+  '',
+  `- **Tram:** ${report.process.scope?.requested_ref ? `des de ${report.process.scope.requested_ref}` : 'historial disponible'}`,
+  `- **Commits:** ${processSummary.total_commits}`,
+  `- **Dies actius:** ${processSummary.active_days}`,
+  `- **Interval:** ${processSummary.span_hours} hores`,
+  `- **Buit màxim entre commits:** ${processSummary.largest_gap_hours} hores`,
+  `- **Dia més actiu:** ${processSummary.busiest_day || '—'} (${processSummary.busiest_day_commits} commits; ${Math.round(processSummary.busiest_day_share * 100)} %)`,
+  `- **Missatges genèrics:** ${processSummary.generic_messages}`,
+  `- **Commits amb referència a issue:** ${processSummary.commits_with_issue_reference}`,
+  '',
+  ...(report.process.timeline?.length ? report.process.timeline.map((item) => `- ${item.committed_at} · \`${item.commit.slice(0, 12)}\` · ${item.author} · ${item.message || '(sense missatge)'} · ${item.areas.join(', ')}`) : ['- No hi ha commits en el tram analitzat.']),
+  '',
+  '> La distribució i els missatges són indicis de procés. No acrediten autoria, qualitat ni assoliment sense contrast docent.',
+  ''
+] : [];
 const lines = [
   `# Informe d'evidències — ${report.project.name}`,
   '',
@@ -25,6 +43,7 @@ const lines = [
   '',
   ...report.checks.map((check) => `- ${icon(check.status)} **${check.id}:** ${check.message}`),
   '',
+  ...processLines,
   '## Avisos',
   '',
   ...(report.warnings.length ? report.warnings.map((item) => `- ${item}`) : ['- Cap avís automàtic.']),

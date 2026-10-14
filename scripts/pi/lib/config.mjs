@@ -26,6 +26,7 @@ export function validateCheckpoint(checkpoint) {
   if (!Array.isArray(checkpoint?.required_files)) errors.push('required_files ha de ser una llista');
   if (!Array.isArray(checkpoint?.required_globs)) errors.push('required_globs ha de ser una llista');
   if (!Array.isArray(checkpoint?.candidate_ra_ca)) errors.push('candidate_ra_ca ha de ser una llista');
+  if (checkpoint?.baseline_ref !== undefined && !String(checkpoint.baseline_ref || '').trim()) errors.push('baseline_ref ha de ser una referència no buida');
   return errors;
 }
 

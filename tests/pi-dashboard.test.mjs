@@ -106,7 +106,13 @@ test('els informes del dashboard són navegables i mantenen la revisió docent',
     checkpoint: { id: 'b1', name: 'Dossier 0' },
     version: { requested_ref: 'dossier-0-v1.0', commit: 'a'.repeat(40) },
     status: 'complete', checks: [{ id: 'file:project.json', status: 'passed', message: 'Fitxer present.', evidence: ['project.json'] }],
-    warnings: [], blocking_flags: [], candidate_evidence: [{ ra_ca: 'RA1.c' }]
+    warnings: [], blocking_flags: [], candidate_evidence: [{ ra_ca: 'RA1.c' }],
+    process: {
+      scope: { requested_ref: null, commit: null, status: 'repository-history' },
+      summary: { total_commits: 2, active_days: 2, span_hours: 24, largest_gap_hours: 24, busiest_day: '2026-10-14', busiest_day_commits: 1, busiest_day_share: 0.5, generic_messages: 0, commits_with_issue_reference: 1 },
+      observations: [],
+      timeline: [{ commit: 'b'.repeat(40), committed_at: '2026-10-14T08:00:00Z', author: 'anna', message: 'Completa el dossier #12', areas: ['proposta'] }]
+    }
   };
   const home = renderDashboard(new Map([['hort', report.project]]), new Map([['b1', report.checkpoint]]), [report]);
   assert.match(home, /href="\/reports\/hort-b1.json"/);
@@ -114,5 +120,9 @@ test('els informes del dashboard són navegables i mantenen la revisió docent',
   assert.match(detail, /Obrir esta versió a GitHub/);
   assert.match(detail, /Descarregar JSON/);
   assert.match(detail, /RA1.c/);
+  assert.match(detail, /Traça temporal i seqüència/);
+  assert.match(detail, /Completa el dossier #12/);
+  assert.match(detail, /Dia més actiu/);
+  assert.match(detail, /indicis per reconstruir el procés/);
   assert.match(detail, /no acredita assoliments ni assigna qualificacions/);
 });

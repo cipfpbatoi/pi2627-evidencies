@@ -95,8 +95,10 @@ L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interf
 - retirar un projecte del registre i, amb una confirmació explícita separada, eliminar també el repositori de GitHub;
 - seleccionar un punt de control i una referència immutable;
 - analitzar directament a GitHub el repositori registrat, sense clonar-lo ni modificar-lo;
-- consultar les comprovacions, els avisos, els bloquejos i els RA/CA candidats;
+- consultar les comprovacions, els avisos, els bloquejos, els RA/CA candidats i la traça temporal del tram;
 - obrir en GitHub el commit analitzat i descarregar l'informe JSON.
+
+La traça temporal mostra els commits posteriors a l'etiqueta del control anterior quan eixa referència existix. Inclou dies actius, interval, buit màxim, concentració, identitats Git, missatges, referències a issues i àrees suggerides a partir dels missatges. Són senyals per orientar la revisió docent: no es convertixen en punts, no demostren autoria i no permeten decidir automàticament si la seqüència és coherent.
 
 El dashboard llig el repositori registrat directament des de GitHub. `GITHUB_TOKEN` ha de tindre accés de lectura de continguts als repositoris privats; la referència indicada es resol a un commit i l'informe conserva eixe hash. L'usuari del servei només necessita escriptura en `course/projects.json` i `tmp/pi/`; no cal preparar clons locals dels projectes. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
 

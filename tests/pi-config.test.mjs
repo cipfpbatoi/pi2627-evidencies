@@ -11,4 +11,6 @@ test('el punt de control diferencia formació i revisió docent', () => {
   const base = { id: 'b1-dossier-0', name: 'Dossier 0', phase: 'reactivacio', assessment: 'formative', required_files: [], required_globs: [], candidate_ra_ca: [] };
   assert.deepEqual(validateCheckpoint(base), []);
   assert.ok(validateCheckpoint({ ...base, assessment: 'automatic_grade' }).includes('assessment invàlid'));
+  assert.deepEqual(validateCheckpoint({ ...base, baseline_ref: 'dossier-0-v1.0' }), []);
+  assert.ok(validateCheckpoint({ ...base, baseline_ref: '' }).includes('baseline_ref ha de ser una referència no buida'));
 });

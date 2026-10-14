@@ -3,6 +3,7 @@
   "name": "Bloc 5 — Prototip validat",
   "phase": "execucio-seguiment",
   "assessment": "teacher_review",
+  "baseline_ref": "pla-v1.0",
   "required_files": [
     "project.json",
     "prototip/README.md",

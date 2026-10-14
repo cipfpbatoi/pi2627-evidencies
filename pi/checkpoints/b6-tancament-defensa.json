@@ -3,6 +3,7 @@
   "name": "Bloc 6 — Tancament i defensa",
   "phase": "tancament-defensa",
   "assessment": "teacher_review",
+  "baseline_ref": "prototip-v1.0",
   "required_files": [
     "project.json",
     "docs/05-tancament/memoria.md",

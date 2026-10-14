@@ -3,6 +3,7 @@
   "name": "Bloc 4 — Pla del projecte",
   "phase": "planificacio-execucio",
   "assessment": "teacher_review",
+  "baseline_ref": "dossier-2-v1.0",
   "required_files": [
     "project.json",
     "docs/03-planificacio/pla-projecte.md",

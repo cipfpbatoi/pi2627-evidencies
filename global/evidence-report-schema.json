@@ -3,9 +3,9 @@
   "title": "Informe d'evidències del Projecte Intermodular",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "generated_at", "project", "checkpoint", "version", "status", "checks", "candidate_evidence", "warnings", "blocking_flags", "teacher_review_required", "qualification"],
+  "required": ["schema_version", "generated_at", "project", "checkpoint", "version", "status", "checks", "candidate_evidence", "process", "warnings", "blocking_flags", "teacher_review_required", "qualification"],
   "properties": {
-    "schema_version": { "const": 1 },
+    "schema_version": { "const": 2 },
     "generated_at": { "type": "string" },
     "project": {
       "type": "object", "additionalProperties": false,
@@ -32,6 +32,20 @@
     "status": { "enum": ["complete", "complete_with_warnings", "incomplete"] },
     "checks": { "type": "array", "items": { "type": "object" } },
     "candidate_evidence": { "type": "array", "items": { "type": "object" } },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "summary", "daily_activity", "areas", "timeline", "observations", "interpretation_required"],
+      "properties": {
+        "scope": { "type": "object" },
+        "summary": { "type": "object" },
+        "daily_activity": { "type": "array", "items": { "type": "object" } },
+        "areas": { "type": "array", "items": { "type": "object" } },
+        "timeline": { "type": "array", "items": { "type": "object" } },
+        "observations": { "type": "array", "items": { "type": "string" } },
+        "interpretation_required": { "const": true }
+      }
+    },
     "warnings": { "type": "array", "items": { "type": "string" } },
     "blocking_flags": { "type": "array", "items": { "type": "string" } },
     "teacher_review_required": { "const": true },

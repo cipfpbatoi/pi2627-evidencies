@@ -20,7 +20,24 @@ async function request(url, token, fetchImpl) {
   return response.json();
 }
 
-export async function githubSnapshot({ repository, ref, token, fetchImpl = fetch }) {
+function commitRecord(item) {
+  return {
+    commit: item.sha,
+    committed_at: item.commit?.committer?.date || item.commit?.author?.date,
+    author: item.author?.login || item.commit?.author?.name || 'No identificat',
+    message: item.commit?.message || ''
+  };
+}
+
+async function availableHistory(repository, commit, token, fetchImpl) {
+  const commits = await request(endpoint(repository, `/commits?sha=${encodeURIComponent(commit)}&per_page=100`), token, fetchImpl);
+  return {
+    history: (Array.isArray(commits) ? commits : []).map(commitRecord).reverse(),
+    historyTruncated: Array.isArray(commits) && commits.length === 100
+  };
+}
+
+export async function githubSnapshot({ repository, ref, baselineRef = null, token, fetchImpl = fetch }) {
   if (!token) throw new Error('Falta GITHUB_TOKEN per llegir el repositori de GitHub.');
   const commit = await request(endpoint(repository, `/commits/${encodeURIComponent(ref)}`), token, fetchImpl);
   const sha = commit.sha;
@@ -36,5 +53,33 @@ export async function githubSnapshot({ repository, ref, token, fetchImpl = fetch
     const blob = await request(endpoint(repository, `/git/blobs/${encodeURIComponent(projectEntry.sha)}`), token, fetchImpl);
     if (blob.encoding === 'base64' && typeof blob.content === 'string') projectFile = Buffer.from(blob.content, 'base64').toString('utf8');
   }
-  return { commit: sha, files, projectFile };
+
+  let history;
+  let historyTruncated;
+  let baseline = null;
+  if (baselineRef) {
+    let baselineCommit = null;
+    try {
+      baselineCommit = await request(endpoint(repository, `/commits/${encodeURIComponent(baselineRef)}`), token, fetchImpl);
+    } catch {
+      baseline = { requested_ref: baselineRef, commit: null, status: 'missing', ahead_by: null, behind_by: null };
+    }
+    if (baselineCommit) {
+      const compare = await request(endpoint(repository, `/compare/${encodeURIComponent(baselineCommit.sha)}...${encodeURIComponent(sha)}`), token, fetchImpl);
+      history = (Array.isArray(compare.commits) ? compare.commits : []).map(commitRecord);
+      historyTruncated = Number(compare.total_commits || 0) > history.length;
+      baseline = {
+        requested_ref: baselineRef,
+        commit: baselineCommit.sha,
+        status: compare.status || 'unknown',
+        ahead_by: Number(compare.ahead_by || 0),
+        behind_by: Number(compare.behind_by || 0)
+      };
+    } else {
+      ({ history, historyTruncated } = await availableHistory(repository, sha, token, fetchImpl));
+    }
+  } else {
+    ({ history, historyTruncated } = await availableHistory(repository, sha, token, fetchImpl));
+  }
+  return { commit: sha, files, projectFile, history, historyTruncated, baseline };
 }

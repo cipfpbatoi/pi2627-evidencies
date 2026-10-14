@@ -11,7 +11,8 @@ pi/checkpoints/*.json
   -> fitxers, evidències i RA/CA candidats
 repositori del projecte + release/commit
   -> recopilador
-  -> informe JSON immutable
+  -> fitxers + historial delimitat pel control anterior
+  -> informe JSON immutable amb evidències i indicis de procés
   -> revisió del professorat
   -> Aules
 ```
@@ -22,8 +23,11 @@ Entitats conceptuals mínimes:
 - `checkpoint`: fase i evidències esperades;
 - `evaluation_run`: projecte, punt de control i commit;
 - `evidence_report`: comprovacions, avisos i evidències candidates.
+- `process`: cronologia, distribució temporal i àrees orientatives deduïdes dels missatges dels commits.
 
 No formen part del nucli `student`, `team`, `custody` ni `grade`. Els membres declarats poden aparéixer dins de les evidències del repositori, però l'atribució oficial es resol en Aules.
+
+La traça temporal tampoc incorpora una puntuació de commits. El recompte, els dies actius, els buits i els comptes Git són senyals per dirigir la revisió. L'aplicatiu no pot determinar per si sol si la seqüència és pedagògicament coherent, si un canvi concentrat estava justificat o si l'autoria tècnica coincidix amb l'aprenentatge individual.
 
 La resta d'esta pàgina descriu l'arquitectura anterior de DWES, conservada temporalment.
 
