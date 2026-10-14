@@ -19,9 +19,12 @@ test('el punt de control diferencia formació i revisió docent', () => {
   assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a', 'RA1.a'] }).includes('candidate_ra_ca conté duplicats'));
 });
 
-test('el Bloc 2 observa els CA dels dos instruments oficials de RA1', async () => {
+test('el Bloc 2 només proposa CA sustentats per les evidències demanades', async () => {
   const { checkpoints } = await loadConfiguration(process.cwd());
-  assert.deepEqual(checkpoints.get('b2-dossier-1').candidate_ra_ca, [
-    'RA1.a', 'RA1.b', 'RA1.c', 'RA1.d', 'RA1.e', 'RA1.f', 'RA1.g', 'RA1.h', 'RA1.i'
+  const candidateCa = checkpoints.get('b2-dossier-1').candidate_ra_ca;
+  assert.deepEqual(candidateCa, [
+    'RA1.c', 'RA1.e', 'RA1.f',
+    'RA2.a', 'RA2.b', 'RA2.c', 'RA2.d', 'RA2.e', 'RA2.i'
   ]);
+  assert.deepEqual(candidateCa.filter((ca) => ['RA1.a', 'RA1.b', 'RA1.d', 'RA1.g', 'RA1.h', 'RA1.i'].includes(ca)), []);
 });
