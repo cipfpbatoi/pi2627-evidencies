@@ -198,7 +198,7 @@ export function validateModelProposal(proposal, rubric, packet) {
       if (!available.get(evidence.path).includes(evidence.excerpt)) throw new Error(`El fragment citat en ${criterion.id} no és literal en ${evidence.path}.`);
     }
     for (const value of [...item.missing, ...item.observation_focus, ...item.orientation_questions]) shortText(value, `un element de ${criterion.id}`, 500);
-    if (criterion.source === 'mixed' && (!item.observation_focus.length || !item.orientation_questions.length)) throw new Error(`El criteri mixt ${criterion.id} necessita orientació per al contrast.`);
+    if (['mixed', 'defense'].includes(criterion.source) && (!item.observation_focus.length || !item.orientation_questions.length)) throw new Error(`El criteri ${criterion.id} necessita orientació per al contrast o la defensa.`);
   }
   return proposal;
 }

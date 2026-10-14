@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "id": "b2-proposta-defensa",
+  "checkpoint_id": "b2-dossier-1",
+  "instrument": "PR-Q.2.1.x + DO-Q.2.2.x",
+  "name": "Bloc 2 — Dossier 1, presentació i validació",
+  "criteria": [
+    {
+      "id": "researched-need-evidence",
+      "title": "Necessitat investigada i evidències",
+      "source": "deliverable",
+      "ra_ca": ["RA1.c", "RA2.a"],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Diferencia fets, hipòtesis i limitacions; contrasta fonts o mètodes i explica què podria canviar la selecció.",
+        "3": "Descriu una necessitat concreta, les persones afectades i evidències contrastables, amb les limitacions principals.",
+        "2": "La necessitat és plausible, però depén d'una evidència feble, conserva supòsits importants o es formula parcialment com una solució.",
+        "1": "Es reduïx a «falta una aplicació», usa opinions sense contrast o no identifica persones ni efectes.",
+        "N": "No hi ha investigació localitzable."
+      }
+    },
+    {
+      "id": "differentiated-alternatives",
+      "title": "Alternatives diferenciades",
+      "source": "deliverable",
+      "ra_ca": ["RA1.e"],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Compara respostes realment diferents —inclosa l'adaptació o una opció de baixa tecnologia— i explicita valor, riscos i compensacions.",
+        "3": "Presenta almenys tres alternatives diferents relacionades amb la necessitat, les persones beneficiàries i una possible validació.",
+        "2": "Les opcions varien poc, estan incompletes o alguna no respon clarament a la necessitat.",
+        "1": "Les alternatives són la mateixa solució amb canvis de tecnologia o no guarden relació amb el problema.",
+        "N": "No s'han presentat les alternatives demanades."
+      }
+    },
+    {
+      "id": "criteria-comparison-selection",
+      "title": "Criteris, comparació i selecció",
+      "source": "deliverable",
+      "ra_ca": ["RA1.e"],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Definix criteris abans de decidir, els justifica amb evidències, prova la sensibilitat i reconeix quan la decisió és fràgil.",
+        "3": "Compara les alternatives amb criteris comprensibles i justifica la proposta seleccionada.",
+        "2": "Hi ha comparació, però alguns criteris, puntuacions o justificacions són arbitraris o incomplets.",
+        "1": "La conclusió estava decidida d'entrada o una suma de punts substituïx la justificació.",
+        "N": "No hi ha comparació o selecció localitzable."
+      }
+    },
+    {
+      "id": "proposal-prototype-scope",
+      "title": "Proposta, prototip i abast",
+      "source": "deliverable",
+      "ra_ca": ["RA1.f", "RA2.c", "RA2.d", "RA2.i"],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Traça necessitat, proposta, recorregut, característiques, exclusions i validació; justifica les compensacions d'abast.",
+        "3": "Definix una proposta coherent, un recorregut demostrable, inclusions, exclusions i criteris inicials d'èxit.",
+        "2": "La proposta és comprensible, però part de l'abast, les característiques o la validació no deriva clarament de la necessitat.",
+        "1": "Presenta funcionalitats inconnexes, un abast il·limitat o un prototip que no permet validar la proposta.",
+        "N": "No hi ha proposta o abast localitzable."
+      }
+    },
+    {
+      "id": "preliminary-viability",
+      "title": "Viabilitat preliminar i qüestions pendents",
+      "source": "deliverable",
+      "ra_ca": ["RA2.b", "RA2.e"],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Relaciona dimensions tècniques, temporals, econòmiques, legals i d'ús amb evidències, incerteses i proves prioritzades.",
+        "3": "Identifica les principals incerteses, riscos o costos i indica quina informació o prova falta.",
+        "2": "Reconeix alguns condicionants, però sense evidència, prioritat o acció clara.",
+        "1": "Afirma que la proposta és viable sense analitzar condicionants rellevants.",
+        "N": "No hi ha anàlisi preliminar."
+      }
+    },
+    {
+      "id": "traceability-versions-sources-ai",
+      "title": "Traçabilitat, versions, fonts i ús d'IA",
+      "source": "deliverable",
+      "ra_ca": [],
+      "evidence": ["docs/01-proposta/dossier-1.md", "docs/00-control/fonts-ia.md"],
+      "descriptors": {
+        "4": "Les decisions es poden reconstruir des de fonts, versions i canvis; l'ús d'IA està declarat i verificat.",
+        "3": "Les fonts, versions i usos d'IA són identificables i permeten entendre l'origen de les decisions principals.",
+        "2": "Hi ha registre, però és incomplet, ambigu o no permet verificar alguna decisió important.",
+        "1": "Falten fonts essencials, s'oculta l'ús d'IA o la versió no és identificable.",
+        "N": "No hi ha registre localitzable."
+      }
+    },
+    {
+      "id": "organization-authorship-individual-evidence",
+      "title": "Organització, autoria i evidència individual",
+      "source": "deliverable",
+      "ra_ca": [],
+      "evidence": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+      "descriptors": {
+        "4": "Les responsabilitats i aportacions són traçables; cada membre explica les decisions globals i diferencia la seua contribució.",
+        "3": "El repartiment i les aportacions individuals són identificables i coherents amb les evidències.",
+        "2": "L'autoria és parcial, depén d'afirmacions genèriques o mostra una comprensió desigual no aclarida.",
+        "1": "No es pot atribuir el treball o una persona no pot explicar les decisions en què figura.",
+        "N": "No hi ha evidència individual localitzable."
+      }
+    },
+    {
+      "id": "review-teacher-decision-adjustments",
+      "title": "Revisió, decisió docent i ajustos",
+      "source": "deliverable",
+      "ra_ca": [],
+      "evidence": ["docs/01-proposta/dossier-1.md"],
+      "descriptors": {
+        "4": "Contrasta observacions, justifica què accepta o rebutja i registra canvis, responsables, evidències i revisió.",
+        "3": "Registra la revisió, la decisió docent i els ajustos acordats de manera verificable.",
+        "2": "La revisió o els ajustos apareixen, però falten justificacions, responsables o seguiment.",
+        "1": "S'ignoren observacions o es reescriu la proposta sense conservar la decisió i els canvis.",
+        "N": "No hi ha registre de revisió."
+      }
+    },
+    {
+      "id": "defense-proposal-synthesis",
+      "title": "Síntesi traçable de la proposta",
+      "source": "defense",
+      "ra_ca": ["RA1.c", "RA1.e", "RA1.f"],
+      "evidence": [],
+      "descriptors": {
+        "4": "Connecta evidència, necessitat, alternativa, abast i validació amb una síntesi precisa i adaptada al temps.",
+        "3": "Presenta de manera coherent la necessitat, la selecció i el prototip proposat.",
+        "2": "Omet alguna connexió important o descriu parts del dossier sense construir una explicació global.",
+        "1": "La presentació és una llista de funcionalitats o afirmacions sense evidència ni fil conductor.",
+        "N": "No s'ha realitzat la intervenció."
+      }
+    },
+    {
+      "id": "defense-evidence-limitations",
+      "title": "Defensa de les evidències i les limitacions",
+      "source": "defense",
+      "ra_ca": ["RA1.c"],
+      "evidence": [],
+      "descriptors": {
+        "4": "Interpreta les fonts, distingix fets i hipòtesis i explica què faria canviar la proposta.",
+        "3": "Justifica la necessitat amb evidències i reconeix les limitacions principals.",
+        "2": "Cita informació, però li costa interpretar-la o reconéixer-ne els límits.",
+        "1": "Inventa dades, presenta opinions com a fets o no pot localitzar l'evidència.",
+        "N": "No s'ha pogut observar."
+      }
+    },
+    {
+      "id": "defense-comparison-decision",
+      "title": "Defensa de la comparació i la decisió",
+      "source": "defense",
+      "ra_ca": ["RA1.e"],
+      "evidence": [],
+      "descriptors": {
+        "4": "Explica compensacions, alternatives descartades i fragilitat de la selecció davant canvis raonables.",
+        "3": "Justifica per què la proposta respon millor als criteris acordats.",
+        "2": "Recorda la decisió, però no pot justificar alguns criteris o descartes.",
+        "1": "Defén una preferència tecnològica sense relacionar-la amb la necessitat.",
+        "N": "No s'ha pogut observar."
+      }
+    },
+    {
+      "id": "defense-scope-risks-validation",
+      "title": "Defensa de l'abast, els riscos i la validació",
+      "source": "defense",
+      "ra_ca": ["RA1.f"],
+      "evidence": [],
+      "descriptors": {
+        "4": "Relaciona exclusions, prova prioritària, riscos i persones o casos de validació, i proposa ajustos coherents.",
+        "3": "Explica el recorregut del prototip, els límits i com es podria validar.",
+        "2": "L'abast és comprensible, però queden contradiccions o riscos sense resposta.",
+        "1": "No distingix producte final i prototip o no pot explicar què es validarà.",
+        "N": "No s'ha pogut observar."
+      }
+    },
+    {
+      "id": "defense-individual-understanding",
+      "title": "Comprensió i aportació individual",
+      "source": "defense",
+      "ra_ca": [],
+      "evidence": [],
+      "descriptors": {
+        "4": "Respon amb autonomia, relaciona la seua aportació amb decisions globals i reconeix desacords o canvis.",
+        "3": "Explica una aportació verificable i les decisions essencials de l'equip.",
+        "2": "La comprensió és fragmentària o l'aportació no queda prou localitzada.",
+        "1": "Es limita a llegir, desconeix decisions bàsiques o s'atribuïx treball no verificable.",
+        "N": "No s'ha pogut observar."
+      }
+    },
+    {
+      "id": "defense-questions-pending",
+      "title": "Resposta a preguntes i registre de pendents",
+      "source": "defense",
+      "ra_ca": [],
+      "evidence": [],
+      "descriptors": {
+        "4": "Raona davant preguntes noves, reconeix allò que no sap i formula un pendent verificable.",
+        "3": "Respon coherentment o registra com comprovarà una qüestió no resolta.",
+        "2": "Dona respostes parcials o deixa pendents sense responsable, evidència o revisió.",
+        "1": "Improvisa dades o evita les preguntes sense registrar què falta.",
+        "N": "No s'ha pogut observar."
+      }
+    }
+  ]
+}

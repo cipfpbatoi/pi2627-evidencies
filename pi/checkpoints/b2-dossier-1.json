@@ -3,6 +3,7 @@
   "name": "Bloc 2 — Proposta de projecte",
   "phase": "proposta",
   "assessment": "teacher_review",
+  "rubric_id": "b2-proposta-defensa",
   "required_files": ["project.json", "docs/01-proposta/dossier-1.md", "docs/00-control/fonts-ia.md"],
   "required_globs": ["evidencies/alumnat/*.md"],
   "candidate_ra_ca": ["RA1.c", "RA1.e", "RA1.f", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.i"],

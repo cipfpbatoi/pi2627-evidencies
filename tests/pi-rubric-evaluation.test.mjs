@@ -36,8 +36,8 @@ function proposalFor(rubric, packet) {
         reason: criterion.source === 'mixed' ? 'La traça documental és orientativa i necessita contrast.' : 'El producte respon de manera suficient al descriptor.',
         evidence: selected ? [{ path: selected, location: 'apartat de prova', excerpt: `Evidència literal de ${selected}` }] : [],
         missing: [],
-        observation_focus: criterion.source === 'mixed' ? ['Confirmar autoria i comprensió.'] : [],
-        orientation_questions: criterion.source === 'mixed' ? ['Quina decisió pròpia pots localitzar i explicar?'] : []
+        observation_focus: ['mixed', 'defense'].includes(criterion.source) ? ['Confirmar autoria, comprensió o actuació observable.'] : [],
+        orientation_questions: ['mixed', 'defense'].includes(criterion.source) ? ['Quina decisió pròpia pots localitzar i explicar?'] : []
       };
     })
   };
@@ -50,6 +50,42 @@ test('la rúbrica automatitzable del Bloc 3 conserva huit entregables i un crite
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'deliverable').length, 8);
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'mixed').length, 1);
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'defense').length, 0);
+});
+
+test('la rúbrica executable del Bloc 2 separa huit entregables i sis criteris de defensa', async () => {
+  const { checkpoints, rubrics } = await loadConfiguration(process.cwd());
+  assert.equal(checkpoints.get('b2-dossier-1').rubric_id, 'b2-proposta-defensa');
+  const rubric = rubrics.get('b2-proposta-defensa');
+  assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'deliverable').length, 8);
+  assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'mixed').length, 0);
+  assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'defense').length, 6);
+  assert.deepEqual(rubric.criteria.find((criterion) => criterion.id === 'traceability-versions-sources-ai').ra_ca, []);
+});
+
+test('el Bloc 2 proposa només els nivells documentals i prepara la defensa sense qualificar-la', async () => {
+  const { rubrics } = await loadConfiguration(process.cwd());
+  const rubric = rubrics.get('b2-proposta-defensa');
+  const block2Report = {
+    ...report,
+    checkpoint: { id: 'b2-dossier-1', name: 'Bloc 2', rubric_id: 'b2-proposta-defensa' },
+    version: { requested_ref: 'dossier-1-v1.0', commit },
+    checks: [
+      { evidence: ['project.json'] },
+      { evidence: ['docs/01-proposta/dossier-1.md'] },
+      { evidence: ['docs/00-control/fonts-ia.md'] },
+      { evidence: ['evidencies/alumnat/anna-puig.md'] }
+    ]
+  };
+  const packet = await buildEvidencePacket(block2Report, rubric, async (file) => `Evidència literal de ${file}\n`);
+  const assessment = buildRubricAssessment(block2Report, rubric, proposalFor(rubric, packet), packet, '2026-10-14T20:00:00Z');
+  assert.equal(assessment.criteria.filter((criterion) => criterion.status === 'proposed').length, 8);
+  assert.equal(assessment.criteria.filter((criterion) => criterion.status === 'pending_observation').length, 6);
+  for (const criterion of assessment.criteria.filter((item) => item.source === 'defense')) {
+    assert.equal(criterion.document_assessment.level, null);
+    assert.equal(criterion.document_assessment.confidence, null);
+    assert.ok(criterion.observation_guide.questions.length);
+  }
+  assert.equal(assessment.qualification, null);
 });
 
 test('genera nivells documentals i deixa el criteri mixt pendent de contrast', async () => {

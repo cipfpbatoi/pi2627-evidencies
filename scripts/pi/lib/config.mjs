@@ -65,7 +65,7 @@ export function validateRubric(rubric) {
       else ids.add(criterion.id);
       if (!String(criterion?.title || '').trim()) errors.push(`${prefix}: falta el títol`);
       if (!['deliverable', 'mixed', 'defense'].includes(criterion?.source)) errors.push(`${prefix}: source invàlid`);
-      if (!Array.isArray(criterion?.ra_ca) || !criterion.ra_ca.length || criterion.ra_ca.some((item) => !/^RA[1-4]\.[a-i]$/.test(String(item)))) errors.push(`${prefix}: ra_ca invàlid`);
+      if (!Array.isArray(criterion?.ra_ca) || criterion.ra_ca.some((item) => !/^RA[1-4]\.[a-i]$/.test(String(item)))) errors.push(`${prefix}: ra_ca invàlid`);
       if (!Array.isArray(criterion?.evidence) || (criterion.source !== 'defense' && !criterion.evidence.length) || criterion.evidence.some((item) => !String(item || '').trim())) errors.push(`${prefix}: evidence invàlid`);
       const descriptorKeys = Object.keys(criterion?.descriptors || {}).sort();
       if (descriptorKeys.join(',') !== '1,2,3,4,N' || descriptorKeys.some((key) => !String(criterion.descriptors[key] || '').trim())) errors.push(`${prefix}: falten descriptors 4, 3, 2, 1 o N`);

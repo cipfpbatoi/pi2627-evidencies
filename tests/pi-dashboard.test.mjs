@@ -160,5 +160,32 @@ test('mostra la proposta documental i deixa el criteri mixt pendent de defensa',
   assert.match(html, /Mixta/);
   assert.match(html, /82 %/);
   assert.match(html, /Quina decisió pròpia pots explicar/);
-  assert.match(html, /no es tanquen fins a observar la defensa/);
+  assert.match(html, /no es tanquen fins al contrast/);
+});
+
+test('manté els criteris del Bloc 2 pendents fins a observar la defensa', () => {
+  const commit = 'b'.repeat(40);
+  const report = {
+    filename: `hort-b2-dossier-1-${commit}.json`,
+    project: { id: 'hort', name: 'Hort urbà', repository: 'org/hort' },
+    checkpoint: { id: 'b2-dossier-1', name: 'Bloc 2', rubric_id: 'b2-proposta-defensa' },
+    version: { requested_ref: 'dossier-1-v1.0', commit },
+    status: 'complete', checks: [], warnings: [], blocking_flags: [], candidate_evidence: [], process: null
+  };
+  const assessment = {
+    generated_at: '2026-10-14T20:00:00Z',
+    rubric: { id: 'b2-proposta-defensa', instrument: 'PR-Q.2.1.x + DO-Q.2.2.x', name: 'Bloc 2' },
+    criteria: [{
+      criterion_id: 'defense-comparison-decision', title: 'Defensa de la comparació i la decisió',
+      source: 'defense', status: 'pending_observation',
+      document_assessment: { level: null, confidence: null, reason: 'Requerix observació directa.', evidence: [], missing: [] },
+      observation_guide: { focus: ['Explicar els descartes.'], questions: ['Què faria canviar la selecció?'] },
+      teacher_decision: null
+    }]
+  };
+  const html = renderReport(report, undefined, '', assessment, false);
+  assert.match(html, /Actuació o defensa/);
+  assert.match(html, /pending_observation/);
+  assert.match(html, /Què faria canviar la selecció/);
+  assert.match(html, /queden pendents i sense nivell/);
 });

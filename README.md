@@ -58,10 +58,11 @@ Els esborranys es guarden en `reviews/pi/`, fora de Git, i es poden exportar en 
 
 ### Pilot d'avaluació assistida de la rúbrica
 
-El Bloc 3 incorpora una primera rúbrica executable en `pi/rubrics/b3-dossier-2.json`. Des de l'informe del punt de control, el dashboard pot llegir els fitxers previstos en el commit immutable i generar una proposta provisional:
+Els blocs 2 i 3 incorporen rúbriques executables en `pi/rubrics/`. Des de l'informe del punt de control, el dashboard pot llegir els fitxers previstos en el commit immutable i generar una proposta provisional:
 
 - nivell documental `4/3/2/1/N`, confiança, justificació i evidència literal per als criteris entregables;
 - nivell només orientatiu, aspectes pendents i preguntes per al criteri mixt;
+- estat pendent i guia d'observació, sense nivell documental, per als criteris exclusius de defensa;
 - `qualification: null`, `teacher_review_required: true` i cap atribució individual automàtica.
 
 Cada cita ha de ser un fragment literal d'un fitxer permés per al criteri; les cites inventades o les rutes alienes es rebutgen. Els documents de l'alumnat es tracten com a evidència no fiable, mai com a instruccions per al model. Els enllaços externs que no formen part del paquet llegit queden declarats com a límit.
@@ -70,7 +71,7 @@ Configureu `OPENAI_API_KEY`, `GITHUB_TOKEN` i, opcionalment, `OPENAI_PI_MODEL`. 
 
 ```bash
 npm run rubric:evaluate -- \
-  --input tmp/pi/hort-urba-b3-dossier-2-<commit>.json \
+  --input tmp/pi/hort-urba-b2-dossier-1-<commit>.json \
   --github true
 ```
 
