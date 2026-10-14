@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateProject, validateCheckpoint } from '../scripts/pi/lib/config.mjs';
+import { loadConfiguration, validateProject, validateCheckpoint } from '../scripts/pi/lib/config.mjs';
 
 test('el projecte requerix identificador, nom i repositori', () => {
   assert.deepEqual(validateProject({ id: 'hort-urba', name: 'Hort urbà', repository: 'org/hort-urba' }), []);
@@ -17,4 +17,11 @@ test('el punt de control diferencia formació i revisió docent', () => {
   assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a'], evidence_by_ra_ca: {} }).some((error) => error.includes('RA1.a')));
   assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA5.z'] }).includes('candidate_ra_ca conté un codi invàlid'));
   assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a', 'RA1.a'] }).includes('candidate_ra_ca conté duplicats'));
+});
+
+test('el Bloc 2 observa els CA dels dos instruments oficials de RA1', async () => {
+  const { checkpoints } = await loadConfiguration(process.cwd());
+  assert.deepEqual(checkpoints.get('b2-dossier-1').candidate_ra_ca, [
+    'RA1.a', 'RA1.b', 'RA1.c', 'RA1.d', 'RA1.e', 'RA1.f', 'RA1.g', 'RA1.h', 'RA1.i'
+  ]);
 });
