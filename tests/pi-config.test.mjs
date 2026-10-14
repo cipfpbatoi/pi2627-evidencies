@@ -38,3 +38,13 @@ test('el Bloc 3 no proposa finançament si el Dossier 2 no el demana', async () 
   ]);
   assert.equal(candidateCa.includes('RA2.g'), false);
 });
+
+test('el Bloc 4 proposa només els CA sustentats pel pla demanat', async () => {
+  const { checkpoints } = await loadConfiguration(process.cwd());
+  const candidateCa = checkpoints.get('b4-pla-projecte').candidate_ra_ca;
+  assert.deepEqual(candidateCa, [
+    'RA2.g',
+    'RA3.a', 'RA3.b', 'RA3.c', 'RA3.d', 'RA3.e', 'RA3.f', 'RA3.g', 'RA3.h',
+    'RA4.a', 'RA4.b', 'RA4.c', 'RA4.d', 'RA4.e', 'RA4.f', 'RA4.g'
+  ]);
+});

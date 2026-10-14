@@ -14,6 +14,7 @@
   ],
   "required_globs": ["evidencies/alumnat/*.md", "traspassos/*.md"],
   "candidate_ra_ca": [
+    "RA2.g",
     "RA3.a",
     "RA3.b",
     "RA3.c",
@@ -31,6 +32,7 @@
     "RA4.g"
   ],
   "evidence_by_ra_ca": {
+    "RA2.g": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
     "RA3.a": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
     "RA3.b": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
     "RA3.c": ["docs/03-planificacio/pla-projecte.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
