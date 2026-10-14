@@ -44,7 +44,39 @@ export function validateCheckpoint(checkpoint) {
     }
   }
   if (checkpoint?.baseline_ref !== undefined && !String(checkpoint.baseline_ref || '').trim()) errors.push('baseline_ref ha de ser una referència no buida');
+  if (checkpoint?.rubric_id !== undefined && !validId(checkpoint.rubric_id)) errors.push('rubric_id invàlid');
   return errors;
+}
+
+export function validateRubric(rubric) {
+  const errors = [];
+  if (rubric?.schema_version !== 1) errors.push('schema_version ha de ser 1');
+  if (!validId(rubric?.id)) errors.push('identificador invàlid');
+  if (!validId(rubric?.checkpoint_id)) errors.push('checkpoint_id invàlid');
+  if (!String(rubric?.instrument || '').trim()) errors.push('falta l’instrument');
+  if (!String(rubric?.name || '').trim()) errors.push('falta el nom');
+  if (!Array.isArray(rubric?.criteria) || !rubric.criteria.length) errors.push('criteria ha de ser una llista no buida');
+  else {
+    const ids = new Set();
+    for (const criterion of rubric.criteria) {
+      const prefix = `criteri ${criterion?.id || '(sense id)'}`;
+      if (!validId(criterion?.id)) errors.push(`${prefix}: identificador invàlid`);
+      else if (ids.has(criterion.id)) errors.push(`${prefix}: identificador duplicat`);
+      else ids.add(criterion.id);
+      if (!String(criterion?.title || '').trim()) errors.push(`${prefix}: falta el títol`);
+      if (!['deliverable', 'mixed', 'defense'].includes(criterion?.source)) errors.push(`${prefix}: source invàlid`);
+      if (!Array.isArray(criterion?.ra_ca) || !criterion.ra_ca.length || criterion.ra_ca.some((item) => !/^RA[1-4]\.[a-i]$/.test(String(item)))) errors.push(`${prefix}: ra_ca invàlid`);
+      if (!Array.isArray(criterion?.evidence) || (criterion.source !== 'defense' && !criterion.evidence.length) || criterion.evidence.some((item) => !String(item || '').trim())) errors.push(`${prefix}: evidence invàlid`);
+      const descriptorKeys = Object.keys(criterion?.descriptors || {}).sort();
+      if (descriptorKeys.join(',') !== '1,2,3,4,N' || descriptorKeys.some((key) => !String(criterion.descriptors[key] || '').trim())) errors.push(`${prefix}: falten descriptors 4, 3, 2, 1 o N`);
+    }
+  }
+  return errors;
+}
+
+async function jsonEntries(directory) {
+  try { return (await readdir(directory)).filter((entry) => entry.endsWith('.json')); }
+  catch (error) { if (error.code === 'ENOENT') return []; throw error; }
 }
 
 export async function loadConfiguration(root) {
@@ -59,13 +91,27 @@ export async function loadConfiguration(root) {
   }
   const checkpoints = new Map();
   const checkpointDir = path.join(root, 'pi/checkpoints');
-  for (const entry of await readdir(checkpointDir)) {
-    if (!entry.endsWith('.json')) continue;
+  for (const entry of await jsonEntries(checkpointDir)) {
     const checkpoint = await readJson(path.join(checkpointDir, entry));
     const errors = validateCheckpoint(checkpoint);
     if (errors.length) throw new Error(`Punt de control ${entry}: ${errors.join(', ')}.`);
     if (checkpoints.has(checkpoint.id)) throw new Error(`Punt de control duplicat: ${checkpoint.id}.`);
     checkpoints.set(checkpoint.id, checkpoint);
   }
-  return { registry, projects, checkpoints };
+  const rubrics = new Map();
+  const rubricDir = path.join(root, 'pi/rubrics');
+  for (const entry of await jsonEntries(rubricDir)) {
+    const rubric = await readJson(path.join(rubricDir, entry));
+    const errors = validateRubric(rubric);
+    if (errors.length) throw new Error(`Rúbrica ${entry}: ${errors.join(', ')}.`);
+    if (rubrics.has(rubric.id)) throw new Error(`Rúbrica duplicada: ${rubric.id}.`);
+    rubrics.set(rubric.id, rubric);
+  }
+  for (const checkpoint of checkpoints.values()) {
+    if (!checkpoint.rubric_id) continue;
+    const rubric = rubrics.get(checkpoint.rubric_id);
+    if (!rubric) throw new Error(`El punt de control ${checkpoint.id} referencia una rúbrica inexistent: ${checkpoint.rubric_id}.`);
+    if (rubric.checkpoint_id !== checkpoint.id) throw new Error(`La rúbrica ${rubric.id} no correspon al punt de control ${checkpoint.id}.`);
+  }
+  return { registry, projects, checkpoints, rubrics };
 }

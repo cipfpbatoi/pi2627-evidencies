@@ -8,6 +8,7 @@ import process from 'node:process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { loadConfiguration, validId, validateProject } from '../scripts/pi/lib/config.mjs';
+import { loadRubricAssessment, rubricAssessmentPath, rubricSourceLabel } from '../scripts/pi/lib/rubric-assessment.mjs';
 import { addReviewPerson, emptyTeacherReview, loadTeacherReview, removeReviewPerson, saveTeacherReview, teacherReviewCsv, teacherReviewSummary, updateReviewEntry } from '../scripts/pi/lib/teacher-review.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -219,7 +220,30 @@ function renderTeacherReview(report, review) {
   return `<h2 id="review">Matriu de revisió docent individual</h2><p class="notice">Esta matriu és un esborrany vinculat al commit <code>${escape(report.version.commit.slice(0, 12))}</code>. Registra evidència i abast individual, però no calcula una nota ni substituïx el registre oficial d’Aules.</p><form method="post" action="/reports/${filename}/review/people"><div class="grid"><label>Persona o identificador d’Aules<input name="person" required maxlength="120"></label><label>Funció inicial en este projecte<input name="function" maxlength="160" placeholder="Autora, planificadora, desenvolupadora…"></label></div><p><button type="submit">Preparar els CA candidats</button></p></form>${people.size ? `<h3>Estat per persona</h3><table><thead><tr><th>Persona</th><th>Pendent</th><th>D</th><th>P</th><th>S</th><th>N</th><th>Acció</th></tr></thead><tbody>${personSummary}</tbody></table><h3>Comptatge per RA, sense síntesi automàtica</h3><table><thead><tr><th>Persona</th><th>RA</th><th>CA candidats</th><th>Pendent</th><th>D</th><th>P</th><th>S</th><th>N</th></tr></thead><tbody>${raSummary}</tbody></table><p><a href="/api/reports/${filename}/review.csv">Exportar CSV</a> · <a href="/api/reports/${filename}/review.json">Exportar JSON</a></p><div style="overflow-x:auto"><table><thead><tr><th>Persona</th><th>CA</th><th>Funció</th><th>Abast</th><th>Evidència concreta</th><th>Observació</th><th>Reobservació</th><th>Acció</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p>Incorpora una persona per preparar una fila pendent per cada CA candidat d’este control.</p>'}<p class="evidence"><code>D</code>, <code>P</code>, <code>S</code> i <code>N</code> són registres professionals d’abast, no valors numèrics. El comptatge per RA no és una síntesi d’assoliment. Una evidència grupal només s’atribuïx individualment després de contrastar funció, autoria, explicació i defensa.</p>`;
 }
 
-export function renderReport(report, review = emptyTeacherReview(report), message = '') {
+export function renderRubricAssessment(report, assessment = null, evaluatorConfigured = Boolean(process.env.GITHUB_TOKEN && process.env.OPENAI_API_KEY)) {
+  if (!report.checkpoint?.rubric_id) return '';
+  const filename = encodeURIComponent(report.filename);
+  const action = `/reports/${filename}/rubric/evaluate`;
+  if (!assessment) {
+    return `<h2 id="rubric">Proposta automàtica de la rúbrica</h2><p class="notice">Este punt de control té la rúbrica <code>${escape(report.checkpoint.rubric_id)}</code> preparada per analitzar els entregables. El resultat serà provisional, quedarà vinculat a este commit i no assignarà una nota ni un assoliment individual.</p><form method="post" action="${action}">${evaluatorConfigured ? '<button type="submit">Analitzar els entregables</button>' : '<p class="notice error">Cal configurar GITHUB_TOKEN i OPENAI_API_KEY per generar la proposta.</p>'}</form>`;
+  }
+  const rows = assessment.criteria.map((criterion) => {
+    const document = criterion.document_assessment || {};
+    const level = document.level === null || document.level === undefined ? '—' : document.level;
+    const confidence = typeof document.confidence === 'number' ? `${Math.round(document.confidence * 100)} %` : '—';
+    const evidence = (document.evidence || []).map((item) => {
+      const url = evidenceUrl(report, item.path);
+      const label = `${item.path}${item.location ? ` · ${item.location}` : ''}`;
+      return `${url ? `<a href="${escape(url)}" rel="noreferrer">${escape(label)}</a>` : escape(label)}<br><span class="evidence">«${escape(item.excerpt)}»</span>`;
+    }).join('<br>') || '—';
+    const pending = [...(document.missing || []), ...(criterion.observation_guide?.focus || [])];
+    const questions = criterion.observation_guide?.questions || [];
+    return `<tr><td><strong>${escape(criterion.title)}</strong><br><code>${escape(criterion.criterion_id)}</code></td><td>${escape(rubricSourceLabel(criterion.source))}</td><td>${escape(criterion.status)}</td><td>${escape(level)}</td><td>${escape(confidence)}</td><td>${escape(document.reason || '—')}</td><td>${evidence}</td><td>${pending.length ? `<ul>${pending.map((item) => `<li>${escape(item)}</li>`).join('')}</ul>` : '—'}${questions.length ? `<strong>Preguntes:</strong><ul>${questions.map((item) => `<li>${escape(item)}</li>`).join('')}</ul>` : ''}</td></tr>`;
+  }).join('');
+  return `<h2 id="rubric">Proposta automàtica de la rúbrica</h2><p><strong>Instrument:</strong> <code>${escape(assessment.rubric.instrument)}</code> · <strong>Generada:</strong> ${escape(assessment.generated_at)} · <a href="/api/reports/${filename}/rubric.json">Descarregar JSON</a></p><p class="notice">Els nivells dels entregables són propostes documentals. En els criteris mixtos orienten la revisió, però no es tanquen fins a observar la defensa o el contrast. La proposta no calcula una nota i no atribuïx autoria individual.</p><div style="overflow-x:auto"><table><thead><tr><th>Criteri</th><th>Font</th><th>Estat</th><th>Nivell documental</th><th>Confiança</th><th>Justificació</th><th>Evidència literal</th><th>Pendent de contrast</th></tr></thead><tbody>${rows}</tbody></table></div><form method="post" action="${action}">${evaluatorConfigured ? '<button type="submit">Regenerar la proposta</button>' : '<p class="notice error">Cal configurar GITHUB_TOKEN i OPENAI_API_KEY per regenerar-la.</p>'}</form>`;
+}
+
+export function renderReport(report, review = emptyTeacherReview(report), message = '', rubricAssessment = null, evaluatorConfigured = Boolean(process.env.GITHUB_TOKEN && process.env.OPENAI_API_KEY)) {
   const checks = report.checks.map((check) => `<tr><td class="${escape(check.status)}">${escape(check.status)}</td><td><code>${escape(check.id)}</code></td><td>${escape(check.message)}</td><td class="evidence">${(check.evidence || []).map(escape).join('<br>') || '—'}</td></tr>`).join('');
   const list = (items, empty) => items?.length ? `<ul>${items.map((item) => `<li>${escape(item)}</li>`).join('')}</ul>` : `<p>${empty}</p>`;
   const process = report.process;
@@ -230,7 +254,7 @@ export function renderReport(report, review = emptyTeacherReview(report), messag
     const url = evidenceUrl(report, evidence);
     return url ? `<a href="${escape(url)}" rel="noreferrer">${escape(evidence)}</a>` : escape(evidence);
   }).join('<br>') || 'No localitzada en esta versió'}</td></tr>`).join('');
-  return layout(`Informe — ${report.project.name}`, `${message}<h1>${escape(report.project.name)}</h1><p class="lead">${escape(report.checkpoint.name)} · <code>${escape(report.version.requested_ref)}</code></p><p><strong>Estat:</strong> <span class="status-${escape(report.status)}">${escape(report.status)}</span> · <strong>Commit:</strong> <code>${escape(report.version.commit)}</code></p><p><a href="${escape(`https://github.com/${report.project.repository}/tree/${report.version.commit}`)}" rel="noreferrer">Obrir esta versió a GitHub</a> · <a href="/api/reports/${encodeURIComponent(report.filename)}">Descarregar JSON</a></p><h2>Comprovacions</h2><table><thead><tr><th>Estat</th><th>Comprovació</th><th>Resultat</th><th>Evidència</th></tr></thead><tbody>${checks}</tbody></table>${processBlock}<h2>Avisos</h2>${list(report.warnings, 'Cap avís automàtic.')}<h2>Bloquejos</h2>${list(report.blocking_flags, 'Cap bloqueig automàtic.')}<h2>RA/CA candidats i evidències localitzades</h2><table><thead><tr><th>CA</th><th>Evidències candidates</th></tr></thead><tbody>${candidateRows || '<tr><td colspan="2">No se n’han identificat.</td></tr>'}</tbody></table><p class="notice">Cal revisar qualitat, autoria, abast i defensa. Este informe no acredita assoliments ni assigna qualificacions.</p>${renderTeacherReview(report, review)}`);
+  return layout(`Informe — ${report.project.name}`, `${message}<h1>${escape(report.project.name)}</h1><p class="lead">${escape(report.checkpoint.name)} · <code>${escape(report.version.requested_ref)}</code></p><p><strong>Estat:</strong> <span class="status-${escape(report.status)}">${escape(report.status)}</span> · <strong>Commit:</strong> <code>${escape(report.version.commit)}</code></p><p><a href="${escape(`https://github.com/${report.project.repository}/tree/${report.version.commit}`)}" rel="noreferrer">Obrir esta versió a GitHub</a> · <a href="/api/reports/${encodeURIComponent(report.filename)}">Descarregar JSON</a></p><h2>Comprovacions</h2><table><thead><tr><th>Estat</th><th>Comprovació</th><th>Resultat</th><th>Evidència</th></tr></thead><tbody>${checks}</tbody></table>${processBlock}<h2>Avisos</h2>${list(report.warnings, 'Cap avís automàtic.')}<h2>Bloquejos</h2>${list(report.blocking_flags, 'Cap bloqueig automàtic.')} ${renderRubricAssessment(report, rubricAssessment, evaluatorConfigured)}<h2>RA/CA candidats i evidències localitzades</h2><table><thead><tr><th>CA</th><th>Evidències candidates</th></tr></thead><tbody>${candidateRows || '<tr><td colspan="2">No se n’han identificat.</td></tr>'}</tbody></table><p class="notice">Cal revisar qualitat, autoria, abast i defensa. Este informe no acredita assoliments ni assigna qualificacions.</p>${renderTeacherReview(report, review)}`);
 }
 
 async function readBody(request) {
@@ -473,6 +497,18 @@ export async function handle(request, response) {
       redirect(response, `/reports/${encodeURIComponent(filename)}`);
       return;
     }
+    const evaluateRubricMatch = url.pathname.match(/^\/reports\/([^/]+\.json)\/rubric\/evaluate$/);
+    if (request.method === 'POST' && evaluateRubricMatch) {
+      const report = await readReportFile(evaluateRubricMatch[1]);
+      if (!report.checkpoint?.rubric_id) throw new Error('Este punt de control no té una rúbrica automatitzable.');
+      if (!process.env.GITHUB_TOKEN) throw new Error('Falta GITHUB_TOKEN per llegir les evidències del repositori.');
+      if (!process.env.OPENAI_API_KEY) throw new Error('Falta OPENAI_API_KEY per generar la proposta de rúbrica.');
+      const inputFile = path.join(root, 'tmp/pi', report.filename);
+      const outputFile = rubricAssessmentPath(root, report);
+      await execFileAsync(process.execPath, ['scripts/pi/evaluate-rubric.mjs', '--input', inputFile, '--github', 'true', '--output', outputFile], { cwd: root, maxBuffer: 12 * 1024 * 1024 });
+      redirect(response, `/reports/${encodeURIComponent(report.filename)}?ok=${encodeURIComponent('Proposta automàtica generada per a este commit.')}#rubric`);
+      return;
+    }
     const addReviewPersonMatch = url.pathname.match(/^\/reports\/([^/]+\.json)\/review\/people$/);
     if (request.method === 'POST' && addReviewPersonMatch) {
       const report = await readReportFile(addReviewPersonMatch[1]);
@@ -514,6 +550,19 @@ export async function handle(request, response) {
       response.end(format === 'csv' ? teacherReviewCsv(review) : `${JSON.stringify(review, null, 2)}\n`);
       return;
     }
+    const rubricExportMatch = url.pathname.match(/^\/api\/reports\/([^/]+\.json)\/rubric\.json$/);
+    if (request.method === 'GET' && rubricExportMatch) {
+      const report = await readReportFile(rubricExportMatch[1]);
+      const assessment = await loadRubricAssessment(root, report);
+      if (!assessment) throw Object.assign(new Error('Encara no hi ha proposta automàtica per a este informe.'), { code: 'ENOENT' });
+      response.writeHead(200, {
+        'content-type': 'application/json; charset=utf-8',
+        'content-disposition': `attachment; filename="${report.project.id}-${report.checkpoint.id}-${report.version.commit.slice(0, 12)}-rubric.json"`,
+        'cache-control': 'no-store'
+      });
+      response.end(`${JSON.stringify(assessment, null, 2)}\n`);
+      return;
+    }
     const reportMatch = url.pathname.match(/^\/(api\/)?reports\/([^/]+\.json)$/);
     if (request.method === 'GET' && reportMatch) {
       const report = await readReportFile(reportMatch[2]);
@@ -522,7 +571,7 @@ export async function handle(request, response) {
         response.end(`${JSON.stringify(report, null, 2)}\n`);
       } else {
         response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
-        response.end(renderReport(report, await loadTeacherReview(root, report), notice(url.searchParams)));
+        response.end(renderReport(report, await loadTeacherReview(root, report), notice(url.searchParams), await loadRubricAssessment(root, report)));
       }
       return;
     }
@@ -540,7 +589,8 @@ export async function handle(request, response) {
       let location = `/?error=${encodeURIComponent(error.message)}`;
       if (reportContext) {
         try {
-          location = `/reports/${encodeURIComponent(safeReportFilename(reportContext[1]))}?error=${encodeURIComponent(error.message)}#review`;
+          const anchor = url.pathname.includes('/rubric/') ? 'rubric' : 'review';
+          location = `/reports/${encodeURIComponent(safeReportFilename(reportContext[1]))}?error=${encodeURIComponent(error.message)}#${anchor}`;
         } catch { /* conserva el retorn segur a l'inici */ }
       }
       redirect(response, location);

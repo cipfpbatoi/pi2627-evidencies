@@ -21,7 +21,8 @@
       "required": ["id", "name", "phase", "assessment"],
       "properties": {
         "id": { "type": "string" }, "name": { "type": "string" }, "phase": { "type": "string" },
-        "assessment": { "enum": ["formative", "teacher_review"] }
+        "assessment": { "enum": ["formative", "teacher_review"] },
+        "rubric_id": { "type": ["string", "null"] }
       }
     },
     "version": {

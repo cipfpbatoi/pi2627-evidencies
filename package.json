@@ -33,7 +33,8 @@
     "test:pi": "node --test tests/pi-*.test.mjs",
     "projects:register": "node scripts/pi/register-project.mjs",
     "evidence:collect": "node scripts/pi/collect-evidence.mjs",
-    "evidence:render": "node scripts/pi/render-report.mjs"
+    "evidence:render": "node scripts/pi/render-report.mjs",
+    "rubric:evaluate": "node scripts/pi/evaluate-rubric.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^9.x",

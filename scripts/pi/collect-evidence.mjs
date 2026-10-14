@@ -157,7 +157,7 @@ async function main() {
     schema_version: 2,
     generated_at: new Date().toISOString(),
     project: { id: project.id, name: project.name, repository: project.repository },
-    checkpoint: { id: checkpoint.id, name: checkpoint.name, phase: checkpoint.phase, assessment: checkpoint.assessment },
+    checkpoint: { id: checkpoint.id, name: checkpoint.name, phase: checkpoint.phase, assessment: checkpoint.assessment, rubric_id: checkpoint.rubric_id || null },
     version: { requested_ref: input.ref, commit },
     status: blockingFlags.length ? 'incomplete' : warnings.length ? 'complete_with_warnings' : 'complete',
     checks,

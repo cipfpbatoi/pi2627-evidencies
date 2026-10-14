@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "id": "b3-dossier-2",
+  "checkpoint_id": "b3-dossier-2",
+  "instrument": "PR-Q.3.1.x",
+  "name": "Bloc 3 — Dossier 2, proves i contrast individual",
+  "criteria": [
+    {
+      "id": "continuity-information",
+      "title": "Continuïtat, necessitat i informació nova",
+      "source": "deliverable",
+      "ra_ca": ["RA2.a"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "Resol o trasllada totes les condicions d'entrada, diferencia evidències i hipòtesis i explica com la informació nova modifica el disseny.",
+        "3": "Recupera la necessitat, les persones i les condicions del Dossier 1, amb fonts o evidències noves quan corresponen.",
+        "2": "El context és recognoscible, però alguna condició, font, hipòtesi o canvi queda sense tractar.",
+        "1": "Reescriu la proposta sense connectar-la amb la versió acceptada o usa afirmacions sense origen.",
+        "N": "No hi ha continuïtat o informació localitzable."
+      }
+    },
+    {
+      "id": "objectives-scope-requirements",
+      "title": "Objectius, abast i requisits",
+      "source": "deliverable",
+      "ra_ca": ["RA2.d", "RA2.i"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "Connecta objectius, criteris d'èxit, inclusions, exclusions, supòsits i requisits prioritzats; cada element té origen i prova prevista.",
+        "3": "Definix objectius observables, un abast delimitat i requisits funcionals i no funcionals prioritzats i verificables.",
+        "2": "Alguns objectius o requisits són genèrics, l'abast conserva ambigüitats o falten prioritats, origen o prova.",
+        "1": "Confón objectiu, funcionalitat i tecnologia, o presenta un abast sense límits ni criteris observables.",
+        "N": "No hi ha objectius, abast o requisits localitzables."
+      }
+    },
+    {
+      "id": "functional-data-design",
+      "title": "Disseny funcional i de dades",
+      "source": "deliverable",
+      "ra_ca": ["RA2.c", "RA2.h", "RA2.i"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "Modela recorreguts normals, alternatius i d'error, regles i casos límit; les dades tenen finalitat, relacions, accés, conservació, validacions i riscos justificats.",
+        "3": "Descriu les parts funcionals, les regles principals i un model de dades coherent amb el recorregut i els requisits.",
+        "2": "Els models permeten entendre la base, però ometen excepcions, regles, relacions o decisions rellevants sobre les dades.",
+        "1": "Els diagrames repliquen pantalles, les entitats no tenen finalitat o el model contradiu els requisits.",
+        "N": "No hi ha disseny funcional o de dades localitzable."
+      }
+    },
+    {
+      "id": "interface-early-test",
+      "title": "Interfície i prova primerenca",
+      "source": "deliverable",
+      "ra_ca": ["RA2.a", "RA2.h", "RA2.i"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "El prototip representa estats, errors, adaptabilitat i accessibilitat; la prova separa observació i interpretació i produïx canvis traçables.",
+        "3": "Presenta un prototip de baixa fidelitat coherent, prova una tasca representativa i registra resultats i decisions.",
+        "2": "El prototip o la prova existixen, però la tasca, les observacions, l'accessibilitat o els canvis estan poc definits.",
+        "1": "Es valora només l'aparença, es guia la persona participant o no es registra cap decisió a partir de la prova.",
+        "N": "No hi ha prototip o prova localitzable."
+      }
+    },
+    {
+      "id": "architecture-integrations",
+      "title": "Arquitectura, integracions i mínims dels mòduls",
+      "source": "deliverable",
+      "ra_ca": ["RA2.b", "RA2.c", "RA2.e", "RA2.h"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "Cada component respon a una necessitat i un requisit, té responsabilitat, dependències, riscos i prova prevista; les integracions i els mínims formen un recorregut assumible.",
+        "3": "El diagrama i l'explicació mostren components, dades i comunicacions coherents i justifiquen la funció dels mínims aplicables.",
+        "2": "L'arquitectura és comprensible, però alguna peça, integració, recurs o mínim no té una justificació o prova clara.",
+        "1": "Llista tecnologies o components sense responsabilitat, necessitat ni relació amb el recorregut.",
+        "N": "No hi ha arquitectura o integració dels mínims localitzable."
+      }
+    },
+    {
+      "id": "alternatives-technical-test",
+      "title": "Alternatives, prova tècnica i decisions",
+      "source": "deliverable",
+      "ra_ca": ["RA2.a", "RA2.b", "RA2.i"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md"],
+      "descriptors": {
+        "4": "Compara alternatives amb criteris i fonts, executa una prova reproduïble sobre la incertesa principal i definix conseqüències i condicions de revisió.",
+        "3": "Compara almenys una decisió rellevant, aporta evidència o prova tècnica i justifica l'opció seleccionada.",
+        "2": "Hi ha alternatives o prova, però els criteris, el resultat, la reproducció o la connexió amb la decisió són incomplets.",
+        "1": "La tecnologia estava decidida d'entrada, la prova no reduïx cap risc o la decisió no té evidència.",
+        "N": "No hi ha comparació, prova o decisió localitzable."
+      }
+    },
+    {
+      "id": "viability-resources-costs-risks",
+      "title": "Viabilitat, recursos, costos i riscos",
+      "source": "deliverable",
+      "ra_ca": ["RA2.b", "RA2.e", "RA2.f"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md"],
+      "descriptors": {
+        "4": "Integra evidències i estimacions tècniques, temporals, econòmiques, legals, operatives i d'ús; identifica recursos, costos, límits, riscos, accions i una conclusió coherent.",
+        "3": "Analitza les dimensions demanades, identifica els principals recursos i conceptes de cost i justifica si és responsable passar a planificació.",
+        "2": "L'anàlisi detecta alguns condicionants, però conté estimacions febles o omissions rellevants de recursos, costos, riscos o accions.",
+        "1": "Declara la viabilitat sense evidències, ignora límits importants o usa estimacions arbitràries.",
+        "N": "No hi ha anàlisi de viabilitat localitzable."
+      }
+    },
+    {
+      "id": "traceability-documentation-handoff",
+      "title": "Traçabilitat, documentació, revisió i traspàs",
+      "source": "deliverable",
+      "ra_ca": ["RA2.h", "RA2.i"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md"],
+      "descriptors": {
+        "4": "Les cadenes es poden seguir de necessitat a prova i risc; la documentació està versionada, incorpora la revisió i permet un traspàs amb reserves i pendents explícits.",
+        "3": "Manté cadenes completes, registra la decisió docent, els ajustos i una versió comprensible per a l'equip receptor.",
+        "2": "Hi ha documentació i traspàs, però algunes connexions, canvis, responsables o evidències no es poden reconstruir.",
+        "1": "Els documents es contradiuen, oculten pendents o exigixen explicacions informals per poder continuar.",
+        "N": "No hi ha traçabilitat o paquet de traspàs localitzable."
+      }
+    },
+    {
+      "id": "authorship-sources-ai-defense",
+      "title": "Autoria, fonts, ús d'IA i defensa individual",
+      "source": "mixed",
+      "ra_ca": ["RA2.a", "RA2.h"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/fonts-ia.md", "evidencies/alumnat/*.md"],
+      "descriptors": {
+        "4": "Cada membre defensa amb autonomia una cadena i una decisió, localitza la seua aportació, explica objeccions o canvis i verifica fonts i ús d'IA.",
+        "3": "Les aportacions, fonts i ús d'IA són identificables; cada persona explica la proposta global i una contribució verificable.",
+        "2": "L'autoria o la verificació és parcial, o la persona només explica una part aïllada sense connectar-la amb el conjunt.",
+        "1": "No es pot atribuir el treball, es limita a llegir o s'atribuïx evidència que no pot explicar.",
+        "N": "No hi ha evidència individual o no s'ha pogut realitzar el contrast."
+      }
+    }
+  ]
+}

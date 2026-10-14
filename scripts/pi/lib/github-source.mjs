@@ -20,6 +20,20 @@ async function request(url, token, fetchImpl) {
   return response.json();
 }
 
+function safeRepositoryPath(file) {
+  const value = String(file || '');
+  if (!value || value.startsWith('/') || /(^|\/)\.\.(\/|$)/.test(value) || /[\u0000-\u001f]/.test(value)) throw new Error('Ruta d’evidència invàlida.');
+  return value.split('/').map(encodeURIComponent).join('/');
+}
+
+export async function githubFileAtCommit({ repository, commit, file, token, fetchImpl = fetch }) {
+  if (!token) throw new Error('Falta GITHUB_TOKEN per llegir el repositori de GitHub.');
+  if (!/^[0-9a-f]{40}$/i.test(String(commit || ''))) throw new Error('Commit invàlid per llegir l’evidència.');
+  const payload = await request(endpoint(repository, `/contents/${safeRepositoryPath(file)}?ref=${encodeURIComponent(commit)}`), token, fetchImpl);
+  if (payload.type !== 'file' || payload.encoding !== 'base64' || typeof payload.content !== 'string') throw new Error(`GitHub no ha retornat un fitxer de text vàlid per a ${file}.`);
+  return Buffer.from(payload.content, 'base64').toString('utf8');
+}
+
 function commitRecord(item) {
   return {
     commit: item.sha,

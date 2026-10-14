@@ -3,6 +3,7 @@
   "name": "Bloc 3 — Avantprojecte",
   "phase": "disseny-viabilitat",
   "assessment": "teacher_review",
+  "rubric_id": "b3-dossier-2",
   "baseline_ref": "dossier-1-v1.0",
   "required_files": ["project.json", "docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "docs/00-control/fonts-ia.md"],
   "required_globs": ["evidencies/alumnat/*.md"],

@@ -56,6 +56,26 @@ Les files naixen com a `pending` i no es poden confirmar com a diagnòstiques, p
 
 Els esborranys es guarden en `reviews/pi/`, fora de Git, i es poden exportar en CSV o JSON. Poden contindre dades personals i observacions docents: el directori necessita permisos restringits i còpia de seguretat. Aules continua sent el registre oficial. La matriu manté `qualification: null` i no transforma `D/P/S/N` en números.
 
+### Pilot d'avaluació assistida de la rúbrica
+
+El Bloc 3 incorpora una primera rúbrica executable en `pi/rubrics/b3-dossier-2.json`. Des de l'informe del punt de control, el dashboard pot llegir els fitxers previstos en el commit immutable i generar una proposta provisional:
+
+- nivell documental `4/3/2/1/N`, confiança, justificació i evidència literal per als criteris entregables;
+- nivell només orientatiu, aspectes pendents i preguntes per al criteri mixt;
+- `qualification: null`, `teacher_review_required: true` i cap atribució individual automàtica.
+
+Cada cita ha de ser un fragment literal d'un fitxer permés per al criteri; les cites inventades o les rutes alienes es rebutgen. Els documents de l'alumnat es tracten com a evidència no fiable, mai com a instruccions per al model. Els enllaços externs que no formen part del paquet llegit queden declarats com a límit.
+
+Configureu `OPENAI_API_KEY`, `GITHUB_TOKEN` i, opcionalment, `OPENAI_PI_MODEL`. També es pot executar des del terminal:
+
+```bash
+npm run rubric:evaluate -- \
+  --input tmp/pi/hort-urba-b3-dossier-2-<commit>.json \
+  --github true
+```
+
+La proposta es guarda en `tmp/pi/rubrics/`, separada de l'informe original i de la matriu docent. Regenerar-la no modifica el repositori de l'alumnat ni crea una nota oficial.
+
 ### Dashboard
 
 ```bash

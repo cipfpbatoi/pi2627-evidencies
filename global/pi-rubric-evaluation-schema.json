@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposta d'avaluació de rúbrica del Projecte Intermodular",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "report", "rubric", "criteria", "teacher_review_required", "qualification"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string" },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "checkpoint_id", "requested_ref", "commit"],
+      "properties": {
+        "project_id": { "type": "string" },
+        "checkpoint_id": { "type": "string" },
+        "requested_ref": { "type": "string" },
+        "commit": { "type": "string" }
+      }
+    },
+    "rubric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "instrument", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "instrument": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion_id", "title", "source", "status", "document_assessment", "observation_guide", "teacher_decision"],
+        "properties": {
+          "criterion_id": { "type": "string" },
+          "title": { "type": "string" },
+          "source": { "enum": ["deliverable", "mixed", "defense"] },
+          "status": { "enum": ["proposed", "needs_observation", "pending_observation", "blocked"] },
+          "document_assessment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "confidence", "reason", "evidence", "missing"],
+            "properties": {
+              "level": { "enum": [1, 2, 3, 4, "N", null] },
+              "confidence": { "type": ["number", "null"] },
+              "reason": { "type": "string" },
+              "evidence": { "type": "array", "items": { "type": "object" } },
+              "missing": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "observation_guide": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["focus", "questions"],
+            "properties": {
+              "focus": { "type": "array", "items": { "type": "string" } },
+              "questions": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "teacher_decision": { "type": "null" }
+        }
+      }
+    },
+    "teacher_review_required": { "const": true },
+    "qualification": { "type": "null" }
+  }
+}

@@ -6,7 +6,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { githubSnapshot } from '../scripts/pi/lib/github-source.mjs';
+import { githubFileAtCommit, githubSnapshot } from '../scripts/pi/lib/github-source.mjs';
 
 const exec = promisify(execFile);
 const script = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../scripts/pi/collect-evidence.mjs');
@@ -89,4 +89,21 @@ test('delimita la cronologia de GitHub amb el punt de control anterior', async (
   assert.equal(snapshot.history.length, 2);
   assert.equal(snapshot.historyTruncated, false);
   assert.equal(requested.length, 4);
+});
+
+test('llig una evidència textual en el commit immutable de GitHub', async () => {
+  const commit = 'a'.repeat(40);
+  const requested = [];
+  const fetchImpl = async (url) => {
+    requested.push(url);
+    return new Response(JSON.stringify({
+      type: 'file',
+      encoding: 'base64',
+      content: Buffer.from('# Dossier 2\nEvidència exacta.\n').toString('base64')
+    }), { status: 200 });
+  };
+  const content = await githubFileAtCommit({ repository: 'org/hort', commit, file: 'docs/02-avantprojecte/dossier-2.md', token: 'secret', fetchImpl });
+  assert.match(content, /Evidència exacta/);
+  assert.match(requested[0], new RegExp(`/contents/docs/02-avantprojecte/dossier-2\\.md\\?ref=${commit}$`));
+  await assert.rejects(() => githubFileAtCommit({ repository: 'org/hort', commit, file: '../secret', token: 'secret', fetchImpl }), /Ruta d’evidència invàlida/);
 });

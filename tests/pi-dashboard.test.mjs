@@ -129,3 +129,36 @@ test('els informes del dashboard són navegables i mantenen la revisió docent',
   assert.match(detail, /no calcula una nota/);
   assert.match(detail, /no acredita assoliments ni assigna qualificacions/);
 });
+
+test('mostra la proposta documental i deixa el criteri mixt pendent de defensa', () => {
+  const commit = 'a'.repeat(40);
+  const report = {
+    filename: `hort-b3-dossier-2-${commit}.json`,
+    project: { id: 'hort', name: 'Hort urbà', repository: 'org/hort' },
+    checkpoint: { id: 'b3-dossier-2', name: 'Bloc 3', rubric_id: 'b3-dossier-2' },
+    version: { requested_ref: 'dossier-2-v1.0', commit },
+    status: 'complete', checks: [], warnings: [], blocking_flags: [], candidate_evidence: [], process: null
+  };
+  const assessment = {
+    generated_at: '2026-10-14T20:00:00Z',
+    rubric: { id: 'b3-dossier-2', instrument: 'PR-Q.3.1.x', name: 'Dossier 2' },
+    criteria: [{
+      criterion_id: 'authorship-sources-ai-defense',
+      title: 'Autoria, fonts, ús d’IA i defensa individual',
+      source: 'mixed', status: 'needs_observation',
+      document_assessment: {
+        level: 3, confidence: 0.82, reason: 'La traça documental és suficient.', missing: [],
+        evidence: [{ path: 'docs/02-avantprojecte/dossier-2.md', location: 'apartat 13', excerpt: 'Aportació verificable.' }]
+      },
+      observation_guide: { focus: ['Confirmar autoria.'], questions: ['Quina decisió pròpia pots explicar?'] },
+      teacher_decision: null
+    }]
+  };
+  const html = renderReport(report, undefined, '', assessment, false);
+  assert.match(html, /Proposta automàtica de la rúbrica/);
+  assert.match(html, /Nivell documental/);
+  assert.match(html, /Mixta/);
+  assert.match(html, /82 %/);
+  assert.match(html, /Quina decisió pròpia pots explicar/);
+  assert.match(html, /no es tanquen fins a observar la defensa/);
+});

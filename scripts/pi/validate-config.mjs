@@ -4,10 +4,11 @@ import { loadConfiguration, readJson } from './lib/config.mjs';
 
 try {
   const root = process.cwd();
-  const { projects, checkpoints } = await loadConfiguration(root);
+  const { projects, checkpoints, rubrics } = await loadConfiguration(root);
   await readJson(path.join(root, 'global/evidence-report-schema.json'));
   await readJson(path.join(root, 'global/teacher-review-schema.json'));
-  console.log(`Configuració PI vàlida: ${projects.size} projectes i ${checkpoints.size} punts de control.`);
+  await readJson(path.join(root, 'global/pi-rubric-evaluation-schema.json'));
+  console.log(`Configuració PI vàlida: ${projects.size} projectes, ${checkpoints.size} punts de control i ${rubrics.size} rúbriques automatitzables.`);
   for (const checkpoint of checkpoints.values()) console.log(`- ${checkpoint.id}: ${checkpoint.name}`);
 } catch (error) {
   console.error(`Configuració PI invàlida: ${error.message}`);
