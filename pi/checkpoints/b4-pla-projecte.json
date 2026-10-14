@@ -29,5 +29,22 @@
     "RA4.e",
     "RA4.f",
     "RA4.g"
-  ]
+  ],
+  "evidence_by_ra_ca": {
+    "RA3.a": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.b": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.c": ["docs/03-planificacio/pla-projecte.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA3.d": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.e": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.f": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.g": ["docs/03-planificacio/pla-projecte.md", "evidencies/alumnat/*.md"],
+    "RA3.h": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "docs/03-planificacio/pla-desplegament.md", "evidencies/alumnat/*.md"],
+    "RA4.a": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "evidencies/alumnat/*.md"],
+    "RA4.b": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "evidencies/alumnat/*.md"],
+    "RA4.c": ["docs/03-planificacio/pla-projecte.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA4.d": ["docs/03-planificacio/pla-projecte.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA4.e": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "evidencies/alumnat/*.md"],
+    "RA4.f": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "evidencies/alumnat/*.md"],
+    "RA4.g": ["docs/03-planificacio/pla-projecte.md", "docs/03-planificacio/pla-proves.md", "docs/03-planificacio/pla-desplegament.md", "evidencies/alumnat/*.md"]
+  }
 }

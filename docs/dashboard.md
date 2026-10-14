@@ -96,11 +96,18 @@ L'ordre ordinària `npm run dashboard` obri el nucli nou de PI. Des de la interf
 - seleccionar un punt de control i una referència immutable;
 - analitzar directament a GitHub el repositori registrat, sense clonar-lo ni modificar-lo;
 - consultar les comprovacions, els avisos, els bloquejos, els RA/CA candidats i la traça temporal del tram;
+- preparar i actualitzar una matriu individual `D/P/S/N` vinculada al commit analitzat;
 - obrir en GitHub el commit analitzat i descarregar l'informe JSON.
 
 La traça temporal mostra els commits posteriors a l'etiqueta del control anterior quan eixa referència existix. Inclou dies actius, interval, buit màxim, concentració, identitats Git, missatges, referències a issues i àrees suggerides a partir dels missatges. Són senyals per orientar la revisió docent: no es convertixen en punts, no demostren autoria i no permeten decidir automàticament si la seqüència és coherent.
 
-El dashboard llig el repositori registrat directament des de GitHub. `GITHUB_TOKEN` ha de tindre accés de lectura de continguts als repositoris privats; la referència indicada es resol a un commit i l'informe conserva eixe hash. L'usuari del servei només necessita escriptura en `course/projects.json` i `tmp/pi/`; no cal preparar clons locals dels projectes. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
+### Revisió individual
+
+En obrir un informe, «Matriu de revisió docent individual» permet incorporar una persona i prepara tots els CA candidats com a pendents. Cada fila admet funció, evidència, abast, observació i data de reobservació. L'evidència pot seleccionar-se entre els camins localitzats específicament per al CA o indicar-se amb un altre enllaç verificable.
+
+Cada recopilació conserva en `tmp/pi/` un informe immutable identificat pel hash complet. La matriu es guarda per projecte, punt de control i hash complet en `reviews/pi/`; no es copia a un informe d'un commit diferent. Les exportacions CSV i JSON servixen per traslladar o conservar el treball docent; continuen sense ser l'acta oficial ni una qualificació. Prepareu permisos d'escriptura per a l'usuari del servei, restringiu la lectura i incloeu el directori en les còpies de seguretat.
+
+El dashboard llig el repositori registrat directament des de GitHub. `GITHUB_TOKEN` ha de tindre accés de lectura de continguts als repositoris privats; la referència indicada es resol a un commit i l'informe conserva eixe hash. L'usuari del servei només necessita escriptura en `course/projects.json`, `tmp/pi/` i `reviews/pi/`; no cal preparar clons locals dels projectes. En una instal·lació amb `systemd` i `User=www-data`, cal preparar estos permisos expressament.
 
 El dashboard PI només accepta `DASHBOARD_HOST=127.0.0.1`, `localhost` o `::1` i no s'ha d'exposar directament a Internet.
 

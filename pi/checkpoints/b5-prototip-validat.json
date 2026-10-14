@@ -18,5 +18,22 @@
   "candidate_ra_ca": [
     "RA3.a", "RA3.b", "RA3.c", "RA3.d", "RA3.e", "RA3.f", "RA3.g", "RA3.h",
     "RA4.a", "RA4.b", "RA4.c", "RA4.d", "RA4.e", "RA4.f", "RA4.g"
-  ]
+  ],
+  "evidence_by_ra_ca": {
+    "RA3.a": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.b": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.c": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA3.d": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.e": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.f": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.g": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA3.h": ["docs/04-seguiment/iteracio-5-*.md", "prototip/README.md", "evidencies/alumnat/*.md"],
+    "RA4.a": ["docs/04-seguiment/iteracio-5-*.md", "prototip/README.md", "evidencies/alumnat/*.md"],
+    "RA4.b": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA4.c": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA4.d": ["docs/04-seguiment/iteracio-5-*.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA4.e": ["docs/04-seguiment/iteracio-5-*.md", "prototip/README.md", "evidencies/alumnat/*.md"],
+    "RA4.f": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"],
+    "RA4.g": ["docs/04-seguiment/iteracio-5-*.md", "evidencies/alumnat/*.md"]
+  }
 }

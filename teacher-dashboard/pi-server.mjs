@@ -1,13 +1,14 @@
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
 import { createHash, timingSafeEqual } from 'node:crypto';
-import { access, readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { constants, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { loadConfiguration, validId, validateProject } from '../scripts/pi/lib/config.mjs';
+import { addReviewPerson, emptyTeacherReview, loadTeacherReview, removeReviewPerson, saveTeacherReview, teacherReviewCsv, teacherReviewSummary, updateReviewEntry } from '../scripts/pi/lib/teacher-review.mjs';
 
 const execFileAsync = promisify(execFile);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -110,6 +111,17 @@ async function reports() {
   return result.sort((a, b) => String(b.generated_at).localeCompare(String(a.generated_at)));
 }
 
+function safeReportFilename(value) {
+  const filename = path.basename(decodeURIComponent(String(value || '')));
+  if (!/^[a-z0-9][a-z0-9.-]*\.json$/.test(filename)) throw new Error('Nom d’informe invàlid.');
+  return filename;
+}
+
+async function readReportFile(value) {
+  const filename = safeReportFilename(value);
+  return { ...JSON.parse(await readFile(path.join(root, 'tmp/pi', filename), 'utf8')), filename };
+}
+
 function notice(searchParams) {
   if (searchParams.get('error')) return `<p class="notice error"><strong>Error:</strong> ${escape(searchParams.get('error'))}</p>`;
   if (searchParams.get('ok')) return `<p class="notice">${escape(searchParams.get('ok'))}</p>`;
@@ -167,14 +179,58 @@ export function renderProjectAccess(project, githubConfigured = Boolean(process.
   return layout(`Accés — ${project.name}`, `<h1>Gestionar accés</h1><p><strong>${escape(project.name)}</strong> · <a href="${escape(`https://github.com/${project.repository}/settings/access`)}" rel="noreferrer"><code>${escape(project.repository)}</code> ↗</a></p><form method="post" action="/projects/${encodeURIComponent(project.id)}/access"><label>Usuaris de GitHub<textarea name="collaborators" required placeholder="usuari1&#10;usuari2&#10;usuari3"></textarea></label><p class="evidence">Escriu un usuari per línia o separa'ls amb comes. Rebran el rol <code>write</code>; una invitació pendent encara no dona accés efectiu.</p>${githubConfigured ? '<button type="submit">Convidar usuaris</button>' : '<p class="notice error">Falta configurar GITHUB_TOKEN en el servidor.</p>'}</form><p><a href="/#projectes">Tornar als projectes</a></p>`);
 }
 
-export function renderReport(report) {
+const REVIEW_SCOPE_LABELS = {
+  pending: 'Pendent',
+  diagnostic: 'D — diagnòstica',
+  partial: 'P — parcial',
+  sufficient: 'S — suficient',
+  not_evidenced: 'N — no evidenciada'
+};
+
+function evidenceUrl(report, evidence) {
+  const direct = externalUrl(evidence);
+  if (direct) return direct;
+  const value = String(evidence || '');
+  if (!value || value.startsWith('/') || /(^|\/)\.\.(\/|$)/.test(value) || /[\u0000-\u001f]/.test(value)) return '';
+  return `https://github.com/${report.project.repository}/blob/${report.version.commit}/${value.split('/').map(encodeURIComponent).join('/')}`;
+}
+
+function renderTeacherReview(report, review) {
+  const filename = encodeURIComponent(report.filename);
+  const candidates = new Map((report.candidate_evidence || []).map((item) => [item.ra_ca, item]));
+  const entries = [...review.entries].sort((left, right) => left.person.localeCompare(right.person, 'ca') || left.ra_ca.localeCompare(right.ra_ca, 'ca'));
+  const people = new Map();
+  for (const entry of entries) {
+    if (!people.has(entry.person_id)) people.set(entry.person_id, { person: entry.person, counts: {} });
+    const counts = people.get(entry.person_id).counts;
+    counts[entry.scope] = (counts[entry.scope] || 0) + 1;
+  }
+  const personSummary = [...people.entries()].map(([personId, item]) => `<tr><td>${escape(item.person)}</td><td>${escape(item.counts.pending || 0)}</td><td>${escape(item.counts.diagnostic || 0)}</td><td>${escape(item.counts.partial || 0)}</td><td>${escape(item.counts.sufficient || 0)}</td><td>${escape(item.counts.not_evidenced || 0)}</td><td><form method="post" action="/reports/${filename}/review/people/${encodeURIComponent(personId)}/delete" onsubmit="return confirm('Retirar totes les valoracions d’esta persona?')"><input type="hidden" name="confirm-person" value="${escape(item.person)}"><button type="submit" style="background:var(--bad)">Retirar de la matriu</button></form></td></tr>`).join('');
+  const raSummary = teacherReviewSummary(review).map((item) => `<tr><td>${escape(item.person)}</td><td><code>${escape(item.ra)}</code></td><td>${escape(item.total)}</td><td>${escape(item.pending)}</td><td>${escape(item.diagnostic)}</td><td>${escape(item.partial)}</td><td>${escape(item.sufficient)}</td><td>${escape(item.not_evidenced)}</td></tr>`).join('');
+  const rows = entries.map((entry) => {
+    const formId = `review-${entry.id}`;
+    const candidate = candidates.get(entry.ra_ca);
+    const dataListId = `evidence-${entry.id}`;
+    const options = (candidate?.evidence || []).map((item) => `<option value="${escape(item)}"></option>`).join('');
+    const scopeOptions = Object.entries(REVIEW_SCOPE_LABELS).map(([value, label]) => `<option value="${value}"${entry.scope === value ? ' selected' : ''}>${escape(label)}</option>`).join('');
+    const link = evidenceUrl(report, entry.evidence);
+    return `<tr><td>${escape(entry.person)}</td><td><code>${escape(entry.ra_ca)}</code></td><td><input form="${formId}" name="function" value="${escape(entry.function)}" maxlength="160" aria-label="Funció de ${escape(entry.person)} en ${escape(entry.ra_ca)}"></td><td><select form="${formId}" name="scope" aria-label="Abast de ${escape(entry.ra_ca)}">${scopeOptions}</select></td><td><input form="${formId}" name="evidence" value="${escape(entry.evidence)}" list="${dataListId}" maxlength="500" aria-label="Evidència de ${escape(entry.ra_ca)}"><datalist id="${dataListId}">${options}</datalist>${link ? `<br><a class="evidence" href="${escape(link)}" rel="noreferrer">Obrir evidència ↗</a>` : ''}</td><td><textarea form="${formId}" name="observation" maxlength="2000" aria-label="Observació de ${escape(entry.ra_ca)}">${escape(entry.observation)}</textarea></td><td><input form="${formId}" type="date" name="reobservation_date" value="${escape(entry.reobservation_date || '')}" aria-label="Data de reobservació de ${escape(entry.ra_ca)}"></td><td><form id="${formId}" method="post" action="/reports/${filename}/review/entries/${encodeURIComponent(entry.id)}"><button type="submit">Guardar</button></form></td></tr>`;
+  }).join('');
+  return `<h2 id="review">Matriu de revisió docent individual</h2><p class="notice">Esta matriu és un esborrany vinculat al commit <code>${escape(report.version.commit.slice(0, 12))}</code>. Registra evidència i abast individual, però no calcula una nota ni substituïx el registre oficial d’Aules.</p><form method="post" action="/reports/${filename}/review/people"><div class="grid"><label>Persona o identificador d’Aules<input name="person" required maxlength="120"></label><label>Funció inicial en este projecte<input name="function" maxlength="160" placeholder="Autora, planificadora, desenvolupadora…"></label></div><p><button type="submit">Preparar els CA candidats</button></p></form>${people.size ? `<h3>Estat per persona</h3><table><thead><tr><th>Persona</th><th>Pendent</th><th>D</th><th>P</th><th>S</th><th>N</th><th>Acció</th></tr></thead><tbody>${personSummary}</tbody></table><h3>Comptatge per RA, sense síntesi automàtica</h3><table><thead><tr><th>Persona</th><th>RA</th><th>CA candidats</th><th>Pendent</th><th>D</th><th>P</th><th>S</th><th>N</th></tr></thead><tbody>${raSummary}</tbody></table><p><a href="/api/reports/${filename}/review.csv">Exportar CSV</a> · <a href="/api/reports/${filename}/review.json">Exportar JSON</a></p><div style="overflow-x:auto"><table><thead><tr><th>Persona</th><th>CA</th><th>Funció</th><th>Abast</th><th>Evidència concreta</th><th>Observació</th><th>Reobservació</th><th>Acció</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p>Incorpora una persona per preparar una fila pendent per cada CA candidat d’este control.</p>'}<p class="evidence"><code>D</code>, <code>P</code>, <code>S</code> i <code>N</code> són registres professionals d’abast, no valors numèrics. El comptatge per RA no és una síntesi d’assoliment. Una evidència grupal només s’atribuïx individualment després de contrastar funció, autoria, explicació i defensa.</p>`;
+}
+
+export function renderReport(report, review = emptyTeacherReview(report), message = '') {
   const checks = report.checks.map((check) => `<tr><td class="${escape(check.status)}">${escape(check.status)}</td><td><code>${escape(check.id)}</code></td><td>${escape(check.message)}</td><td class="evidence">${(check.evidence || []).map(escape).join('<br>') || '—'}</td></tr>`).join('');
   const list = (items, empty) => items?.length ? `<ul>${items.map((item) => `<li>${escape(item)}</li>`).join('')}</ul>` : `<p>${empty}</p>`;
   const process = report.process;
   const processSummary = process?.summary;
   const processTimeline = process?.timeline?.map((item) => `<tr><td>${escape(item.committed_at)}</td><td><a href="${escape(`https://github.com/${report.project.repository}/commit/${item.commit}`)}" rel="noreferrer"><code>${escape(item.commit.slice(0, 12))}</code></a></td><td>${escape(item.author)}</td><td>${escape(item.message || '(sense missatge)')}</td><td>${escape((item.areas || []).join(', '))}</td></tr>`).join('') || '';
   const processBlock = processSummary ? `<h2>Traça temporal i seqüència</h2><p><strong>Tram:</strong> ${process.scope?.requested_ref ? `des de <code>${escape(process.scope.requested_ref)}</code>` : 'historial disponible'} · <strong>Commits:</strong> ${escape(processSummary.total_commits)} · <strong>Dies actius:</strong> ${escape(processSummary.active_days)} · <strong>Interval:</strong> ${escape(processSummary.span_hours)} h · <strong>Buit màxim:</strong> ${escape(processSummary.largest_gap_hours)} h</p><p><strong>Dia més actiu:</strong> ${escape(processSummary.busiest_day || '—')} (${escape(processSummary.busiest_day_commits || 0)} commits; ${escape(Math.round(Number(processSummary.busiest_day_share || 0) * 100))} %) · <strong>Missatges genèrics:</strong> ${escape(processSummary.generic_messages)} · <strong>Commits amb referència a issue:</strong> ${escape(processSummary.commits_with_issue_reference)}</p>${list(process.observations, 'Cap senyal automàtic que requerisca atenció.')}<table><thead><tr><th>Data</th><th>Commit</th><th>Identitat Git registrada</th><th>Missatge</th><th>Àrees suggerides</th></tr></thead><tbody>${processTimeline || '<tr><td colspan="5">No hi ha commits en el tram analitzat.</td></tr>'}</tbody></table><p class="notice">La distribució temporal, les identitats Git i les àrees inferides dels missatges són indicis per reconstruir el procés. No acrediten per si soles autoria, qualitat, seqüència correcta ni assoliment.</p>` : '';
-  return layout(`Informe — ${report.project.name}`, `<h1>${escape(report.project.name)}</h1><p class="lead">${escape(report.checkpoint.name)} · <code>${escape(report.version.requested_ref)}</code></p><p><strong>Estat:</strong> <span class="status-${escape(report.status)}">${escape(report.status)}</span> · <strong>Commit:</strong> <code>${escape(report.version.commit)}</code></p><p><a href="${escape(`https://github.com/${report.project.repository}/tree/${report.version.commit}`)}" rel="noreferrer">Obrir esta versió a GitHub</a> · <a href="/api/reports/${encodeURIComponent(report.filename)}">Descarregar JSON</a></p><h2>Comprovacions</h2><table><thead><tr><th>Estat</th><th>Comprovació</th><th>Resultat</th><th>Evidència</th></tr></thead><tbody>${checks}</tbody></table>${processBlock}<h2>Avisos</h2>${list(report.warnings, 'Cap avís automàtic.')}<h2>Bloquejos</h2>${list(report.blocking_flags, 'Cap bloqueig automàtic.')}<h2>RA/CA candidats</h2>${list(report.candidate_evidence?.map((item) => item.ra_ca), 'No se n’han identificat.')}<p class="notice">Cal revisar qualitat, autoria, abast i defensa. Este informe no acredita assoliments ni assigna qualificacions.</p>`);
+  const candidateRows = (report.candidate_evidence || []).map((item) => `<tr><td><code>${escape(item.ra_ca)}</code></td><td class="evidence">${(item.evidence || []).map((evidence) => {
+    const url = evidenceUrl(report, evidence);
+    return url ? `<a href="${escape(url)}" rel="noreferrer">${escape(evidence)}</a>` : escape(evidence);
+  }).join('<br>') || 'No localitzada en esta versió'}</td></tr>`).join('');
+  return layout(`Informe — ${report.project.name}`, `${message}<h1>${escape(report.project.name)}</h1><p class="lead">${escape(report.checkpoint.name)} · <code>${escape(report.version.requested_ref)}</code></p><p><strong>Estat:</strong> <span class="status-${escape(report.status)}">${escape(report.status)}</span> · <strong>Commit:</strong> <code>${escape(report.version.commit)}</code></p><p><a href="${escape(`https://github.com/${report.project.repository}/tree/${report.version.commit}`)}" rel="noreferrer">Obrir esta versió a GitHub</a> · <a href="/api/reports/${encodeURIComponent(report.filename)}">Descarregar JSON</a></p><h2>Comprovacions</h2><table><thead><tr><th>Estat</th><th>Comprovació</th><th>Resultat</th><th>Evidència</th></tr></thead><tbody>${checks}</tbody></table>${processBlock}<h2>Avisos</h2>${list(report.warnings, 'Cap avís automàtic.')}<h2>Bloquejos</h2>${list(report.blocking_flags, 'Cap bloqueig automàtic.')}<h2>RA/CA candidats i evidències localitzades</h2><table><thead><tr><th>CA</th><th>Evidències candidates</th></tr></thead><tbody>${candidateRows || '<tr><td colspan="2">No se n’han identificat.</td></tr>'}</tbody></table><p class="notice">Cal revisar qualitat, autoria, abast i defensa. Este informe no acredita assoliments ni assigna qualificacions.</p>${renderTeacherReview(report, review)}`);
 }
 
 async function readBody(request) {
@@ -332,12 +388,21 @@ async function collectReport(input) {
   if (!process.env.GITHUB_TOKEN) throw new Error('Falta GITHUB_TOKEN per llegir el repositori de GitHub.');
   const { projects } = await loadConfiguration(root);
   if (!projects.has(input['project-id'])) throw new Error('Projecte no registrat.');
-  const filename = `${input['project-id']}-${input.checkpoint}.json`;
-  await execFileAsync(process.execPath, ['scripts/pi/collect-evidence.mjs', '--github', 'true', '--project-id', input['project-id'], '--checkpoint', input.checkpoint, '--ref', input.ref, '--output', `tmp/pi/${filename}`], { cwd: root, maxBuffer: 12 * 1024 * 1024 });
-  return filename;
+  const temporary = `tmp/pi/${input['project-id']}-${input.checkpoint}-${process.pid}-${Date.now()}.pending.json`;
+  try {
+    await execFileAsync(process.execPath, ['scripts/pi/collect-evidence.mjs', '--github', 'true', '--project-id', input['project-id'], '--checkpoint', input.checkpoint, '--ref', input.ref, '--output', temporary], { cwd: root, maxBuffer: 12 * 1024 * 1024 });
+    const report = JSON.parse(await readFile(path.join(root, temporary), 'utf8'));
+    if (!/^[0-9a-f]{40}$/i.test(String(report.version?.commit || ''))) throw new Error('L’informe no conté un commit immutable vàlid.');
+    const filename = `${input['project-id']}-${input.checkpoint}-${report.version.commit}.json`;
+    await rename(path.join(root, temporary), path.join(root, 'tmp/pi', filename));
+    return filename;
+  } catch (error) {
+    await rm(path.join(root, temporary), { force: true });
+    throw error;
+  }
 }
 
-async function handle(request, response) {
+export async function handle(request, response) {
   if (!authorizationAccepted(request.headers.authorization)) {
     sendUnauthorized(response);
     return;
@@ -408,16 +473,56 @@ async function handle(request, response) {
       redirect(response, `/reports/${encodeURIComponent(filename)}`);
       return;
     }
+    const addReviewPersonMatch = url.pathname.match(/^\/reports\/([^/]+\.json)\/review\/people$/);
+    if (request.method === 'POST' && addReviewPersonMatch) {
+      const report = await readReportFile(addReviewPersonMatch[1]);
+      const review = await loadTeacherReview(root, report);
+      addReviewPerson(review, report, await readBody(request));
+      await saveTeacherReview(root, report, review);
+      redirect(response, `/reports/${encodeURIComponent(report.filename)}?ok=${encodeURIComponent('Persona incorporada a la matriu.')}#review`);
+      return;
+    }
+    const removeReviewPersonMatch = url.pathname.match(/^\/reports\/([^/]+\.json)\/review\/people\/([0-9a-f-]+)\/delete$/i);
+    if (request.method === 'POST' && removeReviewPersonMatch) {
+      const report = await readReportFile(removeReviewPersonMatch[1]);
+      const review = await loadTeacherReview(root, report);
+      const input = await readBody(request);
+      removeReviewPerson(review, removeReviewPersonMatch[2], input['confirm-person']);
+      await saveTeacherReview(root, report, review);
+      redirect(response, `/reports/${encodeURIComponent(report.filename)}?ok=${encodeURIComponent('Persona retirada de la matriu.')}#review`);
+      return;
+    }
+    const updateReviewEntryMatch = url.pathname.match(/^\/reports\/([^/]+\.json)\/review\/entries\/([0-9a-f-]+)$/i);
+    if (request.method === 'POST' && updateReviewEntryMatch) {
+      const report = await readReportFile(updateReviewEntryMatch[1]);
+      const review = await loadTeacherReview(root, report);
+      updateReviewEntry(review, report, updateReviewEntryMatch[2], await readBody(request));
+      await saveTeacherReview(root, report, review);
+      redirect(response, `/reports/${encodeURIComponent(report.filename)}?ok=${encodeURIComponent('Valoració guardada.')}#review`);
+      return;
+    }
+    const reviewExportMatch = url.pathname.match(/^\/api\/reports\/([^/]+\.json)\/review\.(json|csv)$/);
+    if (request.method === 'GET' && reviewExportMatch) {
+      const report = await readReportFile(reviewExportMatch[1]);
+      const review = await loadTeacherReview(root, report);
+      const format = reviewExportMatch[2];
+      response.writeHead(200, {
+        'content-type': format === 'csv' ? 'text/csv; charset=utf-8' : 'application/json; charset=utf-8',
+        'content-disposition': `attachment; filename="${report.project.id}-${report.checkpoint.id}-${report.version.commit.slice(0, 12)}-review.${format}"`,
+        'cache-control': 'no-store'
+      });
+      response.end(format === 'csv' ? teacherReviewCsv(review) : `${JSON.stringify(review, null, 2)}\n`);
+      return;
+    }
     const reportMatch = url.pathname.match(/^\/(api\/)?reports\/([^/]+\.json)$/);
     if (request.method === 'GET' && reportMatch) {
-      const filename = path.basename(decodeURIComponent(reportMatch[2]));
-      const report = { ...JSON.parse(await readFile(path.join(root, 'tmp/pi', filename), 'utf8')), filename };
+      const report = await readReportFile(reportMatch[2]);
       if (reportMatch[1]) {
-        response.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'content-disposition': `attachment; filename="${filename}"` });
+        response.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'content-disposition': `attachment; filename="${report.filename}"` });
         response.end(`${JSON.stringify(report, null, 2)}\n`);
       } else {
-        response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
-        response.end(renderReport(report));
+        response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+        response.end(renderReport(report, await loadTeacherReview(root, report), notice(url.searchParams)));
       }
       return;
     }
@@ -431,7 +536,14 @@ async function handle(request, response) {
     response.end('No trobat.\n');
   } catch (error) {
     if (request.method === 'POST') {
-      redirect(response, `/?error=${encodeURIComponent(error.message)}`);
+      const reportContext = url.pathname.match(/^\/reports\/([^/]+\.json)\//);
+      let location = `/?error=${encodeURIComponent(error.message)}`;
+      if (reportContext) {
+        try {
+          location = `/reports/${encodeURIComponent(safeReportFilename(reportContext[1]))}?error=${encodeURIComponent(error.message)}#review`;
+        } catch { /* conserva el retorn segur a l'inici */ }
+      }
+      redirect(response, location);
       return;
     }
     response.writeHead(error.code === 'ENOENT' ? 404 : 500, { 'content-type': 'text/plain; charset=utf-8' });

@@ -6,5 +6,17 @@
   "baseline_ref": "dossier-1-v1.0",
   "required_files": ["project.json", "docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "docs/00-control/fonts-ia.md"],
   "required_globs": ["evidencies/alumnat/*.md"],
-  "candidate_ra_ca": ["RA1.f", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.f", "RA2.g", "RA2.h", "RA2.i"]
+  "candidate_ra_ca": ["RA1.f", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.f", "RA2.g", "RA2.h", "RA2.i"],
+  "evidence_by_ra_ca": {
+    "RA1.f": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.a": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.b": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA2.c": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.d": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.e": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.f": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.g": ["docs/02-avantprojecte/dossier-2.md", "evidencies/alumnat/*.md"],
+    "RA2.h": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"],
+    "RA2.i": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "evidencies/alumnat/*.md"]
+  }
 }

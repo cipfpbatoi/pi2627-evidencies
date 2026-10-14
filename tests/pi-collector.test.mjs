@@ -19,7 +19,7 @@ test('recopila una versió immutable d’un projecte amb nom i no genera nota', 
     await mkdir(path.join(root, 'pi/checkpoints'), { recursive: true });
     await mkdir(path.join(repo, 'docs'), { recursive: true });
     await writeFile(path.join(root, 'course/projects.json'), JSON.stringify({ version: 1, projects: [{ id: 'hort', name: 'Hort urbà', repository: 'org/hort' }] }));
-    await writeFile(path.join(root, 'pi/checkpoints/control.json'), JSON.stringify({ id: 'control', name: 'Control', phase: 'proposta', assessment: 'formative', required_files: ['project.json', 'docs/dossier.md'], required_globs: [], candidate_ra_ca: ['RA2.a'] }));
+    await writeFile(path.join(root, 'pi/checkpoints/control.json'), JSON.stringify({ id: 'control', name: 'Control', phase: 'proposta', assessment: 'formative', required_files: ['project.json', 'docs/dossier.md'], required_globs: [], candidate_ra_ca: ['RA2.a'], evidence_by_ra_ca: { 'RA2.a': ['docs/dossier.md'] } }));
     await writeFile(path.join(repo, 'project.json'), JSON.stringify({ id: 'hort', name: 'Hort urbà', repository: 'org/hort' }));
     await writeFile(path.join(repo, 'docs/dossier.md'), '# Dossier\n');
     await exec('git', ['init'], { cwd: repo });
@@ -32,6 +32,8 @@ test('recopila una versió immutable d’un projecte amb nom i no genera nota', 
     assert.equal(report.qualification, null);
     assert.equal(report.teacher_review_required, true);
     assert.equal(report.candidate_evidence[0].scope, 'candidate');
+    assert.deepEqual(report.candidate_evidence[0].evidence, ['docs/dossier.md']);
+    assert.deepEqual(report.candidate_evidence[0].expected_evidence, ['docs/dossier.md']);
     assert.equal(report.process.summary.total_commits, 1);
     assert.equal(report.process.interpretation_required, true);
     assert.match(report.warnings.join('\n'), /\[Procés\].*únic commit/);

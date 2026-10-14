@@ -124,5 +124,8 @@ test('els informes del dashboard són navegables i mantenen la revisió docent',
   assert.match(detail, /Completa el dossier #12/);
   assert.match(detail, /Dia més actiu/);
   assert.match(detail, /indicis per reconstruir el procés/);
+  assert.match(detail, /Matriu de revisió docent individual/);
+  assert.match(detail, /Preparar els CA candidats/);
+  assert.match(detail, /no calcula una nota/);
   assert.match(detail, /no acredita assoliments ni assigna qualificacions/);
 });

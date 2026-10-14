@@ -42,13 +42,27 @@ La secció `process` incorpora el nombre de commits i dies actius, l'interval te
 
 Estos valors són **indicis de procés**, no una rúbrica de quantitat. Un commit gran, una concentració temporal, un compte compartit per una incidència o una revisió d'una fase anterior requerixen explicació i contrast, però no impliquen automàticament falta d'autoria ni una qualificació inferior. Les àrees de la cronologia es deduïxen només del missatge del commit i poden ser incompletes; cal revisar també issues, pull requests, documents, proves i defensa.
 
+### Matriu de revisió docent
+
+Cada informe permet preparar una matriu per persona amb una fila per CA candidat. El professorat hi registra:
+
+- funció exercida en el projecte;
+- evidència concreta, seleccionable entre els fitxers localitzats per al CA;
+- abast `D` (diagnòstica), `P` (parcial), `S` (suficient) o `N` (no evidenciada);
+- observació justificativa;
+- data de reobservació, quan correspon.
+
+Les files naixen com a `pending` i no es poden confirmar com a diagnòstiques, parcials o suficients sense una evidència, ni amb qualsevol abast no pendent sense una observació. Cada recopilació conserva un informe amb el hash complet en el nom i la matriu queda vinculada al mateix commit: una entrega nova genera un esborrany diferent i no hereta silenciosament les valoracions anteriors.
+
+Els esborranys es guarden en `reviews/pi/`, fora de Git, i es poden exportar en CSV o JSON. Poden contindre dades personals i observacions docents: el directori necessita permisos restringits i còpia de seguretat. Aules continua sent el registre oficial. La matriu manté `qualification: null` i no transforma `D/P/S/N` en números.
+
 ### Dashboard
 
 ```bash
 npm run dashboard
 ```
 
-Permet registrar projectes, recopilar una versió directament del repositori GitHub registrat, consultar les comprovacions i la traça temporal, obrir el commit analitzat i descarregar l'informe JSON. El procés ha de poder escriure en `course/projects.json` i `tmp/pi/`; no cal clonar ni guardar els repositoris de l'alumnat al servidor. Per als repositoris privats, `GITHUB_TOKEN` necessita accés de lectura de continguts i historial. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
+Permet registrar projectes, recopilar una versió directament del repositori GitHub registrat, consultar les comprovacions i la traça temporal, completar la matriu docent, obrir el commit analitzat i descarregar els informes. El procés ha de poder escriure en `course/projects.json`, `tmp/pi/` i `reviews/pi/`; no cal clonar ni guardar els repositoris de l'alumnat al servidor. Per als repositoris privats, `GITHUB_TOKEN` necessita accés de lectura de continguts i historial. Per seguretat només escolta en local; en un servidor s'hi accedix amb un túnel SSH o un mecanisme equivalent restringit al professorat.
 
 El dashboard PI exigix sempre `DASHBOARD_USER` i `DASHBOARD_PASSWORD`. L'autenticació Basic només protegix les credencials quan el trànsit circula per un túnel SSH o per HTTPS; no s'ha de publicar el port HTTP directament.
 

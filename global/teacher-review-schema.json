@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Esborrany de revisió docent individual del Projecte Intermodular",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report", "updated_at", "entries", "qualification", "official_record"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "checkpoint_id", "requested_ref", "commit"],
+      "properties": {
+        "project_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "checkpoint_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "requested_ref": { "type": "string" },
+        "commit": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" }
+      }
+    },
+    "updated_at": { "type": "string" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "person_id", "person", "function", "ra_ca", "evidence", "scope", "observation", "reobservation_date", "updated_at"],
+        "properties": {
+          "id": { "type": "string" },
+          "person_id": { "type": "string" },
+          "person": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "function": { "type": "string", "maxLength": 160 },
+          "ra_ca": { "type": "string", "pattern": "^RA[1-4]\\.[a-i]$" },
+          "evidence": { "type": "string", "maxLength": 500 },
+          "scope": { "enum": ["pending", "diagnostic", "partial", "sufficient", "not_evidenced"] },
+          "observation": { "type": "string", "maxLength": 2000 },
+          "reobservation_date": { "type": ["string", "null"], "format": "date" },
+          "updated_at": { "type": "string" }
+        }
+      }
+    },
+    "qualification": { "type": "null" },
+    "official_record": { "const": "Aules" }
+  }
+}

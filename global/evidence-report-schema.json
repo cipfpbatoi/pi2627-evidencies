@@ -31,7 +31,20 @@
     },
     "status": { "enum": ["complete", "complete_with_warnings", "incomplete"] },
     "checks": { "type": "array", "items": { "type": "object" } },
-    "candidate_evidence": { "type": "array", "items": { "type": "object" } },
+    "candidate_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ra_ca", "scope", "expected_evidence", "evidence"],
+        "properties": {
+          "ra_ca": { "type": "string", "pattern": "^RA[1-4]\\.[a-i]$" },
+          "scope": { "const": "candidate" },
+          "expected_evidence": { "type": "array", "items": { "type": "string" } },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
     "process": {
       "type": "object",
       "additionalProperties": false,

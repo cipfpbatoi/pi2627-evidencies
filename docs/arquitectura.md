@@ -13,7 +13,7 @@ repositori del projecte + release/commit
   -> recopilador
   -> fitxers + historial delimitat pel control anterior
   -> informe JSON immutable amb evidències i indicis de procés
-  -> revisió del professorat
+  -> esborrany de revisió individual vinculat al commit
   -> Aules
 ```
 
@@ -24,8 +24,9 @@ Entitats conceptuals mínimes:
 - `evaluation_run`: projecte, punt de control i commit;
 - `evidence_report`: comprovacions, avisos i evidències candidates.
 - `process`: cronologia, distribució temporal i àrees orientatives deduïdes dels missatges dels commits.
+- `teacher_review_draft`: files manuals per persona i CA amb evidència, funció, abast i observació; sempre sense qualificació.
 
-No formen part del nucli `student`, `team`, `custody` ni `grade`. Els membres declarats poden aparéixer dins de les evidències del repositori, però l'atribució oficial es resol en Aules.
+No formen part del nucli `team`, `custody` ni `grade`. La unitat recopilada continua sent el projecte. La persona només s'incorpora manualment a l'esborrany de revisió per poder atribuir una evidència contrastada; l'atribució i el registre oficial continuen resolent-se en Aules.
 
 La traça temporal tampoc incorpora una puntuació de commits. El recompte, els dies actius, els buits i els comptes Git són senyals per dirigir la revisió. L'aplicatiu no pot determinar per si sol si la seqüència és pedagògicament coherent, si un canvi concentrat estava justificat o si l'autoria tècnica coincidix amb l'aprenentatge individual.
 

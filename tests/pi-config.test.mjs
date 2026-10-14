@@ -13,4 +13,8 @@ test('el punt de control diferencia formació i revisió docent', () => {
   assert.ok(validateCheckpoint({ ...base, assessment: 'automatic_grade' }).includes('assessment invàlid'));
   assert.deepEqual(validateCheckpoint({ ...base, baseline_ref: 'dossier-0-v1.0' }), []);
   assert.ok(validateCheckpoint({ ...base, baseline_ref: '' }).includes('baseline_ref ha de ser una referència no buida'));
+  assert.deepEqual(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a'], evidence_by_ra_ca: { 'RA1.a': ['docs/dossier.md'] } }), []);
+  assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a'], evidence_by_ra_ca: {} }).some((error) => error.includes('RA1.a')));
+  assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA5.z'] }).includes('candidate_ra_ca conté un codi invàlid'));
+  assert.ok(validateCheckpoint({ ...base, candidate_ra_ca: ['RA1.a', 'RA1.a'] }).includes('candidate_ra_ca conté duplicats'));
 });

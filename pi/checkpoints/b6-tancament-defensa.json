@@ -21,5 +21,35 @@
     "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.f", "RA2.g", "RA2.h", "RA2.i",
     "RA3.a", "RA3.b", "RA3.c", "RA3.d", "RA3.e", "RA3.f", "RA3.g", "RA3.h",
     "RA4.a", "RA4.b", "RA4.c", "RA4.d", "RA4.e", "RA4.f", "RA4.g"
-  ]
+  ],
+  "evidence_by_ra_ca": {
+    "RA1.c": ["docs/01-proposta/dossier-1.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA1.e": ["docs/01-proposta/dossier-1.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA1.f": ["docs/01-proposta/dossier-1.md", "docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA1.i": ["docs/01-proposta/dossier-1.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.a": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.b": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.c": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.d": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.e": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.f": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.g": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.h": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA2.i": ["docs/02-avantprojecte/dossier-2.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.a": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.b": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.c": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.d": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.e": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.f": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.g": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA3.h": ["docs/03-planificacio/pla-projecte.md", "docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.a": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.b": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.c": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.d": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.e": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.f": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"],
+    "RA4.g": ["docs/04-seguiment/iteracio-5-*.md", "docs/05-tancament/memoria.md", "evidencies/alumnat/*.md"]
+  }
 }

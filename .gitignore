@@ -14,3 +14,6 @@ tmp/*
 grades/**
 !grades/
 !grades/README.md
+reviews/**
+!reviews/
+!reviews/README.md

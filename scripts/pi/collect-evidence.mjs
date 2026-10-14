@@ -77,6 +77,10 @@ function meaningfulFiles(files) {
   return files.filter((file) => !path.basename(file).startsWith('plantilla') && !file.endsWith('/README.md'));
 }
 
+function candidateFiles(patterns, files) {
+  return [...new Set((patterns || []).flatMap((pattern) => files.filter((file) => matches(pattern, file) && !path.basename(file).startsWith('plantilla'))))];
+}
+
 async function main() {
   const input = args(process.argv.slice(2));
   const missing = ['project-id', 'checkpoint', 'ref'].filter((key) => !input[key]);
@@ -140,7 +144,15 @@ async function main() {
   const warnings = processEvidence.observations.map((item) => `[Procés] ${item}`);
   const contributors = files.filter((file) => /^evidencies\/alumnat\/[^/]+\.md$/.test(file) && !file.endsWith('/plantilla.md'));
   if (contributors.length < 2) warnings.push('Hi ha menys de dos registres individuals identificables; cal revisar si és una excepció autoritzada.');
-  const candidateEvidence = checkpoint.candidate_ra_ca.map((raCa) => ({ ra_ca: raCa, scope: 'candidate', evidence: checks.filter((check) => check.status === 'passed').flatMap((check) => check.evidence) }));
+  const candidateEvidence = checkpoint.candidate_ra_ca.map((raCa) => {
+    const expected = checkpoint.evidence_by_ra_ca?.[raCa] || [];
+    return {
+      ra_ca: raCa,
+      scope: 'candidate',
+      expected_evidence: expected,
+      evidence: expected.length ? candidateFiles(expected, files) : checks.filter((check) => check.status === 'passed').flatMap((check) => check.evidence)
+    };
+  });
   const report = {
     schema_version: 2,
     generated_at: new Date().toISOString(),

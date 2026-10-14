@@ -26,6 +26,23 @@ export function validateCheckpoint(checkpoint) {
   if (!Array.isArray(checkpoint?.required_files)) errors.push('required_files ha de ser una llista');
   if (!Array.isArray(checkpoint?.required_globs)) errors.push('required_globs ha de ser una llista');
   if (!Array.isArray(checkpoint?.candidate_ra_ca)) errors.push('candidate_ra_ca ha de ser una llista');
+  else {
+    if (checkpoint.candidate_ra_ca.some((raCa) => !/^RA[1-4]\.[a-i]$/.test(String(raCa)))) errors.push('candidate_ra_ca conté un codi invàlid');
+    if (new Set(checkpoint.candidate_ra_ca).size !== checkpoint.candidate_ra_ca.length) errors.push('candidate_ra_ca conté duplicats');
+  }
+  if (checkpoint?.evidence_by_ra_ca !== undefined) {
+    if (!checkpoint.evidence_by_ra_ca || Array.isArray(checkpoint.evidence_by_ra_ca) || typeof checkpoint.evidence_by_ra_ca !== 'object') errors.push('evidence_by_ra_ca ha de ser un objecte');
+    else if (Array.isArray(checkpoint.candidate_ra_ca)) {
+      for (const raCa of checkpoint.candidate_ra_ca) {
+        const patterns = checkpoint.evidence_by_ra_ca[raCa];
+        if (!Array.isArray(patterns) || !patterns.length) errors.push(`falten patrons d’evidència per a ${raCa}`);
+        else if (patterns.some((pattern) => !String(pattern || '').trim())) errors.push(`hi ha un patró d’evidència invàlid per a ${raCa}`);
+      }
+      for (const raCa of Object.keys(checkpoint.evidence_by_ra_ca)) {
+        if (!checkpoint.candidate_ra_ca.includes(raCa)) errors.push(`evidence_by_ra_ca conté un CA no candidat: ${raCa}`);
+      }
+    }
+  }
   if (checkpoint?.baseline_ref !== undefined && !String(checkpoint.baseline_ref || '').trim()) errors.push('baseline_ref ha de ser una referència no buida');
   return errors;
 }

@@ -5,5 +5,17 @@
   "assessment": "teacher_review",
   "required_files": ["project.json", "docs/01-proposta/dossier-1.md", "docs/00-control/fonts-ia.md"],
   "required_globs": ["evidencies/alumnat/*.md"],
-  "candidate_ra_ca": ["RA1.c", "RA1.e", "RA1.f", "RA1.i", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.i"]
+  "candidate_ra_ca": ["RA1.c", "RA1.e", "RA1.f", "RA1.i", "RA2.a", "RA2.b", "RA2.c", "RA2.d", "RA2.e", "RA2.i"],
+  "evidence_by_ra_ca": {
+    "RA1.c": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA1.e": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA1.f": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA1.i": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.a": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.b": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.c": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.d": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.e": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"],
+    "RA2.i": ["docs/01-proposta/dossier-1.md", "evidencies/alumnat/*.md"]
+  }
 }
