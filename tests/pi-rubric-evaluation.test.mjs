@@ -19,6 +19,7 @@ const report = {
     { evidence: ['docs/02-avantprojecte/dossier-2.md'] },
     { evidence: ['docs/00-control/decisions.md'] },
     { evidence: ['docs/00-control/fonts-ia.md'] },
+    { evidence: ['traspassos/01-avantprojecte-a-planificacio.md'] },
     { evidence: ['evidencies/alumnat/anna-puig.md'] }
   ],
   candidate_evidence: []
@@ -50,6 +51,7 @@ test('la rúbrica automatitzable del Bloc 3 conserva huit entregables i un crite
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'deliverable').length, 8);
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'mixed').length, 1);
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'defense').length, 0);
+  assert.ok(rubric.criteria.find((criterion) => criterion.id === 'traceability-documentation-handoff').evidence.includes('traspassos/01-avantprojecte-a-planificacio.md'));
 });
 
 test('la rúbrica executable del Bloc 2 separa huit entregables i sis criteris de defensa', async () => {
@@ -92,6 +94,7 @@ test('genera nivells documentals i deixa el criteri mixt pendent de contrast', a
   const { rubrics } = await loadConfiguration(process.cwd());
   const rubric = rubrics.get('b3-dossier-2');
   const packet = await buildEvidencePacket(report, rubric, async (file) => `Evidència literal de ${file}\nContingut de prova.\n`);
+  assert.ok(packet.files.some((file) => file.path === 'traspassos/01-avantprojecte-a-planificacio.md'));
   const proposal = proposalFor(rubric, packet);
   const assessment = buildRubricAssessment(report, rubric, proposal, packet, '2026-10-14T20:00:00Z');
   assert.equal(assessment.qualification, null);
@@ -163,6 +166,7 @@ test('executa el pilot local sobre el commit immutable i guarda la proposta sepa
       'docs/02-avantprojecte/dossier-2.md',
       'docs/00-control/decisions.md',
       'docs/00-control/fonts-ia.md',
+      'traspassos/01-avantprojecte-a-planificacio.md',
       'evidencies/alumnat/anna-puig.md'
     ];
     for (const file of files) {

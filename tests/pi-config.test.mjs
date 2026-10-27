@@ -31,12 +31,15 @@ test('el Bloc 2 només proposa CA sustentats per les evidències demanades', asy
 
 test('el Bloc 3 no proposa finançament si el Dossier 2 no el demana', async () => {
   const { checkpoints } = await loadConfiguration(process.cwd());
-  const candidateCa = checkpoints.get('b3-dossier-2').candidate_ra_ca;
+  const checkpoint = checkpoints.get('b3-dossier-2');
+  const candidateCa = checkpoint.candidate_ra_ca;
   assert.deepEqual(candidateCa, [
     'RA1.f',
     'RA2.a', 'RA2.b', 'RA2.c', 'RA2.d', 'RA2.e', 'RA2.f', 'RA2.h', 'RA2.i'
   ]);
   assert.equal(candidateCa.includes('RA2.g'), false);
+  assert.ok(checkpoint.required_files.includes('traspassos/01-avantprojecte-a-planificacio.md'));
+  assert.ok(checkpoint.evidence_by_ra_ca['RA2.h'].includes('traspassos/01-avantprojecte-a-planificacio.md'));
 });
 
 test('el Bloc 4 proposa només els CA sustentats pel pla demanat', async () => {

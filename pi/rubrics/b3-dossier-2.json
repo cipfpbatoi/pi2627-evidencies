@@ -108,7 +108,7 @@
       "title": "Traçabilitat, documentació, revisió i traspàs",
       "source": "deliverable",
       "ra_ca": ["RA2.h", "RA2.i"],
-      "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md"],
+      "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md", "traspassos/01-avantprojecte-a-planificacio.md"],
       "descriptors": {
         "4": "Les cadenes es poden seguir de necessitat a prova i risc; la documentació està versionada, incorpora la revisió i permet un traspàs amb reserves i pendents explícits.",
         "3": "Manté cadenes completes, registra la decisió docent, els ajustos i una versió comprensible per a l'equip receptor.",
