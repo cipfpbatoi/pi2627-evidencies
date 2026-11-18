@@ -2,6 +2,36 @@
   "version": 1,
   "projects": [
     {
+      "id": "projecte-a-1",
+      "name": "Projecte en relleu 1 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-1"
+    },
+    {
+      "id": "projecte-a-2",
+      "name": "Projecte en relleu 2 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-2"
+    },
+    {
+      "id": "projecte-a-3",
+      "name": "Projecte en relleu 3 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-3"
+    },
+    {
+      "id": "projecte-a-4",
+      "name": "Projecte en relleu 4 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-4"
+    },
+    {
+      "id": "projecte-a-5",
+      "name": "Projecte en relleu 5 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-5"
+    },
+    {
+      "id": "projecte-a-6",
+      "name": "Projecte en relleu 6 Grup A",
+      "repository": "batoi-pi-2026/projecte-a-6"
+    },
+    {
       "id": "projecte-b-1",
       "name": "Projecte en relleu 1 Grup B",
       "repository": "batoi-pi-2026/projecte-b-1"
