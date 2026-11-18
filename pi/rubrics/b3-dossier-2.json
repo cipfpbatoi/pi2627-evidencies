@@ -49,16 +49,16 @@
     },
     {
       "id": "interface-early-test",
-      "title": "Interfície i prova primerenca",
+      "title": "Interfície i revisió del recorregut",
       "source": "deliverable",
       "ra_ca": ["RA2.a", "RA2.h", "RA2.i"],
       "evidence": ["docs/02-avantprojecte/dossier-2.md"],
       "descriptors": {
-        "4": "El prototip representa estats, errors, adaptabilitat i accessibilitat; la prova separa observació i interpretació i produïx canvis traçables.",
-        "3": "Presenta un prototip de baixa fidelitat coherent, prova una tasca representativa i registra resultats i decisions.",
-        "2": "El prototip o la prova existixen, però la tasca, les observacions, l'accessibilitat o els canvis estan poc definits.",
-        "1": "Es valora només l'aparença, es guia la persona participant o no es registra cap decisió a partir de la prova.",
-        "N": "No hi ha prototip o prova localitzable."
+        "4": "La maqueta representa estats, errors, adaptabilitat i accessibilitat; la revisió comprova sistemàticament els passos del recorregut i produïx canvis traçables.",
+        "3": "Presenta una maqueta de baixa fidelitat coherent, recorre una tasca representativa i registra mancances, comprovacions i decisions.",
+        "2": "La maqueta o la revisió existixen, però el recorregut, els criteris, l'accessibilitat o els canvis estan poc definits.",
+        "1": "Es valora només l'aparença o no es registra què s'ha comprovat ni cap decisió.",
+        "N": "No hi ha maqueta o revisió localitzable."
       }
     },
     {
@@ -77,16 +77,16 @@
     },
     {
       "id": "alternatives-technical-test",
-      "title": "Alternatives, prova tècnica i decisions",
+      "title": "Alternatives, risc tècnic i decisions",
       "source": "deliverable",
       "ra_ca": ["RA2.a", "RA2.b", "RA2.i"],
       "evidence": ["docs/02-avantprojecte/dossier-2.md", "docs/00-control/decisions.md"],
       "descriptors": {
-        "4": "Compara alternatives amb criteris i fonts, executa una prova reproduïble sobre la incertesa principal i definix conseqüències i condicions de revisió.",
-        "3": "Compara almenys una decisió rellevant, aporta evidència o prova tècnica i justifica l'opció seleccionada.",
-        "2": "Hi ha alternatives o prova, però els criteris, el resultat, la reproducció o la connexió amb la decisió són incomplets.",
-        "1": "La tecnologia estava decidida d'entrada, la prova no reduïx cap risc o la decisió no té evidència.",
-        "N": "No hi ha comparació, prova o decisió localitzable."
+        "4": "Compara alternatives amb criteris i fonts, definix un cas reproduïble per validar més avant la incertesa principal i explicita resultat esperat, conseqüències, alternativa i condicions de revisió.",
+        "3": "Compara almenys una decisió rellevant, identifica el risc i definix un cas de validació futura coherent amb l'opció seleccionada.",
+        "2": "Hi ha alternatives o un cas previst, però falten criteris, resultat esperat, evidència futura, alternativa o connexió amb la decisió.",
+        "1": "La tecnologia estava decidida d'entrada, el risc no té tractament o es presenta com a executada una prova que només està prevista.",
+        "N": "No hi ha comparació, cas de validació futura o decisió localitzable."
       }
     },
     {

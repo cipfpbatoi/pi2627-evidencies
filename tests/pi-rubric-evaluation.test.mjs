@@ -52,6 +52,9 @@ test('la rúbrica automatitzable del Bloc 3 conserva huit entregables i un crite
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'mixed').length, 1);
   assert.equal(rubric.criteria.filter((criterion) => criterion.source === 'defense').length, 0);
   assert.ok(rubric.criteria.find((criterion) => criterion.id === 'traceability-documentation-handoff').evidence.includes('traspassos/01-avantprojecte-a-planificacio.md'));
+  assert.equal(rubric.criteria.find((criterion) => criterion.id === 'interface-early-test').title, 'Interfície i revisió del recorregut');
+  assert.match(rubric.criteria.find((criterion) => criterion.id === 'alternatives-technical-test').descriptors['3'], /cas de validació futura/);
+  assert.doesNotMatch(JSON.stringify(rubric), /executa una prova reproduïble|prova tècnica i decisions/);
 });
 
 test('la rúbrica executable del Bloc 2 separa huit entregables i sis criteris de defensa', async () => {
